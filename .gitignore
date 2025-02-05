@@ -33,6 +33,13 @@ next-env.d.ts
 # ide
 .idea/*
 
+# OpenAPI Generator
+generate/**
+openapitools.json
+!generate/template
+!generate/configuration.ts
+!generate/index.ts
+
 declarations.d.ts
 
 .vscode/
