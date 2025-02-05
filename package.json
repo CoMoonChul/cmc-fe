@@ -5,7 +5,9 @@
     "dev": "pnpm dev-next",
     "build": "next build",
     "start": "next start",
-    "dev-next": "cross-env DEPLOY_ENV=LOCAL node server.js"
+    "dev-next": "cross-env DEPLOY_ENV=LOCAL node server.js",
+    "oag:gen:local": "(copy openapitools.local.json openapitools.json || cp openapitools.local.json openapitools.json) && openapi-generator-cli generate",
+    "oag:gen:prd": "(copy openapitools.prd.json openapitools.json || cp openapitools.prd.json openapitools.json) && openapi-generator-cli generate"
   },
   "dependencies": {
     "axios": "^1.7.2",
@@ -28,6 +30,7 @@
     "sass": "^1.77.8",
     "typescript": "^5.5.2",
     "webpack": "^5.92.1",
-    "webpack-cli": "^5.1.4"
+    "webpack-cli": "^5.1.4",
+    "@openapitools/openapi-generator-cli": "^2.6.0"
   }
 }
