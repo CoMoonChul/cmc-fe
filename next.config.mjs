@@ -12,6 +12,9 @@ switch (process.env.DEPLOY_ENV) {
   case 'DEV':
     envFile = '.env.dev';
     break;
+  case 'PRD':
+    envFile = '.env.prd';
+    break;
   default:
     envFile = '.env.local';
 }
