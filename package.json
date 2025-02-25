@@ -10,8 +10,6 @@
     "prepare": "husky install",
     "husky-init": "node src/cmdUtils/husky.mjs",
     "lint-staged": "lint-staged",
-    "storybook": "storybook dev -p 7006",
-    "storybook:debug": "storybook dev -p 7006 --loglevel silly",
     "build-storybook": "storybook build",
     "oag:gen:local": "(copy openapitools.local.json openapitools.json || cp openapitools.local.json openapitools.json) && openapi-generator-cli generate",
     "oag:gen:prd": "(copy openapitools.prd.json openapitools.json || cp openapitools.prd.json openapitools.json) && openapi-generator-cli generate"
@@ -24,26 +22,27 @@
     ]
   },
   "dependencies": {
+    "@tanstack/react-query": "^5.66.9",
     "axios": "^1.7.9",
     "next": "15.1.7",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "zustand": "^5.0.3",
-    "@tanstack/react-query": "^5.66.9"
+    "zustand": "^5.0.3"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
     "@openapitools/openapi-generator-cli": "^2.6.0",
-    "@types/node": "^20",
+    "@types/node": "^20.17.19",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "autoprefixer": "^10.4.20",
     "eslint": "^9",
     "eslint-config-next": "15.1.7",
     "eslint-config-prettier": "^10.0.1",
     "eslint-plugin-prettier": "^5.2.3",
     "husky": "^9.1.4",
     "lint-staged": "^15.4.3",
-    "postcss": "^8",
+    "postcss": "^8.5.3",
     "prettier": "^3.5.2",
     "storybook": "^8.2.9",
     "tailwindcss": "^3.4.1",
