@@ -10,6 +10,7 @@ export async function createComment(data: COMMENT.CreateCommentReqDTO) {
     const response = await api.createComment(data)
     return response
   } catch (error) {
+    console.error(error)
     throw new Error('fail')
   }
 }
