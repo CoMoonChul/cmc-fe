@@ -21,6 +21,7 @@ export async function handler(req: NextRequest) {
     const data = await response.json()
     return NextResponse.json(data, { status: response.status })
   } catch (error) {
+    console.error(error)
     return NextResponse.json(
       { error: 'Internal Server Error' },
       { status: 500 },

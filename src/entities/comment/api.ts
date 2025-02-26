@@ -19,6 +19,7 @@ export async function selectComment(id: number) {
     const response = await api.selectComment(id)
     return response
   } catch (error) {
+    console.error(error)
     throw new Error('fail')
   }
 }
