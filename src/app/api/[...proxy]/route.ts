@@ -7,9 +7,6 @@ async function handleRequest(req: NextRequest) {
     const path = req.nextUrl.pathname.replace(/^\/api/, '')
     const searchParams = req.nextUrl.search
     const url = `${BACKEND_URL}${path}${searchParams ? searchParams : ''}`
-
-    console.log('@@ 요청 URL:', url)
-
     const body =
       req.method !== 'GET' ? JSON.stringify(await req.json()) : undefined
 
@@ -27,7 +24,7 @@ async function handleRequest(req: NextRequest) {
     const data = await response.json()
     return NextResponse.json(data, { status: response.status })
   } catch (error) {
-    console.error('%% 에러 발생:', error)
+    console.log('error', error)
     return NextResponse.json(
       { error: 'Internal Server Error' },
       { status: 500 },

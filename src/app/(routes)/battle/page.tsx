@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react'
 import { selectComment } from '@/entities/comment/api'
-import { Button } from '@/shared/components/ui/Button'
+import { Button } from '@/shared/ui/Button'
 
 export default function BattlePage() {
   const [selectResult, setSelectResult] = useState<string | null>(null)
@@ -12,7 +12,7 @@ export default function BattlePage() {
     setLoading(true)
     try {
       const result = await selectComment(3)
-      setSelectResult(JSON.stringify(result.data))
+      setSelectResult(JSON.stringify(result))
     } catch (error) {
       setSelectResult(JSON.stringify(error))
     } finally {
