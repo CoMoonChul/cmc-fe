@@ -11,9 +11,9 @@ import { getErrorMessage } from '@/shared/lib/messages'
  * @returns API 응답 데이터
  */
 async function apiClient<T>(
-  requestFn: (...args: unknown[]) => Promise<T>,
+  requestFn: (...args: any[]) => Promise<T>,
   manualErrorHandle: boolean = true,
-  ...args: unknown[]
+  ...args: any[]
 ): Promise<T> {
   try {
     return await requestFn(...args)
