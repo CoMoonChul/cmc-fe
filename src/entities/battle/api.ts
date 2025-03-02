@@ -14,7 +14,7 @@ const api = new BATTLE.BattleControllerApi(
  */
 export async function selectBattle(
   battleId: number,
-  manualErrorHandle = true,
+  manualErrorHandle = false,
 ): Promise<BATTLE.SelectBattleResDTO> {
   const response = await apiClient(
     api.selectBattle.bind(api),
@@ -32,7 +32,7 @@ export async function selectBattle(
  */
 export async function createBattle(
   data: BATTLE.CreateBattleReqDTO,
-  manualErrorHandle = true,
+  manualErrorHandle = false,
 ): Promise<BATTLE.CreateBattleResDTO> {
   const response = await apiClient(
     api.createBattle.bind(api),
@@ -50,7 +50,7 @@ export async function createBattle(
  */
 export async function updateBattle(
   data: BATTLE.UpdateBattleReqDTO,
-  manualErrorHandle = true,
+  manualErrorHandle = false,
 ): Promise<BATTLE.UpdateBattleResDTO> {
   const response = await apiClient(
     api.updateBattle.bind(api),
@@ -68,7 +68,7 @@ export async function updateBattle(
  */
 export async function updateVoteBattle(
   data: BATTLE.UpdateVoteBattleReqDTO,
-  manualErrorHandle = true,
+  manualErrorHandle = false,
 ): Promise<BATTLE.UpdateVoteBattleResDTO> {
   const response = await apiClient(
     api.updateVoteBattle.bind(api),
@@ -86,7 +86,7 @@ export async function updateVoteBattle(
  */
 export async function deleteVoteBattle(
   data: BATTLE.DeleteVoteBattleReqDTO,
-  manualErrorHandle = true,
+  manualErrorHandle = false,
 ): Promise<BATTLE.DeleteVoteBattleResDTO> {
   const response = await apiClient(
     api.deleteVoteBattle.bind(api),
@@ -104,7 +104,7 @@ export async function deleteVoteBattle(
  */
 export async function deleteBattle(
   data: BATTLE.DeleteBattleReqDTO,
-  manualErrorHandle = true,
+  manualErrorHandle = false,
 ): Promise<BATTLE.DeleteBattleResDTO> {
   const response = await apiClient(
     api.deleteBattle.bind(api),

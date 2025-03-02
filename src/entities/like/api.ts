@@ -12,7 +12,7 @@ const api = new LIKE.LikeControllerApi(new Configuration({ basePath: '/api' }))
  */
 export async function updateReviewLike(
   data: LIKE.UpdateReviewLikeReqDTO,
-  manualErrorHandle = true,
+  manualErrorHandle = false,
 ): Promise<LIKE.UpdateReviewLikeResDTO> {
   const response = await apiClient(
     api.updateReviewLike.bind(api),
@@ -30,7 +30,7 @@ export async function updateReviewLike(
  */
 export async function deleteReviewLike(
   data: LIKE.DeleteReviewLikeReqDTO,
-  manualErrorHandle = true,
+  manualErrorHandle = false,
 ): Promise<LIKE.DeleteReviewLikeResDTO> {
   const response = await apiClient(
     api.deleteReviewLike.bind(api),

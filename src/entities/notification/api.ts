@@ -16,7 +16,7 @@ const api = new NOTICE.NoticeControllerApi(
 export async function selectPageNotice(
   page: number,
   size: number,
-  manualErrorHandle = true,
+  manualErrorHandle = false,
 ): Promise<NOTICE.SelectNoticeListDTO> {
   const response = await apiClient(
     api.selectPageNotice.bind(api),
@@ -34,7 +34,7 @@ export async function selectPageNotice(
  */
 export async function deleteNotice(
   data: NOTICE.DeleteNoticeReqDTO,
-  manualErrorHandle = true,
+  manualErrorHandle = false,
 ): Promise<NOTICE.DeleteNoticeResDTO> {
   const response = await apiClient(
     api.deleteNotice.bind(api),
@@ -50,7 +50,7 @@ export async function deleteNotice(
  * @returns 삭제 결과
  */
 export async function deleteNoticeAll(
-  manualErrorHandle = true,
+  manualErrorHandle = false,
 ): Promise<NOTICE.DeleteNoticeAllResDTO> {
   const response = await apiClient(
     api.deleteNoticeAll.bind(api),

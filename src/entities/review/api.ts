@@ -14,7 +14,7 @@ const api = new REVIEW.ReviewControllerApi(
  */
 export async function selectReview(
   reviewId: number,
-  manualErrorHandle = true,
+  manualErrorHandle = false,
 ): Promise<REVIEW.SelectReviewResDTO> {
   const response = await apiClient(
     api.selectReview.bind(api),
@@ -40,7 +40,7 @@ export async function selectReviewList(
   sort: 'createdAt' | 'updatedAt' | 'title' = 'createdAt',
   order: 'asc' | 'desc' = 'desc',
   keyword?: string,
-  manualErrorHandle = true,
+  manualErrorHandle = false,
 ): Promise<REVIEW.SelectReviewListResDTO> {
   const response = await apiClient(
     api.selectReviewList.bind(api),
@@ -64,7 +64,7 @@ export async function selectReviewList(
  */
 export async function createReview(
   data: REVIEW.CreateReviewReqDTO,
-  manualErrorHandle = true,
+  manualErrorHandle = false,
 ): Promise<REVIEW.CreateReviewResDTO> {
   const response = await apiClient(
     api.createReview.bind(api),
@@ -82,7 +82,7 @@ export async function createReview(
  */
 export async function deleteReview(
   data: REVIEW.DeleteReviewReqDTO,
-  manualErrorHandle = true,
+  manualErrorHandle = false,
 ): Promise<REVIEW.DeleteReviewResDTO> {
   const response = await apiClient(
     api.deleteReview.bind(api),
@@ -100,7 +100,7 @@ export async function deleteReview(
  */
 export async function updateReview(
   data: REVIEW.UpdateReviewReqDTO,
-  manualErrorHandle = true,
+  manualErrorHandle = false,
 ): Promise<REVIEW.UpdateReviewResDTO> {
   const response = await apiClient(
     api.updateReview.bind(api),

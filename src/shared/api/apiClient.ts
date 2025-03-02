@@ -12,13 +12,13 @@ import { getErrorMessage } from '@/shared/lib/messages'
  */
 async function apiClient<T>(
   requestFn: (...args: any[]) => Promise<T>,
-  manualErrorHandle: boolean = true,
+  manualErrorHandle: boolean = false,
   ...args: any[]
 ): Promise<T> {
   try {
     return await requestFn(...args)
   } catch (error: any) {
-    if (manualErrorHandle) {
+    if (!manualErrorHandle) {
       const parsedMessage = getErrorMessage(error?.response?.data?.message)
       alert(parsedMessage)
     }

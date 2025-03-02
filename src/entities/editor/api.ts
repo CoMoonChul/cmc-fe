@@ -14,7 +14,7 @@ const api = new EDITOR.EditorControllerApi(
  */
 export async function createEditor(
   data: EDITOR.CreateEditorReqDTO,
-  manualErrorHandle = true,
+  manualErrorHandle = false,
 ): Promise<EDITOR.CreateEditorResDTO> {
   const response = await apiClient(
     api.createEditor.bind(api),
@@ -32,7 +32,7 @@ export async function createEditor(
  */
 export async function updateEditor(
   data: EDITOR.UpdateEditorReqDTO,
-  manualErrorHandle = true,
+  manualErrorHandle = false,
 ): Promise<EDITOR.UpdateEditorResDTO> {
   const response = await apiClient(
     api.updateEditor.bind(api),
@@ -50,7 +50,7 @@ export async function updateEditor(
  */
 export async function deleteEditor(
   data: EDITOR.DeleteEditorReqDTO,
-  manualErrorHandle = true,
+  manualErrorHandle = false,
 ): Promise<EDITOR.DeleteEditorResDTO> {
   const response = await apiClient(
     api.deleteEditor.bind(api),
@@ -68,7 +68,7 @@ export async function deleteEditor(
  */
 export async function selectEditor(
   id: number,
-  manualErrorHandle = true,
+  manualErrorHandle = false,
 ): Promise<EDITOR.SelectEditorResDTO> {
   const response = await apiClient(
     api.selectEditor.bind(api),

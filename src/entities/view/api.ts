@@ -12,7 +12,7 @@ const api = new VIEW.ViewControllerApi(new Configuration({ basePath: '/api' }))
  */
 export async function updateReviewView(
   data: VIEW.UpdateReviewViewReqDTO,
-  manualErrorHandle = true,
+  manualErrorHandle = false,
 ): Promise<VIEW.UpdateReviewViewResDTO> {
   const response = await apiClient(
     api.updateReviewView.bind(api),
@@ -30,7 +30,7 @@ export async function updateReviewView(
  */
 export async function updateBattleView(
   data: VIEW.UpdateBattleViewReqDTO,
-  manualErrorHandle = true,
+  manualErrorHandle = false,
 ): Promise<VIEW.UpdateBattleViewResDTO> {
   const response = await apiClient(
     api.updateBattleView.bind(api),
