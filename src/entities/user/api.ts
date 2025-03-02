@@ -16,7 +16,7 @@ const loginApi = new USER.LoginControllerApi(conf)
  */
 export async function join(
   data: USER.JoinReqDTO,
-  manualErrorHandle = true,
+  manualErrorHandle = false,
 ): Promise<USER.JoinResDTO> {
   const response = await apiClient(
     joinApi.join.bind(joinApi),
@@ -34,7 +34,7 @@ export async function join(
  */
 export async function checkUserId(
   userId: string,
-  manualErrorHandle = true,
+  manualErrorHandle = false,
 ): Promise<USER.CheckJoinResDTO> {
   const response = await apiClient(
     joinApi.checkUserId.bind(joinApi),
@@ -52,7 +52,7 @@ export async function checkUserId(
  */
 export async function checkUsername(
   username: string,
-  manualErrorHandle = true,
+  manualErrorHandle = false,
 ): Promise<USER.CheckJoinResDTO> {
   const response = await apiClient(
     joinApi.checkUsername.bind(joinApi),
@@ -70,7 +70,7 @@ export async function checkUsername(
  */
 export async function tempLogin(
   data: USER.TempLoginReqDTO,
-  manualErrorHandle = true,
+  manualErrorHandle = false,
 ): Promise<USER.TempLoginResDTO> {
   const response = await apiClient(
     loginApi.tempLogin.bind(loginApi),
@@ -88,7 +88,7 @@ export async function tempLogin(
  */
 export async function login(
   data: USER.LoginReqDTO,
-  manualErrorHandle = true,
+  manualErrorHandle = false,
 ): Promise<USER.LoginResDTO> {
   const response = await apiClient(
     loginApi.login.bind(loginApi),
@@ -104,7 +104,7 @@ export async function login(
  * @returns 재발급된 AccessToken
  */
 export async function refresh(
-  manualErrorHandle = true,
+  manualErrorHandle = false,
 ): Promise<USER.RefreshResDTO> {
   const response = await apiClient(
     loginApi.refresh.bind(loginApi),
@@ -119,7 +119,7 @@ export async function refresh(
  * @returns 로그아웃 결과
  */
 export async function logout(
-  manualErrorHandle = true,
+  manualErrorHandle = false,
 ): Promise<USER.LogoutResDTO> {
   const response = await apiClient(
     loginApi.logout.bind(loginApi),
@@ -136,7 +136,7 @@ export async function logout(
  */
 export async function findAccount(
   data: USER.FindAccountReqDTO,
-  manualErrorHandle = true,
+  manualErrorHandle = false,
 ): Promise<USER.FindAccountResDTO> {
   const response = await apiClient(
     loginApi.findAccount.bind(loginApi),
@@ -152,7 +152,7 @@ export async function findAccount(
  * @returns 내 정보
  */
 export async function getMyInfo(
-  manualErrorHandle = true,
+  manualErrorHandle = false,
 ): Promise<USER.GetMyInfoResDTO> {
   const response = await apiClient(
     userApi.getMyInfo.bind(userApi),
@@ -169,7 +169,7 @@ export async function getMyInfo(
  */
 export async function withdraw(
   data: USER.WithdrawReqDTO,
-  manualErrorHandle = true,
+  manualErrorHandle = false,
 ): Promise<USER.WithdrawResDTO> {
   const response = await apiClient(
     userApi.withdraw.bind(userApi),
@@ -187,7 +187,7 @@ export async function withdraw(
  */
 export async function updateInfo(
   data: USER.UpdateInfoReqDTO,
-  manualErrorHandle = true,
+  manualErrorHandle = false,
 ): Promise<USER.UpdateInfoResDTO> {
   const response = await apiClient(
     userApi.updateInfo.bind(userApi),

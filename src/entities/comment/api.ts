@@ -14,7 +14,7 @@ const api = new COMMENT.CommentControllerApi(
  */
 export async function createComment(
   data: COMMENT.CreateCommentReqDTO,
-  manualErrorHandle = true,
+  manualErrorHandle = false,
 ): Promise<COMMENT.CreateCommentResDTO> {
   const response = await apiClient(
     api.createComment.bind(api),
@@ -32,7 +32,7 @@ export async function createComment(
  */
 export async function selectComment(
   id: number,
-  manualErrorHandle = true,
+  manualErrorHandle = false,
 ): Promise<COMMENT.SelectCommentResDTO> {
   const response = await apiClient(
     api.selectComment.bind(api),
@@ -56,7 +56,7 @@ export async function selectCommentList(
   commentTarget: number,
   page = 0,
   size = 10,
-  manualErrorHandle = true,
+  manualErrorHandle = false,
 ): Promise<COMMENT.SelectCommentListResDTO> {
   const response = await apiClient(
     api.selectCommentList.bind(api),
@@ -77,7 +77,7 @@ export async function selectCommentList(
  */
 export async function deleteComment(
   data: COMMENT.DeleteCommentReqDTO,
-  manualErrorHandle = true,
+  manualErrorHandle = false,
 ): Promise<COMMENT.DeleteCommentResDTO> {
   const response = await apiClient(
     api.deleteComment.bind(api),
@@ -95,7 +95,7 @@ export async function deleteComment(
  */
 export async function updateComment(
   data: COMMENT.UpdateCommentReqDTO,
-  manualErrorHandle = true,
+  manualErrorHandle = false,
 ): Promise<COMMENT.UpdateCommentResDTO> {
   const response = await apiClient(
     api.updateComment.bind(api),

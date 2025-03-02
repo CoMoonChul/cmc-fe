@@ -14,7 +14,7 @@ const api = new REDIS.RedisControllerApi(
  */
 export async function saveRedis(
   data: REDIS.SaveRedisReqDTO,
-  manualErrorHandle = true,
+  manualErrorHandle = false,
 ): Promise<REDIS.SaveRedisResDTO> {
   const response = await apiClient(
     api.saveRedis.bind(api),
@@ -32,7 +32,7 @@ export async function saveRedis(
  */
 export async function selectRedis(
   key: string,
-  manualErrorHandle = true,
+  manualErrorHandle = false,
 ): Promise<REDIS.SelectRedisResDTO> {
   const response = await apiClient(
     api.selectRedis.bind(api),
@@ -50,7 +50,7 @@ export async function selectRedis(
  */
 export async function deleteRedis(
   data: REDIS.DeleteRedisReqDTO,
-  manualErrorHandle = true,
+  manualErrorHandle = false,
 ): Promise<void> {
   const response = await apiClient(
     api.deleteRedis.bind(api),
@@ -68,7 +68,7 @@ export async function deleteRedis(
  */
 export async function saveHash(
   data: REDIS.SaveHashReqDTO,
-  manualErrorHandle = true,
+  manualErrorHandle = false,
 ): Promise<REDIS.SaveHashResDTO> {
   const response = await apiClient(
     api.saveHash.bind(api),
@@ -86,7 +86,7 @@ export async function saveHash(
  */
 export async function selectHash(
   key: string,
-  manualErrorHandle = true,
+  manualErrorHandle = false,
 ): Promise<REDIS.SelectHashResDTO> {
   const response = await apiClient(
     api.selectHash.bind(api),

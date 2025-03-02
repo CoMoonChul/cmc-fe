@@ -14,7 +14,7 @@ const api = new LIVECODING.LiveCodingControllerApi(
  */
 export async function createLiveCoding(
   data: LIVECODING.CreateLiveCodingReqDTO,
-  manualErrorHandle = true,
+  manualErrorHandle = false,
 ): Promise<LIVECODING.CreateLiveCodingResDTO> {
   const response = await apiClient(
     api.createLiveCoding.bind(api),
@@ -32,7 +32,7 @@ export async function createLiveCoding(
  */
 export async function deleteLiveCoding(
   data: LIVECODING.DeleteLiveCodingReqDTO,
-  manualErrorHandle = true,
+  manualErrorHandle = false,
 ): Promise<LIVECODING.DeleteLiveCodingResDTO> {
   const response = await apiClient(
     api.deleteLiveCoding.bind(api),
@@ -50,7 +50,7 @@ export async function deleteLiveCoding(
  */
 export async function updateLiveCoding(
   data: LIVECODING.UpdateLiveCodingReqDTO,
-  manualErrorHandle = true,
+  manualErrorHandle = false,
 ): Promise<LIVECODING.UpdateLiveCodingResDTO> {
   const response = await apiClient(
     api.updateLiveCoding.bind(api),
@@ -68,7 +68,7 @@ export async function updateLiveCoding(
  */
 export async function selectLiveCoding(
   roomId: string,
-  manualErrorHandle = true,
+  manualErrorHandle = false,
 ): Promise<LIVECODING.SelectLiveCodingResDTO> {
   const response = await apiClient(
     api.selectLiveCoding.bind(api),
@@ -86,7 +86,7 @@ export async function selectLiveCoding(
  */
 export async function inviteLiveCoding(
   data: LIVECODING.InviteLiveCodingReqDTO,
-  manualErrorHandle = true,
+  manualErrorHandle = false,
 ): Promise<LIVECODING.InviteLiveCodingResDTO> {
   const response = await apiClient(
     api.inviteLiveCoding.bind(api),
@@ -104,7 +104,7 @@ export async function inviteLiveCoding(
  */
 export async function leaveLiveCoding(
   data: LIVECODING.LeaveLiveCodingReqDTO,
-  manualErrorHandle = true,
+  manualErrorHandle = false,
 ): Promise<LIVECODING.LeaveLiveCodingResDTO> {
   const response = await apiClient(
     api.leaveLiveCoding.bind(api),
