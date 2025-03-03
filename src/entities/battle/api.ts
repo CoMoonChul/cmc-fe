@@ -1,10 +1,8 @@
-import { Configuration } from '#/generate/configuration'
 import { BATTLE } from '#/generate'
 import { apiClient } from '@/shared/api/apiClient'
+import { apiConfig } from '@/shared/config/apiConfig'
 
-const api = new BATTLE.BattleControllerApi(
-  new Configuration({ basePath: '/api' }),
-)
+const api = new BATTLE.BattleControllerApi(apiConfig)
 
 /**
  * 배틀 단건 조회

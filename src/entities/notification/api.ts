@@ -1,10 +1,8 @@
-import { Configuration } from '#/generate/configuration'
 import { NOTICE } from '#/generate'
 import { apiClient } from '@/shared/api/apiClient'
+import { apiConfig } from '@/shared/config/apiConfig'
 
-const api = new NOTICE.NoticeControllerApi(
-  new Configuration({ basePath: '/api' }),
-)
+const api = new NOTICE.NoticeControllerApi(apiConfig)
 
 /**
  * 알림 리스트 조회(페이징)

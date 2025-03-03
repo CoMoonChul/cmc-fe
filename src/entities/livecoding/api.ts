@@ -1,10 +1,8 @@
-import { Configuration } from '#/generate/configuration'
 import { LIVECODING } from '#/generate'
 import { apiClient } from '@/shared/api/apiClient'
+import { apiConfig } from '@/shared/config/apiConfig'
 
-const api = new LIVECODING.LiveCodingControllerApi(
-  new Configuration({ basePath: '/api' }),
-)
+const api = new LIVECODING.LiveCodingControllerApi(apiConfig)
 
 /**
  * 라이브 코딩 방 생성

@@ -1,8 +1,8 @@
-import { Configuration } from '#/generate/configuration'
 import { LIKE } from '#/generate'
 import { apiClient } from '@/shared/api/apiClient'
+import { apiConfig } from '@/shared/config/apiConfig'
 
-const api = new LIKE.LikeControllerApi(new Configuration({ basePath: '/api' }))
+const api = new LIKE.LikeControllerApi(apiConfig)
 
 /**
  * 리뷰 좋아요 생성/업데이트

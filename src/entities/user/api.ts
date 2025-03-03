@@ -1,12 +1,10 @@
-import { Configuration } from '#/generate/configuration'
 import { USER } from '#/generate'
 import { apiClient } from '@/shared/api/apiClient'
+import { apiConfig } from '@/shared/config/apiConfig'
 
-const conf = new Configuration({ basePath: '/api' })
-
-const userApi = new USER.UserControllerApi(conf)
-const joinApi = new USER.JoinControllerApi(conf)
-const loginApi = new USER.LoginControllerApi(conf)
+const userApi = new USER.UserControllerApi(apiConfig)
+const joinApi = new USER.JoinControllerApi(apiConfig)
+const loginApi = new USER.LoginControllerApi(apiConfig)
 
 /**
  * 회원가입
