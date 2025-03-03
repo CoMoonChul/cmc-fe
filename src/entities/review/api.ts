@@ -1,10 +1,8 @@
-import { Configuration } from '#/generate/configuration'
 import { REVIEW } from '#/generate'
 import { apiClient } from '@/shared/api/apiClient'
+import { apiConfig } from '@/shared/config/apiConfig'
 
-const api = new REVIEW.ReviewControllerApi(
-  new Configuration({ basePath: '/api' }),
-)
+const api = new REVIEW.ReviewControllerApi(apiConfig)
 
 /**
  * 리뷰 단건 조회

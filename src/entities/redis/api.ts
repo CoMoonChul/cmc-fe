@@ -1,10 +1,8 @@
-import { Configuration } from '#/generate/configuration'
 import { REDIS } from '#/generate'
 import { apiClient } from '@/shared/api/apiClient'
+import { apiConfig } from '@/shared/config/apiConfig'
 
-const api = new REDIS.RedisControllerApi(
-  new Configuration({ basePath: '/api' }),
-)
+const api = new REDIS.RedisControllerApi(apiConfig)
 
 /**
  * Redis에 항목 저장

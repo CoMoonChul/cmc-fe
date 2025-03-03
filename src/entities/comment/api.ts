@@ -1,10 +1,8 @@
-import { Configuration } from '#/generate/configuration'
 import { COMMENT } from '#/generate'
 import { apiClient } from '@/shared/api/apiClient'
+import { apiConfig } from '@/shared/config/apiConfig'
 
-const api = new COMMENT.CommentControllerApi(
-  new Configuration({ basePath: '/api' }),
-)
+const api = new COMMENT.CommentControllerApi(apiConfig)
 
 /**
  * 댓글 생성

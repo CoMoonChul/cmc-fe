@@ -1,8 +1,8 @@
-import { Configuration } from '#/generate/configuration'
 import { VIEW } from '#/generate'
 import { apiClient } from '@/shared/api/apiClient'
+import { apiConfig } from '@/shared/config/apiConfig'
 
-const api = new VIEW.ViewControllerApi(new Configuration({ basePath: '/api' }))
+const api = new VIEW.ViewControllerApi(apiConfig)
 
 /**
  * 리뷰 조회수 생성/업데이트

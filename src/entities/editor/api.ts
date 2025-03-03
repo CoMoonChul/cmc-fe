@@ -1,10 +1,8 @@
-import { Configuration } from '#/generate/configuration'
 import { EDITOR } from '#/generate'
 import { apiClient } from '@/shared/api/apiClient'
+import { apiConfig } from '@/shared/config/apiConfig'
 
-const api = new EDITOR.EditorControllerApi(
-  new Configuration({ basePath: '/api' }),
-)
+const api = new EDITOR.EditorControllerApi(apiConfig)
 
 /**
  * 코드 에디터 저장
