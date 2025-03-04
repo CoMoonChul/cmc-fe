@@ -1,3 +1,5 @@
+// 이 파일의 훅들은 모두 정제해서 hooks 디렉토리 내부에 개별 파일로 만들 것
+
 import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query'
 import {
   selectCommentList,
