@@ -41,10 +41,10 @@ yarn-error.log*
 next-env.d.ts
 
 # oag
-generate/**
+generate/*
 openapitools.json
 openapitools.local.json
-!generate/template
+!generate/template/
 !generate/configuration.ts
 !generate/index.ts
 
