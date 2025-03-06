@@ -14,7 +14,7 @@ export function Button({
   disabled = false,
 }: ButtonProps) {
   const baseStyles =
-    'px-4 py-2 rounded-md text-white font-semibold transition duration-200'
+    'px-4 py-2 rounded-md text-black font-semibold transition duration-200'
   const variantStyles =
     variant === 'primary'
       ? 'bg-blue-500 hover:bg-blue-600 disabled:bg-blue-300'

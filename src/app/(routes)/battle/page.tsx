@@ -1,23 +1,17 @@
 'use client'
 
 import React, { useState } from 'react'
-import { selectComment } from '@/entities/comment/api'
 import { Button } from '@/shared/ui/Button'
+import { useComment } from '@/features/comment/hooks'
 
 export default function BattlePage() {
-  const [selectResult, setSelectResult] = useState<string | null>(null)
-  const [loading, setLoading] = useState<boolean>(false)
+  const [commentId, setCommentId] = useState<number | null>(null)
 
-  const handleStartBattle = async () => {
-    setLoading(true)
-    try {
-      const result = await selectComment(3)
-      setSelectResult(JSON.stringify(result))
-    } catch (error) {
-      setSelectResult(JSON.stringify(error))
-    } finally {
-      setLoading(false)
-    }
+  const { data, refetch } = useComment(commentId ?? 1)
+
+  const handleStartBattle = () => {
+    setCommentId(3)
+    refetch()
   }
 
   return (
@@ -27,13 +21,10 @@ export default function BattlePage() {
       {/* 배틀 시작 버튼 */}
       <Button label="배틀 시작" variant="primary" onClick={handleStartBattle} />
 
-      {/* 로딩 상태 표시 */}
-      {loading && <p className="mt-4 text-gray-600">배틀 진행 중...</p>}
-
       {/* API 응답 결과 출력 */}
-      {selectResult && (
+      {data && (
         <div className="mt-4 p-4 bg-white shadow-md rounded text-center">
-          <p className="text-gray-800">{selectResult}</p>
+          <p className="text-gray-800">{JSON.stringify(data)}</p>
         </div>
       )}
     </div>
