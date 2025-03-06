@@ -3,12 +3,11 @@
 import { usePathname, useRouter } from 'next/navigation'
 import { useThemeStore } from '@/shared/store/useThemeStore'
 
-type LayoutProps = {
-  title: string
+const Layout = ({
+  children,
+}: Readonly<{
   children: React.ReactNode
-}
-
-const Layout = ({ title, children }: LayoutProps) => {
+}>) => {
   const pathname = usePathname()
   const router = useRouter()
   const { theme, toggleTheme } = useThemeStore()
@@ -25,10 +24,6 @@ const Layout = ({ title, children }: LayoutProps) => {
         >
           ← 뒤로 가기
         </button>
-
-        <h1 className="text-lg font-medium tracking-wide text-gray-800 dark:text-gray-200">
-          {title}
-        </h1>
 
         <span className="text-sm text-gray-500 dark:text-gray-400">
           {pathname}
