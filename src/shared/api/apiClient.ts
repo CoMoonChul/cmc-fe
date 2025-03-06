@@ -1,6 +1,7 @@
 /* tslint:disable */
 /* eslint-disable */
 
+import axios from 'axios'
 import { getErrorMessage } from '@/shared/lib/messages'
 
 /**
@@ -18,6 +19,10 @@ async function apiClient<T>(
   try {
     return await requestFn(...args)
   } catch (error: any) {
+    if (error.response?.status === 401) {
+      console.log('토큰 갱신 필요')
+    }
+
     if (!manualErrorHandle) {
       const parsedMessage = getErrorMessage(error?.response?.data?.message)
       alert(parsedMessage)

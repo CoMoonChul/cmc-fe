@@ -1,11 +1,7 @@
 'use client'
 import { motion } from 'framer-motion'
-import { useIsFetching } from '@tanstack/react-query'
 
 const Loading = () => {
-  const isFetching = useIsFetching() > 0
-
-  if (!isFetching) return null
   return (
     <motion.div
       className="fixed top-0 left-0 w-screen h-screen flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm z-50 dark:bg-opacity-70"
