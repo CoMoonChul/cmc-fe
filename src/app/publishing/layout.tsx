@@ -14,7 +14,6 @@ const Layout = ({
 
   return (
     <div className="min-h-screen flex flex-col bg-gray-100 dark:bg-[#1E1E1E] text-gray-900 dark:text-gray-300">
-      {/* Header */}
       <header className="w-full bg-white dark:bg-[#2A2A2A] shadow-md p-4 flex items-center justify-between">
         <button
           onClick={() => router.back()}
