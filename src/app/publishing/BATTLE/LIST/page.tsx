@@ -1,7 +1,7 @@
 import BattleListDropDown from '../COMPONENT/BattleListDropDown'
 import BattleListCard from '../COMPONENT/BattleListCard'
 
-const BattleList = () => {
+const BattleListPage = () => {
   return (
     <div className="min-h-screen p-6 bg-white text-black dark:bg-black dark:text-white">
       <div className="flex justify-between items-center mb-4">
@@ -28,4 +28,4 @@ const BattleList = () => {
   )
 }
 
-export default BattleList
+export default BattleListPage
