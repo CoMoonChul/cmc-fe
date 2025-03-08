@@ -1,19 +1,22 @@
 'use client'
-
 import { useState } from 'react'
 import CodeMirror from '@uiw/react-codemirror'
-import { javascript } from '@codemirror/lang-javascript'
 import { dracula } from '@uiw/codemirror-theme-dracula'
 import CodeModal from './CodeModal'
 import { useThemeStore } from '@/shared/store/useThemeStore'
+import { languageExtensions } from '@/entities/editor/types'
 
 const BattleCodeBlock = ({
   code,
   isVoted,
+  language,
+  position,
   editable,
 }: {
   code: string
   isVoted: boolean
+  language?: string
+  position: string
   editable: boolean
 }) => {
   const [selectedCode, setSelectedCode] = useState<{
@@ -22,6 +25,11 @@ const BattleCodeBlock = ({
     language: string
   } | null>(null)
   const { theme } = useThemeStore()
+  const safeLanguage = language ?? 'javascript'
+
+  const onClickCode = () => {
+    console.log('onClickCode', position)
+  }
 
   return (
     <div
@@ -29,11 +37,12 @@ const BattleCodeBlock = ({
         ${isVoted ? 'border-2 border-blue-500' : 'border border-gray-300 dark:border-gray-700'}
         ${selectedCode ? '' : 'hover:scale-105 active:opacity-80 transition-transform duration-300'}
       `}
+      onClick={onClickCode}
     >
       <button
         className="absolute top-2 right-2 bg-gray-700 text-white text-xs px-2 py-1 rounded-md z-10"
         onClick={() =>
-          setSelectedCode({ code, editable, language: 'javascript' })
+          setSelectedCode({ code, editable, language: safeLanguage })
         }
       >
         전체보기
@@ -42,7 +51,7 @@ const BattleCodeBlock = ({
       <div className="flex-1 w-full overflow-auto">
         <CodeMirror
           value={code}
-          extensions={[javascript()]}
+          extensions={[languageExtensions[safeLanguage]]}
           theme={theme === 'light' ? undefined : dracula}
           className="w-full h-full rounded-md"
           readOnly={true}

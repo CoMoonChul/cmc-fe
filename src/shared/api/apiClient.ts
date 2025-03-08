@@ -1,7 +1,5 @@
 /* tslint:disable */
 /* eslint-disable */
-
-import axios from 'axios'
 import { getErrorMessage } from '@/shared/lib/messages'
 
 /**

@@ -32,6 +32,7 @@
     "@uiw/codemirror-theme-dracula": "^4.23.10",
     "@uiw/react-codemirror": "^4.23.10",
     "axios": "^1.7.9",
+    "dayjs": "^1.11.13",
     "framer-motion": "^12.4.7",
     "next": "15.1.7",
     "react": "^19.0.0",

@@ -17,7 +17,7 @@ export async function selectBattle(
   const response = await apiClient(
     api.selectBattle.bind(api),
     manualErrorHandle,
-    { id: battleId },
+    battleId,
   )
   return response.data
 }

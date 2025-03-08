@@ -21,16 +21,33 @@ const BattleDetailPage = () => {
     <div className="min-h-screen p-6 bg-white text-black dark:bg-black dark:text-white">
       <h1 className="text-2xl font-bold mb-4">배틀 제목</h1>
 
+      <div className="flex items-center justify-between space-x-4 mb-4">
+        <div>
+          <p className="text-sm font-medium">홍길동</p>
+          <p className="text-xs text-gray-500 dark:text-gray-400">2시간 전</p>
+        </div>
+        <p className="text-sm text-gray-600 dark:text-gray-400">
+          조회수: 120회
+        </p>
+      </div>
       <div className="grid grid-cols-1 md:grid-cols-[1fr_auto_1fr] gap-4 items-center">
-        <BattleCodeBlock code={sampleJavaScriptCode} editable={false} />
+        <BattleCodeBlock
+          code={sampleJavaScriptCode}
+          isVoted={true}
+          editable={false}
+        />
         <div className="text-center text-lg font-bold min-w-max px-2 whitespace-nowrap">
           VS
         </div>
-        <BattleCodeBlock code={sampleJavaScriptCode} editable={true} />
+        <BattleCodeBlock
+          code={sampleJavaScriptCode}
+          isVoted={false}
+          editable={true}
+        />
       </div>
 
       <div className="mt-4 text-center text-gray-700 dark:text-gray-300">
-        더 낫다고 생각하는 코드에 투표하세요
+        코드를 클릭해 투표하세요
       </div>
 
       <div className="mt-6 bg-gray-100 dark:bg-gray-900 p-4 rounded-lg">
