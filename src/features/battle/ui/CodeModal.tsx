@@ -54,6 +54,12 @@ const CodeModal = ({
       >
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-lg font-bold">코드 전체보기</h2>
+          <button
+            className="text-gray-500 hover:text-gray-800 dark:hover:text-white"
+            onClick={onClose}
+          >
+            ✖
+          </button>
         </div>
 
         <div className="flex-1 overflow-auto max-h-[70vh] border border-gray-300 dark:border-gray-700 rounded-md">
@@ -63,8 +69,8 @@ const CodeModal = ({
             theme={theme === 'light' ? undefined : dracula}
             className="w-full h-full"
             readOnly={!editable}
-            basicSetup={{ indentOnInput: true }}
-            style={{ minHeight: '60vh', maxHeight: '70vh' }}
+            basicSetup={{ indentOnInput: true }} // 자동 인덴팅 활성화
+            style={{ minHeight: '60vh', maxHeight: '70vh' }} // 코드미러 크기 제한
           />
         </div>
 
