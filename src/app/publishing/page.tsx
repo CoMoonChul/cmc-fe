@@ -8,9 +8,19 @@ const Publishing = () => {
       </h1>
       <div className="w-full max-w-lg bg-white dark:bg-[#2A2A2A] shadow-md rounded-xl p-6">
         <h2 className="text-lg font-medium text-gray-800 dark:text-gray-200 mb-4">
+          공통
+        </h2>
+        <ul className="space-y-3  mb-4">
+          <PubbleItem link="/COM/NOT_FOUND" />
+          <PubbleItem link="/COM/LOADING" />
+        </ul>
+        <h2 className="text-lg font-medium text-gray-800 dark:text-gray-200 mb-4">
           리뷰
         </h2>
-        <ul className="space-y-3 mb-4"></ul>
+        <ul className="space-y-3 mb-4">
+          <PubbleItem link="/REVIEW/LIST" />
+          <PubbleItem link="/REVIEW/DETAIL" />
+        </ul>
         <h2 className="text-lg font-medium text-gray-800 dark:text-gray-200 mb-4">
           배틀
         </h2>
@@ -21,11 +31,19 @@ const Publishing = () => {
           <PubbleItem link="/BATTLE/DETAIL" />
         </ul>
         <h2 className="text-lg font-medium text-gray-800 dark:text-gray-200 mb-4">
-          공통
+          회원
         </h2>
         <ul className="space-y-3  mb-4">
-          <PubbleItem link="/COM/NOT_FOUND" />
-          <PubbleItem link="/COM/LOADING" />
+          <PubbleItem link="/USER/SIGNUP" />
+          <PubbleItem link="/USER/LOGIN" />
+          <PubbleItem link="/USER/ACCOUNT_RECOVER" />
+          <PubbleItem link="/USER/PROFILE" />
+        </ul>
+        <h2 className="text-lg font-medium text-gray-800 dark:text-gray-200 mb-4">
+          알림
+        </h2>
+        <ul className="space-y-3  mb-4">
+          <PubbleItem link="/NOTI/LIST" />
         </ul>
       </div>
     </div>
