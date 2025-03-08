@@ -24,6 +24,7 @@ const BattleDetailPage: FC<BattleDetailPageProps> = async ({ params }) => {
     codeTypeRight,
     viewCount,
     username,
+    voteValue,
     createdAt,
   } = await selectBattle(Number(id))
 
