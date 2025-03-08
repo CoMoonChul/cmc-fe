@@ -18,6 +18,7 @@ const Publishing = () => {
           <PubbleItem link="/BATTLE/LIST" />
           <PubbleItem link="/BATTLE/DETAIL" />
           <PubbleItem link="/BATTLE/RESULT" />
+          <PubbleItem link="/BATTLE/DETAIL" />
         </ul>
         <h2 className="text-lg font-medium text-gray-800 dark:text-gray-200 mb-4">
           공통

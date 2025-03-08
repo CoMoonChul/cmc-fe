@@ -38,7 +38,6 @@ const Layout = ({
         </button>
       </header>
 
-      {/* Content */}
       <main className="flex-grow p-6">{children}</main>
     </div>
   )
