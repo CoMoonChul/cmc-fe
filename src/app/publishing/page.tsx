@@ -14,19 +14,26 @@ const Publishing = () => {
           공통 컴포넌트
         </h2>
         <ul className="space-y-3">
-          <li>
-            <Link
-              href="/publishing/COM_NOT_FOUND"
-              className="block px-5 py-3 rounded-lg transition text-center 
-              bg-gray-200 text-gray-900 hover:bg-gray-300 
-              dark:bg-[#3A3A3A] dark:text-gray-100 dark:hover:bg-[#444444]"
-            >
-              COM_NOT_FOUND
-            </Link>
-          </li>
+          <PubbleItem link="COM_NOT_FOUND" />
+          <PubbleItem link="BATTLE_LIST" />
         </ul>
       </div>
     </div>
+  )
+}
+
+const PubbleItem = ({ link }: { link: string }) => {
+  return (
+    <li>
+      <Link
+        href={'/publishing/' + link}
+        className="block px-5 py-3 rounded-lg transition text-center 
+        bg-gray-200 text-gray-900 hover:bg-gray-300 
+        dark:bg-[#3A3A3A] dark:text-gray-100 dark:hover:bg-[#444444]"
+      >
+        {link}
+      </Link>
+    </li>
   )
 }
 
