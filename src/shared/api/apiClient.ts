@@ -32,7 +32,7 @@ async function apiClient<T>(
         openPopup('에러', parsedMessage)
         // 서버 컴포넌트의 경우 500 에러 페이지 리다이렉트
       } else {
-        redirect('/500')
+        throw new Error(parsedMessage)
       }
     }
     throw error
