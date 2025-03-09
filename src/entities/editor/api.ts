@@ -7,7 +7,7 @@ const api = new EDITOR.EditorControllerApi(apiConfig)
 /**
  * 코드 에디터 저장
  * @param data CreateEditorReqDTO
- * @param manualErrorHandle 에러 핸들링 여부 (기본값: true)
+ * @param manualErrorHandle 에러 핸들링 여부 (기본값: false)
  * @returns 생성된 코드 에디터 정보
  */
 export async function createEditor(
@@ -25,7 +25,7 @@ export async function createEditor(
 /**
  * 코드 에디터 수정
  * @param data UpdateEditorReqDTO
- * @param manualErrorHandle 에러 핸들링 여부 (기본값: true)
+ * @param manualErrorHandle 에러 핸들링 여부 (기본값: false)
  * @returns 수정된 코드 에디터 정보
  */
 export async function updateEditor(
@@ -43,7 +43,7 @@ export async function updateEditor(
 /**
  * 코드 에디터 삭제
  * @param data DeleteEditorReqDTO
- * @param manualErrorHandle 에러 핸들링 여부 (기본값: true)
+ * @param manualErrorHandle 에러 핸들링 여부 (기본값: false)
  * @returns 삭제된 코드 에디터 정보
  */
 export async function deleteEditor(
@@ -61,7 +61,7 @@ export async function deleteEditor(
 /**
  * 코드 에디터 단건 조회
  * @param id 에디터 ID
- * @param manualErrorHandle 에러 핸들링 여부 (기본값: true)
+ * @param manualErrorHandle 에러 핸들링 여부 (기본값: false)
  * @returns 조회된 코드 에디터 정보
  */
 export async function selectEditor(

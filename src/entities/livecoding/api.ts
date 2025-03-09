@@ -7,7 +7,7 @@
 // /**
 //  * 라이브 코딩 방 생성
 //  * @param data CreateLiveCodingReqDTO
-//  * @param manualErrorHandle 에러 핸들링 여부 (기본값: true)
+//  * @param manualErrorHandle 에러 핸들링 여부 (기본값: false)
 //  * @returns 생성된 라이브 코딩 방 정보
 //  */
 // export async function createLiveCoding(
@@ -25,7 +25,7 @@
 // /**
 //  * 라이브 코딩 방 삭제
 //  * @param data DeleteLiveCodingReqDTO
-//  * @param manualErrorHandle 에러 핸들링 여부 (기본값: true)
+//  * @param manualErrorHandle 에러 핸들링 여부 (기본값: false)
 //  * @returns 삭제된 라이브 코딩 방 정보
 //  */
 // export async function deleteLiveCoding(
@@ -43,7 +43,7 @@
 // /**
 //  * 라이브 코딩 방 정보 업데이트
 //  * @param data UpdateLiveCodingReqDTO
-//  * @param manualErrorHandle 에러 핸들링 여부 (기본값: true)
+//  * @param manualErrorHandle 에러 핸들링 여부 (기본값: false)
 //  * @returns 업데이트된 라이브 코딩 방 정보
 //  */
 // export async function updateLiveCoding(
@@ -61,7 +61,7 @@
 // /**
 //  * 라이브 코딩 방 조회
 //  * @param roomId 라이브 코딩 방 ID (UUID)
-//  * @param manualErrorHandle 에러 핸들링 여부 (기본값: true)
+//  * @param manualErrorHandle 에러 핸들링 여부 (기본값: false)
 //  * @returns 조회된 라이브 코딩 방 정보
 //  */
 // export async function selectLiveCoding(
@@ -79,7 +79,7 @@
 // /**
 //  * 라이브 코딩 방 초대 링크 생성
 //  * @param data InviteLiveCodingReqDTO
-//  * @param manualErrorHandle 에러 핸들링 여부 (기본값: true)
+//  * @param manualErrorHandle 에러 핸들링 여부 (기본값: false)
 //  * @returns 생성된 초대 링크 정보
 //  */
 // export async function inviteLiveCoding(
@@ -97,7 +97,7 @@
 // /**
 //  * 라이브 코딩 방에서 나가기
 //  * @param data LeaveLiveCodingReqDTO
-//  * @param manualErrorHandle 에러 핸들링 여부 (기본값: true)
+//  * @param manualErrorHandle 에러 핸들링 여부 (기본값: false)
 //  * @returns 라이브 코딩 방 나가기 결과
 //  */
 // export async function leaveLiveCoding(

@@ -7,7 +7,7 @@ const api = new COMMENT.CommentControllerApi(apiConfig)
 /**
  * 댓글 생성
  * @param data CreateCommentReqDTO
- * @param manualErrorHandle 에러 핸들링 여부 (기본값: true)
+ * @param manualErrorHandle 에러 핸들링 여부 (기본값: false)
  * @returns 생성된 댓글 정보
  */
 export async function createComment(
@@ -25,7 +25,7 @@ export async function createComment(
 /**
  * 댓글 단건 조회
  * @param id 댓글 ID
- * @param manualErrorHandle 에러 핸들링 여부 (기본값: true)
+ * @param manualErrorHandle 에러 핸들링 여부 (기본값: false)
  * @returns 댓글 상세 정보
  */
 export async function selectComment(
@@ -46,7 +46,7 @@ export async function selectComment(
  * @param commentTarget 타겟 구분 값
  * @param page 페이지 번호 (기본값: 0)
  * @param size 페이지 사이즈 (기본값: 10)
- * @param manualErrorHandle 에러 핸들링 여부 (기본값: true)
+ * @param manualErrorHandle 에러 핸들링 여부 (기본값: false)
  * @returns 댓글 리스트
  */
 export async function selectCommentList(
@@ -70,7 +70,7 @@ export async function selectCommentList(
 /**
  * 댓글 삭제
  * @param data DeleteCommentReqDTO
- * @param manualErrorHandle 에러 핸들링 여부 (기본값: true)
+ * @param manualErrorHandle 에러 핸들링 여부 (기본값: false)
  * @returns 삭제된 댓글 정보
  */
 export async function deleteComment(
@@ -88,7 +88,7 @@ export async function deleteComment(
 /**
  * 댓글 수정
  * @param data UpdateCommentReqDTO
- * @param manualErrorHandle 에러 핸들링 여부 (기본값: true)
+ * @param manualErrorHandle 에러 핸들링 여부 (기본값: false)
  * @returns 수정된 댓글 정보
  */
 export async function updateComment(

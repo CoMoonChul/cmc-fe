@@ -7,7 +7,7 @@ const api = new REVIEW.ReviewControllerApi(apiConfig)
 /**
  * 리뷰 단건 조회
  * @param reviewId 리뷰 ID
- * @param manualErrorHandle 에러 핸들링 여부 (기본값: true)
+ * @param manualErrorHandle 에러 핸들링 여부 (기본값: false)
  * @returns 조회된 리뷰 정보
  */
 export async function selectReview(
@@ -29,7 +29,7 @@ export async function selectReview(
  * @param sort 정렬 기준 (기본값: "createdAt")
  * @param order 정렬 순서 (기본값: "desc")
  * @param keyword 검색 키워드 (선택)
- * @param manualErrorHandle 에러 핸들링 여부 (기본값: true)
+ * @param manualErrorHandle 에러 핸들링 여부 (기본값: false)
  * @returns 리뷰 리스트 조회 결과
  */
 export async function selectReviewList(
@@ -57,7 +57,7 @@ export async function selectReviewList(
 /**
  * 리뷰 생성
  * @param data CreateReviewReqDTO
- * @param manualErrorHandle 에러 핸들링 여부 (기본값: true)
+ * @param manualErrorHandle 에러 핸들링 여부 (기본값: false)
  * @returns 생성된 리뷰 정보
  */
 export async function createReview(
@@ -75,7 +75,7 @@ export async function createReview(
 /**
  * 리뷰 삭제
  * @param data DeleteReviewReqDTO
- * @param manualErrorHandle 에러 핸들링 여부 (기본값: true)
+ * @param manualErrorHandle 에러 핸들링 여부 (기본값: false)
  * @returns 삭제 결과
  */
 export async function deleteReview(
@@ -93,7 +93,7 @@ export async function deleteReview(
 /**
  * 리뷰 수정
  * @param data UpdateReviewReqDTO
- * @param manualErrorHandle 에러 핸들링 여부 (기본값: true)
+ * @param manualErrorHandle 에러 핸들링 여부 (기본값: false)
  * @returns 수정된 리뷰 정보
  */
 export async function updateReview(

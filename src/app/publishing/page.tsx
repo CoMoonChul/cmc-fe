@@ -13,6 +13,7 @@ const Publishing = () => {
         <ul className="space-y-3  mb-4">
           <PubbleItem link="/COM/NOT_FOUND" />
           <PubbleItem link="/COM/LOADING" />
+          <PubbleItem link="/COM/ERROR_500" />
         </ul>
         <h2 className="text-lg font-medium text-gray-800 dark:text-gray-200 mb-4">
           리뷰
