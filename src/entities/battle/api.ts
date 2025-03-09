@@ -7,7 +7,7 @@ const api = new BATTLE.BattleControllerApi(apiConfig)
 /**
  * 배틀 단건 조회
  * @param battleId 배틀 ID
- * @param manualErrorHandle 에러 핸들링 여부 (기본값: true)
+ * @param manualErrorHandle 에러 핸들링 여부 (기본값: false)
  * @returns 조회된 배틀 정보
  */
 export async function selectBattle(
@@ -25,7 +25,7 @@ export async function selectBattle(
 /**
  * 배틀 생성
  * @param data CreateBattleReqDTO
- * @param manualErrorHandle 에러 핸들링 여부 (기본값: true)
+ * @param manualErrorHandle 에러 핸들링 여부 (기본값: false)
  * @returns 생성된 배틀 정보
  */
 export async function createBattle(
@@ -43,7 +43,7 @@ export async function createBattle(
 /**
  * 배틀 수정
  * @param data UpdateBattleReqDTO
- * @param manualErrorHandle 에러 핸들링 여부 (기본값: true)
+ * @param manualErrorHandle 에러 핸들링 여부 (기본값: false)
  * @returns 수정된 배틀 정보
  */
 export async function updateBattle(
@@ -61,7 +61,7 @@ export async function updateBattle(
 /**
  * 배틀 투표 (기존 투표가 있다면 변경됨)
  * @param data UpdateVoteBattleReqDTO
- * @param manualErrorHandle 에러 핸들링 여부 (기본값: true)
+ * @param manualErrorHandle 에러 핸들링 여부 (기본값: false)
  * @returns 변경된 배틀 투표 정보
  */
 export async function updateVoteBattle(
@@ -79,7 +79,7 @@ export async function updateVoteBattle(
 /**
  * 배틀 투표 삭제
  * @param data DeleteVoteBattleReqDTO
- * @param manualErrorHandle 에러 핸들링 여부 (기본값: true)
+ * @param manualErrorHandle 에러 핸들링 여부 (기본값: false)
  * @returns 삭제된 투표 정보
  */
 export async function deleteVoteBattle(
@@ -97,7 +97,7 @@ export async function deleteVoteBattle(
 /**
  * 배틀 삭제
  * @param data DeleteBattleReqDTO
- * @param manualErrorHandle 에러 핸들링 여부 (기본값: true)
+ * @param manualErrorHandle 에러 핸들링 여부 (기본값: false)
  * @returns 삭제된 배틀 정보
  */
 export async function deleteBattle(

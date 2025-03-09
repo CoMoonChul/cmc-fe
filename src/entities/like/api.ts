@@ -7,7 +7,7 @@ const api = new LIKE.LikeControllerApi(apiConfig)
 /**
  * 리뷰 좋아요 생성/업데이트
  * @param data UpdateReviewLikeReqDTO
- * @param manualErrorHandle 에러 핸들링 여부 (기본값: true)
+ * @param manualErrorHandle 에러 핸들링 여부 (기본값: false)
  * @returns 생성/업데이트된 리뷰 좋아요 정보
  */
 export async function updateReviewLike(
@@ -25,7 +25,7 @@ export async function updateReviewLike(
 /**
  * 리뷰 좋아요 삭제
  * @param data DeleteReviewLikeReqDTO
- * @param manualErrorHandle 에러 핸들링 여부 (기본값: true)
+ * @param manualErrorHandle 에러 핸들링 여부 (기본값: false)
  * @returns 삭제된 리뷰 좋아요 정보
  */
 export async function deleteReviewLike(

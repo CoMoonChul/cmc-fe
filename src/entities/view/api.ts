@@ -7,7 +7,7 @@ const api = new VIEW.ViewControllerApi(apiConfig)
 /**
  * 리뷰 조회수 생성/업데이트
  * @param data UpdateReviewViewReqDTO
- * @param manualErrorHandle 에러 핸들링 여부 (기본값: true)
+ * @param manualErrorHandle 에러 핸들링 여부 (기본값: false)
  * @returns 조회수 업데이트 결과
  */
 export async function updateReviewView(
@@ -25,7 +25,7 @@ export async function updateReviewView(
 /**
  * 배틀 조회수 생성/업데이트
  * @param data UpdateBattleViewReqDTO
- * @param manualErrorHandle 에러 핸들링 여부 (기본값: true)
+ * @param manualErrorHandle 에러 핸들링 여부 (기본값: false)
  * @returns 조회수 업데이트 결과
  */
 export async function updateBattleView(
