@@ -7,6 +7,42 @@ const joinApi = new USER.JoinControllerApi(apiConfig)
 const loginApi = new USER.LoginControllerApi(apiConfig)
 
 /**
+ * 로그인 - 넥스트 로그인 라우터를 통한 처리
+ * @param userId 아이디
+ * @param password 비밀번호
+ * @returns 로그인 결과
+ */
+export async function loginNext(userId: string, password: string) {
+  const response = await fetch('/api/auth/login', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ userId, password }),
+    credentials: 'include', // 쿠키 포함 필수
+  })
+
+  if (!response.ok) {
+    throw new Error('로그인 실패')
+  }
+
+  return await response.json()
+}
+
+/**
+ * 로그아웃 - 넥스트 로그아웃 라우터를 통한 처리
+ * @returns 로그아웃 결과
+ */
+export async function logoutNext() {
+  const response = await fetch('/api/auth/logout', {
+    method: 'POST',
+    credentials: 'include', // 쿠키 포함 필수
+  })
+
+  if (!response.ok) {
+    throw new Error('로그아웃 실패')
+  }
+}
+
+/**
  * 회원가입
  * @param data JoinReqDTO
  * @param manualErrorHandle 에러 핸들링 여부 (기본값: false)
