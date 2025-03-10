@@ -1,5 +1,5 @@
 // 정적 라우팅 경로
-export const PROTECTED_ROUTES = ['/battle']
+export const PROTECTED_ROUTES = ['/battle', '/notice']
 
 // 동적 라우팅 경로
 export const DYNAMIC_PROTECTED_ROUTES = [
