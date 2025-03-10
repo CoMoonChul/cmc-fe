@@ -1,8 +1,13 @@
 import { BATTLE } from '#/generate'
 import { apiClient } from '@/shared/api/apiClient'
 import { apiConfig } from '@/shared/config/apiConfig'
+import { axiosInstance } from '@/shared/config/axiosInstance'
 
-const api = new BATTLE.BattleControllerApi(apiConfig)
+const api = new BATTLE.BattleControllerApi(
+  apiConfig,
+  apiConfig.basePath,
+  axiosInstance,
+)
 
 /**
  * 배틀 단건 조회

@@ -6,14 +6,17 @@ import { USER } from '#/generate'
 import Image from 'next/image'
 import GoogleIcon from '#/public/google-icon.svg'
 import { AxiosError } from 'axios'
+import { useRouter } from 'next/navigation'
 
 const UserLoginPage = () => {
-  // 로그인 api 오류 발생 시 에러 수동 처리
-  const { mutate: loginMutate } = useLogin(true)
+  // 라우터
+  const router = useRouter()
+  const { mutate: loginMutate } = useLogin()
   const [formData, setFormData] = useState({
     userId: '',
     password: '',
   })
+  // 상단 에러문구 노출
   const [error, setError] = useState<string | null>(null)
 
   const handleLogin = () => {
@@ -29,7 +32,7 @@ const UserLoginPage = () => {
 
     loginMutate(loginParam, {
       onSuccess: (data) => {
-        console.log('data', data)
+        router.push('/')
       },
       onError: (err) => {
         if (err instanceof AxiosError) {
