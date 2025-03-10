@@ -19,7 +19,8 @@ export async function selectPageNotice(
   const response = await apiClient(
     api.selectPageNotice.bind(api),
     manualErrorHandle,
-    { page, size },
+    page,
+    size,
   )
   return response.data
 }
