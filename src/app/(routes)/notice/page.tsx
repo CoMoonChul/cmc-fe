@@ -3,7 +3,7 @@
 import React, { useState } from 'react'
 import { Button } from '@/shared/ui/Button'
 import { useComment } from '@/features/comment/hooks'
-import { useNotices } from '@/features/notice/hook'
+import { useNotices } from '@/features/notice/hooks'
 import { useEditor } from '@/features/editor/hooks'
 
 export default function NoticePage() {
