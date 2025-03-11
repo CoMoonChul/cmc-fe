@@ -44,3 +44,21 @@ export async function selectLiveCoding(
   )
   return response.data
 }
+
+/**
+ * 라이브코딩 삭제
+ * @param data DeleteVoteBattleReqDTO
+ * @param manualErrorHandle 에러 핸들링 여부 (기본값: false)
+ * @returns 삭제 성공 여부
+ */
+export async function deleteLiveCoding(
+  data: LIVECODING.DeleteLiveCodingReqDTO,
+  manualErrorHandle = false,
+): Promise<LIVECODING.DeleteLiveCodingResDTO> {
+  const response = await apiClient(
+    api.deleteLiveCoding.bind(api),
+    manualErrorHandle,
+    data,
+  )
+  return response.data
+}
