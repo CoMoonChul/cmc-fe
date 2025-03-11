@@ -26,3 +26,21 @@ export async function createLiveCoding(
   )
   return response.data
 }
+
+/**
+ * 라이브코딩 방 조회
+ * @param roomId - 조회할 방 ID
+ * @param manualErrorHandle 에러 핸들링 여부 (기본값: false)
+ * @returns 방 정보 조회
+ */
+export async function selectLiveCoding(
+  roomId: string,
+  manualErrorHandle = false,
+): Promise<LIVECODING.SelectLiveCodingResDTO> {
+  const response = await apiClient(
+    api.selectLiveCoding.bind(api),
+    manualErrorHandle,
+    roomId,
+  )
+  return response.data
+}
