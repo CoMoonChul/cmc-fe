@@ -6,14 +6,19 @@ import NoticeCard from '@/features/notice/ui/NoticeCard'
 import { useRouter } from 'next/navigation'
 
 interface NotificationItem {
-  noti_id: number
-  noti_type: string
-  noti_title: string
+  create_user: number | undefined
+  created_at: string
+  link_url: string
   noti_content: string
-  noti_link: string
-  noti_created_at: string
-  noti_read: boolean
-  // 필요한 추가 필드들을 여기에 정의하세요.
+  noti_id: number
+  noti_template_id: number
+  noti_template_nm: string
+  noti_title: string
+  noti_type: 'NOTI' | 'JOIN' | 'LINK'
+  reason_noti: string
+  send_at: string
+  send_state: string
+  user_num: number
 }
 
 interface Notification {
@@ -68,7 +73,7 @@ export default function NoticePage() {
 
       <div className="space-y-4">
         {notiList.length > 0 ? (
-          notiList.map((notification) => (
+          notiList.map((notification: NotificationItem) => (
             <NoticeCard
               key={notification.noti_id}
               notification={notification}
