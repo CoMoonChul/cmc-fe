@@ -1,8 +1,13 @@
 import { NOTICE } from '#/generate'
 import { apiClient } from '@/shared/api/apiClient'
 import { apiConfig } from '@/shared/config/apiConfig'
+import { axiosInstance } from '@/shared/config/axiosInstance'
 
-const api = new NOTICE.NoticeControllerApi(apiConfig)
+const api = new NOTICE.NoticeControllerApi(
+  apiConfig,
+  apiConfig.basePath,
+  axiosInstance,
+)
 
 /**
  * 알림 리스트 조회(페이징)

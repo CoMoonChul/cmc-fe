@@ -1,8 +1,13 @@
 import { COMMENT } from '#/generate'
 import { apiClient } from '@/shared/api/apiClient'
 import { apiConfig } from '@/shared/config/apiConfig'
+import { axiosInstance } from '@/shared/config/axiosInstance'
 
-const api = new COMMENT.CommentControllerApi(apiConfig)
+const api = new COMMENT.CommentControllerApi(
+  apiConfig,
+  apiConfig.basePath,
+  axiosInstance,
+)
 
 /**
  * 댓글 생성

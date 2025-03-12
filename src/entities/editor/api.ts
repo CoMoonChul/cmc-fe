@@ -1,8 +1,13 @@
 import { EDITOR } from '#/generate'
 import { apiClient } from '@/shared/api/apiClient'
 import { apiConfig } from '@/shared/config/apiConfig'
+import { axiosInstance } from '@/shared/config/axiosInstance'
 
-const api = new EDITOR.EditorControllerApi(apiConfig)
+const api = new EDITOR.EditorControllerApi(
+  apiConfig,
+  apiConfig.basePath,
+  axiosInstance,
+)
 
 /**
  * 코드 에디터 저장

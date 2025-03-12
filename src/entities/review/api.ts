@@ -1,8 +1,13 @@
 import { REVIEW } from '#/generate'
 import { apiClient } from '@/shared/api/apiClient'
 import { apiConfig } from '@/shared/config/apiConfig'
+import { axiosInstance } from '@/shared/config/axiosInstance'
 
-const api = new REVIEW.ReviewControllerApi(apiConfig)
+const api = new REVIEW.ReviewControllerApi(
+  apiConfig,
+  apiConfig.basePath,
+  axiosInstance,
+)
 
 /**
  * 리뷰 단건 조회

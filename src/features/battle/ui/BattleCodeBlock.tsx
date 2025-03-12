@@ -1,18 +1,22 @@
 'use client'
 import { useState } from 'react'
+import { BATTLE } from '#/generate'
 import CodeMirror from '@uiw/react-codemirror'
 import { dracula } from '@uiw/codemirror-theme-dracula'
 import CodeModal from './CodeModal'
 import { useThemeStore } from '@/shared/store/useThemeStore'
 import { languageExtensions } from '@/entities/editor/types'
+import { useUpdateVoteBattle } from '@/features/battle/hooks/useUpdateVoteBattle'
 
 const BattleCodeBlock = ({
+  battleId,
   code,
   isVoted,
   language,
   position,
   editable,
 }: {
+  battleId: number
   code: string
   isVoted: boolean
   language?: string
@@ -24,11 +28,21 @@ const BattleCodeBlock = ({
     editable: boolean
     language: string
   } | null>(null)
+
   const { theme } = useThemeStore()
   const safeLanguage = language ?? 'javascript'
+  const voteBattleMutation = useUpdateVoteBattle()
 
   const onClickCode = () => {
-    console.log('onClickCode', position)
+    const voteReq: BATTLE.UpdateVoteBattleReqDTO = {
+      battleId,
+      voteValue: position === 'left' ? 0 : 1,
+    }
+    voteBattleMutation.mutate(voteReq, {
+      onSuccess: (data) => {
+        console.log('data', data)
+      },
+    })
   }
 
   return (

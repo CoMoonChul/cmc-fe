@@ -32,7 +32,7 @@ const UserLoginPage = () => {
 
     loginMutate(loginParam, {
       onSuccess: (data) => {
-        router.push('/')
+        router.push('/battle/detail/3')
       },
       onError: (err) => {
         if (err instanceof AxiosError) {

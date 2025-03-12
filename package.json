@@ -34,6 +34,7 @@
     "axios": "^1.7.9",
     "dayjs": "^1.11.13",
     "framer-motion": "^12.4.7",
+    "lodash": "^4.17.21",
     "next": "15.1.7",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
@@ -42,6 +43,7 @@
   "devDependencies": {
     "@eslint/eslintrc": "^3",
     "@openapitools/openapi-generator-cli": "^2.6.0",
+    "@types/lodash": "^4.17.16",
     "@types/node": "^20.17.19",
     "@types/react": "^19.0.10",
     "@types/react-dom": "^19",

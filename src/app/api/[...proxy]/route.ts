@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 
 const BACKEND_URL = process.env.BACKEND_URL || 'http://localhost:8080'
-const REFRESH_TOKEN_URL = `${BACKEND_URL}/user/refresh`
+const REFRESH_TOKEN_URL = `${BACKEND_URL}/user/tempRefresh`
 
 /**
  * API 호출 핸들러
@@ -27,20 +27,16 @@ async function handleRequest(
       'Content-Type': 'application/json',
       ...(accessToken && { Authorization: `Bearer ${accessToken}` }),
     }
-    console.log('@@@@@@@headers', headers)
 
     let response = await fetch(url, {
       method: req.method,
       headers,
       body,
+      credentials: 'include',
     })
-
-    console.log('@@@@@@response', response)
 
     // accessToken이 만료된 경우, refreshToken을 사용하여 새로운 accessToken을 받아온다.
     if (response.status === 401 && !retried && refreshToken) {
-      console.log('🔄 AccessToken expired. Trying to refresh...')
-
       // 새로운 accessToken 요청
       const newAccessToken = await refreshAccessToken(refreshToken)
 
@@ -48,20 +44,25 @@ async function handleRequest(
         return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
       }
 
-      console.log('✅ AccessToken refreshed successfully!')
-
       // 새로운 accessToken을 헤더에 추가하여 다시 요청
       headers.Authorization = `Bearer ${newAccessToken}`
       response = await fetch(url, {
         method: req.method,
         headers,
         body,
+        credentials: 'include',
       })
 
       // 새로운 accessToken을 쿠키로 설정하여 응답 반환
-      return setAccessTokenCookie(response, newAccessToken)
+      const newResponse = NextResponse.json(await response.json(), {
+        status: response.status,
+      })
+      newResponse.headers.append(
+        'Set-Cookie',
+        `accessToken=${newAccessToken}; Path=/; HttpOnly; Secure=${process.env.NODE_ENV === 'production'}; SameSite=Strict; Max-Age=900`,
+      )
+      return newResponse
     }
-
     return NextResponse.json(await response.json(), { status: response.status })
   } catch (error) {
     console.error('[api][route.ts] error', error)
@@ -80,13 +81,17 @@ async function handleRequest(
 async function refreshAccessToken(
   refreshToken: string,
 ): Promise<string | null> {
+  const body = {
+    refreshToken,
+  }
+
   try {
     const response = await fetch(REFRESH_TOKEN_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ refreshToken }),
+      body: JSON.stringify(body),
+      credentials: 'include',
     })
-
     if (!response.ok) {
       return null
     }
@@ -97,30 +102,6 @@ async function refreshAccessToken(
     console.error('[refreshAccessToken] Error:', error)
     return null
   }
-}
-
-/**
- * 새로운 accessToken을 쿠키로 설정하여 응답 반환
- * @param originalResponse Response
- * @param newAccessToken string
- * @returns NextResponse
- */
-function setAccessTokenCookie(
-  originalResponse: Response,
-  newAccessToken: string,
-): NextResponse {
-  const response = NextResponse.json(originalResponse.body, {
-    status: originalResponse.status,
-  })
-
-  response.cookies.set('accessToken', newAccessToken, {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'strict',
-    path: '/',
-  })
-
-  return response
 }
 
 export async function GET(req: NextRequest) {

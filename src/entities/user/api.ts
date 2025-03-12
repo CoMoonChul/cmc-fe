@@ -1,10 +1,23 @@
 import { USER } from '#/generate'
 import { apiClient } from '@/shared/api/apiClient'
 import { apiConfig } from '@/shared/config/apiConfig'
+import { axiosInstance } from '@/shared/config/axiosInstance'
 
-const userApi = new USER.UserControllerApi(apiConfig)
-const joinApi = new USER.JoinControllerApi(apiConfig)
-const loginApi = new USER.LoginControllerApi(apiConfig)
+const userApi = new USER.UserControllerApi(
+  apiConfig,
+  apiConfig.basePath,
+  axiosInstance,
+)
+const joinApi = new USER.JoinControllerApi(
+  apiConfig,
+  apiConfig.basePath,
+  axiosInstance,
+)
+const loginApi = new USER.LoginControllerApi(
+  apiConfig,
+  apiConfig.basePath,
+  axiosInstance,
+)
 
 /**
  * 로그인 - 넥스트 로그인 라우터를 통한 처리
@@ -17,7 +30,7 @@ export async function loginNext(userId: string, password: string) {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ userId, password }),
-    credentials: 'include', // 쿠키 포함 필수
+    credentials: 'include',
   })
 
   if (!response.ok) {
@@ -34,7 +47,7 @@ export async function loginNext(userId: string, password: string) {
 export async function logoutNext() {
   const response = await fetch('/api/auth/logout', {
     method: 'POST',
-    credentials: 'include', // 쿠키 포함 필수
+    credentials: 'include',
   })
 
   if (!response.ok) {
