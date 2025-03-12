@@ -20,6 +20,7 @@ export default function LiveCodingTestPage() {
         alert('호스트 ID를 입력해야 합니다.')
         return
       }
+      // test
       if (!/^\d+$/.test(hostIdInput)) {
         alert('숫자만 입력 가능합니다.')
         return
