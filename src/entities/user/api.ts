@@ -1,10 +1,23 @@
 import { USER } from '#/generate'
 import { apiClient } from '@/shared/api/apiClient'
 import { apiConfig } from '@/shared/config/apiConfig'
+import { axiosInstance } from '@/shared/config/axiosInstance'
 
-const userApi = new USER.UserControllerApi(apiConfig)
-const joinApi = new USER.JoinControllerApi(apiConfig)
-const loginApi = new USER.LoginControllerApi(apiConfig)
+const userApi = new USER.UserControllerApi(
+  apiConfig,
+  apiConfig.basePath,
+  axiosInstance,
+)
+const joinApi = new USER.JoinControllerApi(
+  apiConfig,
+  apiConfig.basePath,
+  axiosInstance,
+)
+const loginApi = new USER.LoginControllerApi(
+  apiConfig,
+  apiConfig.basePath,
+  axiosInstance,
+)
 
 /**
  * 로그인 - 넥스트 로그인 라우터를 통한 처리

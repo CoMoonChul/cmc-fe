@@ -1,8 +1,13 @@
 import { VIEW } from '#/generate'
 import { apiClient } from '@/shared/api/apiClient'
 import { apiConfig } from '@/shared/config/apiConfig'
+import { axiosInstance } from '@/shared/config/axiosInstance'
 
-const api = new VIEW.ViewControllerApi(apiConfig)
+const api = new VIEW.ViewControllerApi(
+  apiConfig,
+  apiConfig.basePath,
+  axiosInstance,
+)
 
 /**
  * 리뷰 조회수 생성/업데이트
