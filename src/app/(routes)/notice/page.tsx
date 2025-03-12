@@ -6,7 +6,23 @@ import NoticeCard from '@/features/notice/ui/NoticeCard'
 import { useRouter } from 'next/navigation'
 
 interface Notification {
-  notiList: []
+  notiList: [
+    {
+      create_user: number | undefined // undefined 허용
+      created_at: string
+      link_url: string
+      noti_content: string
+      noti_id: number
+      noti_template_id: number
+      noti_template_nm: string
+      noti_title: string
+      noti_type: 'NOTI' | 'JOIN' | 'LINK'
+      reason_noti: string
+      send_at: string
+      send_state: string
+      user_num: number
+    },
+  ]
   pageNumber: number
   pageSize: number
   totalElements: number
