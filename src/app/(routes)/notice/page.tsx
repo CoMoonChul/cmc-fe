@@ -4,26 +4,9 @@ import React, { useState } from 'react'
 import { useDeleteNoticeMutation, useNotices } from '@/features/notice/hooks'
 import NoticeCard from '@/features/notice/ui/NoticeCard'
 import { useRouter } from 'next/navigation'
-import { SelectNoticeResDTO } from '#/generate/notice/api'
-
-interface NotificationItem {
-  create_user: number | undefined
-  created_at: string
-  link_url: string
-  noti_content: string
-  noti_id: number
-  noti_template_id: number
-  noti_template_nm: string
-  noti_title: string
-  noti_type: 'NOTI' | 'JOIN' | 'LINK'
-  reason_noti: string
-  send_at: string
-  send_state: string
-  user_num: number
-}
 
 interface Notification {
-  notiList: NotificationItem[]
+  notiList: []
   pageNumber: number
   pageSize: number
   totalElements: number
@@ -31,10 +14,10 @@ interface Notification {
 }
 
 export default function NoticePage() {
-  const { data, refetch, isLoading, isError } = useNotices(0, 10)
+  // const { notifications, setNotifications } = useState<Notification[]>()
+  const { data, refetch }: { Notification: Notification } = useNotices(0, 10)
   const { mutate: deleteNotice } = useDeleteNoticeMutation()
   const router = useRouter()
-
   /**
    * 알림 삭제
    * @param id
@@ -50,35 +33,13 @@ export default function NoticePage() {
     handleDelete(id)
   }
 
-  if (isLoading) {
-    return (
-      <div className="min-h-screen p-6 bg-white text-black dark:bg-black dark:text-white">
-        Loading...
-      </div>
-    )
-  }
-
-  if (isError) {
-    return (
-      <div className="min-h-screen p-6 bg-white text-black dark:bg-black dark:text-white">
-        Error loading notices.
-      </div>
-    )
-  }
-
-  // 데이터가 SelectNoticeResDTO 형식일 경우, NotificationItem 형식으로 변환
-  const notiList = (data?.notiList || []).map((item: SelectNoticeResDTO) => ({
-    ...item,
-    create_user: item.create_user ?? 0, // create_user가 없을 경우 기본값을 0으로 설정
-  }))
-
   return (
     <div className="min-h-screen p-6 bg-white text-black dark:bg-black dark:text-white">
       <h1 className="text-2xl font-bold mb-4">알림함</h1>
 
       <div className="space-y-4">
-        {notiList.length > 0 ? (
-          notiList.map((notification: NotificationItem) => (
+        {data?.notiList?.length > 0 ? (
+          data.notiList.map((notification) => (
             <NoticeCard
               key={notification.noti_id}
               notification={notification}
