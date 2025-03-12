@@ -38,14 +38,18 @@ export default function NoticePage() {
       <h1 className="text-2xl font-bold mb-4">알림함</h1>
 
       <div className="space-y-4">
-        {data.notiList.map((notification) => (
-          <NoticeCard
-            key={notification.noti_id}
-            notification={notification}
-            onDelete={handleDelete}
-            onAccept={handleAccept}
-          />
-        ))}
+        {data?.notiList?.length > 0 ? (
+          data.notiList.map((notification) => (
+            <NoticeCard
+              key={notification.noti_id}
+              notification={notification}
+              onDelete={handleDelete}
+              onAccept={handleAccept}
+            />
+          ))
+        ) : (
+          <p className="text-gray-500">알림이 없습니다.</p>
+        )}
       </div>
     </div>
   )
