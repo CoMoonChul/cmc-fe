@@ -1,5 +1,5 @@
 interface Notification {
-  create_user: number
+  create_user: number | undefined
   created_at: string
   link_url: string
   noti_content: string
