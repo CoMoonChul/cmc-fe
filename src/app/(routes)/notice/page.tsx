@@ -4,6 +4,7 @@ import React, { useState } from 'react'
 import { useDeleteNoticeMutation, useNotices } from '@/features/notice/hooks'
 import NoticeCard from '@/features/notice/ui/NoticeCard'
 import { useRouter } from 'next/navigation'
+import { SelectNoticeResDTO } from '#/generate/notice/api'
 
 interface Notification {
   notiList: []
@@ -39,7 +40,7 @@ export default function NoticePage() {
 
       <div className="space-y-4">
         {data?.notiList?.length > 0 ? (
-          data.notiList.map((notification) => (
+          data.notiList.map((notification: SelectNoticeResDTO) => (
             <NoticeCard
               key={notification.noti_id}
               notification={notification}
