@@ -4,6 +4,7 @@ import React, { useState } from 'react'
 import { useDeleteNoticeMutation, useNotices } from '@/features/notice/hooks'
 import NoticeCard from '@/features/notice/ui/NoticeCard'
 import { useRouter } from 'next/navigation'
+import { SelectNoticeResDTO } from '#/generate/notice/api'
 
 interface NotificationItem {
   create_user: number | undefined
@@ -65,7 +66,11 @@ export default function NoticePage() {
     )
   }
 
-  const notiList = data?.notiList || []
+  // 데이터가 SelectNoticeResDTO 형식일 경우, NotificationItem 형식으로 변환
+  const notiList = (data?.notiList || []).map((item: SelectNoticeResDTO) => ({
+    ...item,
+    create_user: item.create_user ?? 0, // create_user가 없을 경우 기본값을 0으로 설정
+  }))
 
   return (
     <div className="min-h-screen p-6 bg-white text-black dark:bg-black dark:text-white">
