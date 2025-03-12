@@ -38,7 +38,7 @@ export default function NoticePage() {
       <h1 className="text-2xl font-bold mb-4">알림함</h1>
 
       <div className="space-y-4">
-        {data?.notiList && data.notiList.length > 0 ? (
+        {data?.notiList?.length > 0 ? (
           data.notiList.map((notification) => (
             <NoticeCard
               key={notification.noti_id}
