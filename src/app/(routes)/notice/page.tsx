@@ -14,7 +14,7 @@ interface Notification {
 }
 
 export default function NoticePage() {
-  const { notifications, setNotifications } = useState<Notification[]>()
+  // const { notifications, setNotifications } = useState<Notification[]>()
   const { data = { notiList: [] }, refetch } = useNotices(0, 10)
   const { mutate: deleteNotice } = useDeleteNoticeMutation()
   const router = useRouter()
