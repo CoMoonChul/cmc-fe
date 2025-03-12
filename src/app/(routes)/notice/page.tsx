@@ -5,8 +5,19 @@ import { useDeleteNoticeMutation, useNotices } from '@/features/notice/hooks'
 import NoticeCard from '@/features/notice/ui/NoticeCard'
 import { useRouter } from 'next/navigation'
 
+interface NotificationItem {
+  noti_id: number
+  noti_type: string
+  noti_title: string
+  noti_content: string
+  noti_link: string
+  noti_created_at: string
+  noti_read: boolean
+  // 필요한 추가 필드들을 여기에 정의하세요.
+}
+
 interface Notification {
-  notiList: []
+  notiList: NotificationItem[]
   pageNumber: number
   pageSize: number
   totalElements: number
@@ -14,10 +25,10 @@ interface Notification {
 }
 
 export default function NoticePage() {
-  // const { notifications, setNotifications } = useState<Notification[]>()
-  const { data = { notiList: [] }, refetch } = useNotices(0, 10)
+  const { data, refetch, isLoading, isError } = useNotices(0, 10)
   const { mutate: deleteNotice } = useDeleteNoticeMutation()
   const router = useRouter()
+
   /**
    * 알림 삭제
    * @param id
@@ -33,13 +44,31 @@ export default function NoticePage() {
     handleDelete(id)
   }
 
+  if (isLoading) {
+    return (
+      <div className="min-h-screen p-6 bg-white text-black dark:bg-black dark:text-white">
+        Loading...
+      </div>
+    )
+  }
+
+  if (isError) {
+    return (
+      <div className="min-h-screen p-6 bg-white text-black dark:bg-black dark:text-white">
+        Error loading notices.
+      </div>
+    )
+  }
+
+  const notiList = data?.notiList || []
+
   return (
     <div className="min-h-screen p-6 bg-white text-black dark:bg-black dark:text-white">
       <h1 className="text-2xl font-bold mb-4">알림함</h1>
 
       <div className="space-y-4">
-        {data?.notiList?.length > 0 ? (
-          data.notiList.map((notification) => (
+        {notiList.length > 0 ? (
+          notiList.map((notification) => (
             <NoticeCard
               key={notification.noti_id}
               notification={notification}
