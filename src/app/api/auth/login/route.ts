@@ -10,6 +10,7 @@ export async function POST(req: NextRequest) {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(body),
+      credentials: 'include',
     })
 
     if (!response.ok) {
@@ -18,22 +19,18 @@ export async function POST(req: NextRequest) {
       })
     }
 
-    const { accessToken, refreshToken } = await response.json()
+    const setCookieHeader = response.headers.get('set-cookie')
+    const { accessToken } = await response.json()
 
-    // 쿠키 설정
     const res = NextResponse.json({ message: 'Login successful' })
+    if (setCookieHeader) {
+      res.headers.set('Set-Cookie', setCookieHeader)
+    }
 
-    ///// 여기부터는 벌써 http only 쿠키에 rt가 있어야되네
-    console.log('#######', req.cookies)
-    console.log('@@@@@@@@', res.cookies)
-
-    // res.cookies.set('accessToken', accessToken, {
-    //   httpOnly: true,
-    //   secure: process.env.NODE_ENV === 'production',
-    //   sameSite: 'strict',
-    //   path: '/',
-    // })
-
+    res.headers.append(
+      'Set-Cookie',
+      `accessToken=${accessToken}; Path=/; HttpOnly; Secure=${process.env.NODE_ENV === 'production'}; SameSite=Strict; Max-Age=900`,
+    )
     return res
   } catch (error) {
     console.error('[auth/login] error:', error)

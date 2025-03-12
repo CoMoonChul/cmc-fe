@@ -17,7 +17,7 @@ export async function loginNext(userId: string, password: string) {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ userId, password }),
-    credentials: 'include', // 쿠키 포함 필수
+    credentials: 'include',
   })
 
   if (!response.ok) {
@@ -34,7 +34,7 @@ export async function loginNext(userId: string, password: string) {
 export async function logoutNext() {
   const response = await fetch('/api/auth/logout', {
     method: 'POST',
-    credentials: 'include', // 쿠키 포함 필수
+    credentials: 'include',
   })
 
   if (!response.ok) {
