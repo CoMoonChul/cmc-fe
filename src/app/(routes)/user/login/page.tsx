@@ -6,9 +6,10 @@ import { USER } from '#/generate'
 import Image from 'next/image'
 import GoogleIcon from '#/public/google-icon.svg'
 import { AxiosError } from 'axios'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 
 const UserLoginPage = () => {
+  const searchParams = useSearchParams()
   // 라우터
   const router = useRouter()
   const { mutate: loginMutate } = useLogin()
@@ -18,6 +19,8 @@ const UserLoginPage = () => {
   })
   // 상단 에러문구 노출
   const [error, setError] = useState<string | null>(null)
+
+  const redirectPath = searchParams.get('redirect') || '/'
 
   const handleLogin = () => {
     if (!formData.userId || !formData.password) {
@@ -31,8 +34,8 @@ const UserLoginPage = () => {
     }
 
     loginMutate(loginParam, {
-      onSuccess: (data) => {
-        router.push('/battle/detail/3')
+      onSuccess: () => {
+        router.replace(redirectPath)
       },
       onError: (err) => {
         if (err instanceof AxiosError) {

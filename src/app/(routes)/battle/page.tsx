@@ -4,7 +4,7 @@ import React, { useState } from 'react'
 import { Button } from '@/shared/ui/Button'
 import { useComment } from '@/features/comment/hooks'
 
-export default function BattlePage() {
+const BattlePage = () => {
   const [commentId, setCommentId] = useState<number | null>(null)
 
   const { data, refetch } = useComment(commentId ?? 1)
@@ -30,3 +30,5 @@ export default function BattlePage() {
     </div>
   )
 }
+
+export default BattlePage
