@@ -1,31 +1,38 @@
 'use client'
-
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { useLogin } from '@/features/user/hooks/useLogin'
 import { USER } from '#/generate'
 import Image from 'next/image'
 import GoogleIcon from '#/public/google-icon.svg'
 import { AxiosError } from 'axios'
-import { useRouter, useSearchParams } from 'next/navigation'
 
 const UserLoginPage = () => {
-  const searchParams = useSearchParams()
-  // 라우터
+  // routing
   const router = useRouter()
+  const searchParams = useSearchParams()
+
+  // business
   const { mutate: loginMutate } = useLogin()
+
+  // state
   const [formData, setFormData] = useState({
     userId: '',
     password: '',
   })
-  // 상단 에러문구 노출
+  const [redirectPath, setRedirectPath] = useState('/')
   const [error, setError] = useState<string | null>(null)
 
-  const redirectPath = searchParams.get('redirect') || '/'
+  // effect
+  useEffect(() => {
+    setRedirectPath(searchParams.get('redirect') || '/')
+  }, [searchParams])
 
+  // handler
   const handleLogin = () => {
     if (!formData.userId || !formData.password) {
       setError('아이디와 비밀번호를 입력해주세요.')
-      return false
+      return
     }
 
     const loginParam: USER.LoginReqDTO = {
@@ -48,7 +55,6 @@ const UserLoginPage = () => {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 dark:bg-[#1E1E1E] text-gray-900 dark:text-gray-300 p-6">
       <h1 className="text-3xl font-bold mb-2">코문철</h1>
-
       <p className="text-lg font-medium">코문철에 오신 것을 환영합니다.</p>
       <p className="text-sm text-gray-600 dark:text-gray-400 mb-6">
         코문철은 코드 리뷰를 위한 개발자 커뮤니티입니다.
