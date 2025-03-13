@@ -18,7 +18,7 @@ const CodeModal = ({
   language: 'javascript' | 'python' | 'html' | 'java'
   onClose: () => void
 }) => {
-  const { theme, toggleTheme } = useThemeStore()
+  const { theme } = useThemeStore()
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
