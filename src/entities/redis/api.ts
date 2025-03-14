@@ -1,8 +1,13 @@
 import { REDIS } from '#/generate'
 import { apiClient } from '@/shared/api/apiClient'
 import { apiConfig } from '@/shared/config/apiConfig'
+import { axiosInstance } from '@/shared/config/axiosInstance'
 
-const api = new REDIS.RedisControllerApi(apiConfig)
+const api = new REDIS.RedisControllerApi(
+  apiConfig,
+  apiConfig.basePath,
+  axiosInstance,
+)
 
 /**
  * Redis에 항목 저장

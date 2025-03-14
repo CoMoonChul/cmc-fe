@@ -21,7 +21,8 @@ const eslintConfig = [
   {
     files: ["**/*.ts", "**/*.tsx"],
     rules: {
-      "@typescript-eslint/no-unused-vars": "warn"
+      "@typescript-eslint/no-unused-vars": "warn",
+      "@tanstack/query/exhaustive-deps": "off"
     }
   },
   {

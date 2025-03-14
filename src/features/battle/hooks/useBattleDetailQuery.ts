@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { selectBattle } from '@/entities/battle/api'
 import { BATTLE } from '#/generate'
+import { QUERY_KEYS } from '../types'
 
 /**
  * battleId에 해당하는 배틀 상세 정보를 불러오는 Query
@@ -9,7 +10,7 @@ import { BATTLE } from '#/generate'
  */
 export const useBattleDetailQuery = (battleId: number) => {
   return useQuery<BATTLE.SelectBattleResDTO>({
-    queryKey: ['battleDetail', battleId],
+    queryKey: [QUERY_KEYS.BATTLE.DETAIL, battleId],
     queryFn: () => selectBattle(battleId),
   })
 }

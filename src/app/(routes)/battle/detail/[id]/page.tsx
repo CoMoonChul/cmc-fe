@@ -28,6 +28,10 @@ const BattleDetailPage: FC<BattleDetailPageProps> = async ({ params }) => {
     createdAt,
   } = await selectBattle(Number(id))
 
+  if (!battleId) {
+    throw new Error('배틀 조회에 실패했습니다...')
+  }
+
   return (
     <div className="min-h-screen p-6 bg-white text-black dark:bg-black dark:text-white">
       <h1 className="text-2xl font-bold mb-4">{title}</h1>
@@ -47,6 +51,7 @@ const BattleDetailPage: FC<BattleDetailPageProps> = async ({ params }) => {
       <div className="grid grid-cols-1 md:grid-cols-[1fr_auto_1fr] gap-4 items-center">
         {codeContentLeft && (
           <BattleCodeBlock
+            battleId={battleId}
             code={codeContentLeft}
             isVoted={false}
             language={codeTypeLeft}
@@ -59,6 +64,7 @@ const BattleDetailPage: FC<BattleDetailPageProps> = async ({ params }) => {
         </div>
         {codeContentRight && (
           <BattleCodeBlock
+            battleId={battleId}
             code={codeContentRight}
             isVoted={false}
             language={codeTypeRight}

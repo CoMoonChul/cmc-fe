@@ -6,6 +6,7 @@ export interface ConfigurationParameters {
   basePath?: string;
   baseOptions?: any;
   formDataCtor?: new () => any;
+  withCredentials?: boolean;
 }
 
 export class Configuration {
@@ -59,6 +60,8 @@ export class Configuration {
    */
   formDataCtor?: new () => any;
 
+  withCredentials?: boolean;
+
   constructor(param: ConfigurationParameters = {}) {
       this.apiKey = param.apiKey;
       this.username = param.username;
@@ -67,6 +70,7 @@ export class Configuration {
       this.basePath = param.basePath;
       this.baseOptions = param.baseOptions;
       this.formDataCtor = param.formDataCtor;
+      this.withCredentials = param.withCredentials;
   }
 
   /**
