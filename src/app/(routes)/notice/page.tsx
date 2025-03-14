@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   useDeleteNoticeAllMutation,
   useDeleteNoticeMutation,
@@ -10,6 +10,7 @@ import NoticeCard from '@/features/notice/ui/NoticeCard'
 import { useRouter } from 'next/navigation'
 import { SelectNoticeListDTO, SelectNoticeResDTO } from '#/generate/notice/api'
 import { UseQueryResult } from '@tanstack/react-query'
+import { useInView } from 'react-intersection-observer'
 
 interface Notification {
   notiList: []
@@ -25,8 +26,19 @@ export default function NoticePage() {
   const { mutate: deleteNotice } = useDeleteNoticeMutation()
   const { mutate: deleteNoticeAll } = useDeleteNoticeAllMutation()
   const router = useRouter()
-  const { data, refetch }: UseQueryResult<SelectNoticeListDTO, Error> =
-    useNotices(0, 10)
+  const {
+    data,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  }: UseQueryResult<SelectNoticeListDTO, Error> = useNotices(0, 10)
+  const { ref, inView } = useInView()
+
+  useEffect(() => {
+    if (inView && hasNextPage) {
+      fetchNextPage()
+    }
+  }, [inView, hasNextPage, fetchNextPage])
 
   /**
    * 알림 삭제
@@ -65,10 +77,10 @@ export default function NoticePage() {
 
       <div className="space-y-4">
         {data?.notiList?.length > 0 ? (
-          data.notiList.map((notification: SelectNoticeResDTO) => (
+          data?.notiList?.map((notification, index) => (
             <NoticeCard
               key={notification.noti_id}
-              notification={notification}
+              {...notification}
               onDelete={handleDelete}
               onAccept={handleAccept}
             />
