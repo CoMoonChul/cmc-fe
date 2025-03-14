@@ -17,7 +17,16 @@ if (!fs.existsSync(huskyDir)) {
 
 const preCommitContent = isWindows ? `#!/usr/bin/env sh\npnpm run lint-staged\n` : `pnpm run lint-staged\n`;
 
-const prePushContent = isWindows ? `#!/usr/bin/env sh\npnpm run build\n` : `pnpm run build\n`;
+const prePushContent = isWindows ?
+`nvm use 22.14.0\n
+pnpm run build` :
+`# macOS/Linux\n
+export NVM_DIR="$HOME/.nvm"\n
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"\n
+nvm use 22.14.0\n
+pnpm run build`
+
+
 
 // pre-commit 파일 작성
 fs.writeFileSync(path.join(huskyDir, 'pre-commit'), preCommitContent);
