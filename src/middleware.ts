@@ -8,6 +8,7 @@ import { API_PATH } from '@/features/user/types'
 export function middleware(req: NextRequest) {
   const token = req.cookies.get('accessToken')?.value
   const url = req.nextUrl.clone()
+  // ff
 
   // 정적 파일 제외
   if (
