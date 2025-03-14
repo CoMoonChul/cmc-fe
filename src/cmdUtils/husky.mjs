@@ -15,7 +15,7 @@ if (!fs.existsSync(huskyDir)) {
   fs.mkdirSync(huskyDir);
 }
 
-const preCommitContent = isWindows ? `#!/usr/bin/env sh\npnpm run lint-staged\n` : `pnpm run lint-staged\n`;
+const preCommitContent = `#!/bin/sh\n. "$(dirname "$0")/_/husky.sh"\npnpm lint-staged\n`
 
 const prePushContent = isWindows ?
 `nvm use 22.14.0\n
