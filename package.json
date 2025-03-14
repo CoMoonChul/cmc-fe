@@ -9,8 +9,7 @@
     "build:prod": "NODE_ENV=production next build",
     "start:prod": "NODE_ENV=production next start",
     "lint": "next lint",
-    "prepare": "husky install",
-    "husky-init": "node src/cmdUtils/husky.mjs",
+    "husky-init": "husky install && node src/cmdUtils/husky.mjs",
     "lint-staged": "lint-staged",
     "oag:gen:local": "(copy openapitools.local.json openapitools.json || cp openapitools.local.json openapitools.json) && openapi-generator-cli generate",
     "oag:gen:prd": "(copy openapitools.prd.json openapitools.json || cp openapitools.prd.json openapitools.json) && openapi-generator-cli generate"
