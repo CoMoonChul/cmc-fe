@@ -29,7 +29,7 @@ const BattleDetailPage: FC<BattleDetailPageProps> = async ({ params }) => {
   } = await selectBattle(Number(id))
 
   if (!battleId) {
-    throw new Error('배틀 조회에 실패했습니다.');
+    throw new Error('배틀 조회에 실패했습니다.')
   }
 
   return (
