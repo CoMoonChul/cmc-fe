@@ -34,7 +34,7 @@ export async function loginNext(userId: string, password: string) {
   })
 
   if (!response.ok) {
-    throw new Error('로그인 실패')
+    throw new Error('로그인 실패 테스트')
   }
 
   return await response.json()
