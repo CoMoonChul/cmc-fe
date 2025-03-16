@@ -49,29 +49,25 @@ const BattleDetailPage: FC<BattleDetailPageProps> = async ({ params }) => {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-[1fr_auto_1fr] gap-4 items-center">
-        {codeContentLeft && (
-          <BattleCodeBlock
-            battleId={battleId}
-            code={codeContentLeft}
-            isVoted={false}
-            language={codeTypeLeft}
-            position="left"
-            editable={false}
-          />
-        )}
+        <BattleCodeBlock
+          battleId={battleId}
+          code={codeContentLeft}
+          isVoted={false}
+          language={codeTypeLeft}
+          position="left"
+          editable={false}
+        />
         <div className="text-center text-lg font-bold min-w-max px-2 whitespace-nowrap">
           VS
         </div>
-        {codeContentRight && (
-          <BattleCodeBlock
-            battleId={battleId}
-            code={codeContentRight}
-            isVoted={false}
-            language={codeTypeRight}
-            position="right"
-            editable={false}
-          />
-        )}
+        <BattleCodeBlock
+          battleId={battleId}
+          code={codeContentRight}
+          isVoted={false}
+          language={codeTypeRight}
+          position="right"
+          editable={false}
+        />
       </div>
 
       <div className="mt-4 text-center text-gray-700 dark:text-gray-300">

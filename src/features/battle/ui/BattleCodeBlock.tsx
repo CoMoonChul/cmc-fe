@@ -19,7 +19,7 @@ const BattleCodeBlock = ({
   battleId: number
   code: string
   isVoted: boolean
-  language?: string
+  language: string
   position: string
   editable: boolean
 }) => {
@@ -30,7 +30,9 @@ const BattleCodeBlock = ({
   } | null>(null)
 
   const { theme } = useThemeStore()
-  const safeLanguage = language ?? 'javascript'
+  const safeLanguage = Object.keys(languageExtensions).includes(language)
+    ? language
+    : 'javascript'
   const voteBattleMutation = useUpdateVoteBattle()
 
   const onClickCode = () => {
