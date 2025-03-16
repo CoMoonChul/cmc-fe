@@ -13,7 +13,7 @@ export default function GlobalError({
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-300 p-6">
       <h1 className="text-5xl font-bold text-red-600">500</h1>
       <p className="text-lg font-semibold mt-4">
-        서버에서 오류가 발생했습니다.
+        서버에서 오류가 발생했습니다...
       </p>
       <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">
         {error.message} {/* ✅ 여기에 에러 메시지를 직접 표시 */}
