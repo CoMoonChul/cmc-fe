@@ -58,17 +58,12 @@ const NoticePage = () => {
     <div className="min-h-screen p-6 bg-white text-black dark:bg-black dark:text-white">
       <h1 className="text-2xl font-bold mb-4">알림함</h1>
       <div className="flex justify-between mb-4">
-        <p className="text-gray-500">
-          총 {data?.pages?.[0]?.totalElements || 0}개의 알림
-        </p>
-        {data?.pages?.some((page) => page?.notiList?.length > 0) && (
-          <button
-            onClick={handleDeleteAll}
-            className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600"
-          >
-            전체삭제
-          </button>
-        )}
+        <button
+          onClick={handleDeleteAll}
+          className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600"
+        >
+          전체삭제
+        </button>
       </div>
 
       <div className="space-y-4">
