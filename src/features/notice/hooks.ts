@@ -36,7 +36,7 @@ export const useDeleteNoticeMutation = () => {
   return useMutation({
     mutationFn: (data: NOTICE.DeleteNoticeReqDTO) => deleteNotice(data),
     onSuccess: () => {
-      queryClient.invalidateQueries(['notices']) // 삭제 후 알림 목록 새로고침
+      queryClient.invalidateQueries({ queryKey: ['notices'] })
     },
     onError: (error) => {
       console.error('삭제 오류:', error)
@@ -51,7 +51,7 @@ export const useDeleteNoticeAllMutation = () => {
   return useMutation({
     mutationFn: () => deleteNoticeAll(),
     onSuccess: () => {
-      queryClient.invalidateQueries(['notices']) // 삭제 후 알림 목록 새로고침
+      queryClient.invalidateQueries({ queryKey: ['notices'] })
     },
     onError: (error) => {
       console.error('삭제 오류:', error)
