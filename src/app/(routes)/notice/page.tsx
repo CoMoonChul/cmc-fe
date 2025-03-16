@@ -62,7 +62,7 @@ const NoticePage = () => {
         {data?.pages.map((page) =>
           page.notiList?.map((notification, index) => (
             <NoticeCard
-              key={notification.noti_id}
+              key={index}
               {...notification}
               onDelete={handleDelete}
               onAccept={handleAccept}
