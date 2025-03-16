@@ -10,14 +10,6 @@ import NoticeCard from '@/features/notice/ui/NoticeCard'
 import { useRouter } from 'next/navigation'
 import { useInView } from 'react-intersection-observer'
 
-interface Notification {
-  notiList: []
-  pageNumber: number
-  pageSize: number
-  totalElements: number
-  totalPages: number
-}
-
 const NoticePage = () => {
   const { mutate: deleteNotice } = useDeleteNoticeMutation()
   const { mutate: deleteNoticeAll } = useDeleteNoticeAllMutation()
