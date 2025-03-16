@@ -8,8 +8,6 @@ import {
 } from '@/features/notice/hooks'
 import NoticeCard from '@/features/notice/ui/NoticeCard'
 import { useRouter } from 'next/navigation'
-import { SelectNoticeListDTO, SelectNoticeResDTO } from '#/generate/notice/api'
-import { UseQueryResult } from '@tanstack/react-query'
 import { useInView } from 'react-intersection-observer'
 
 interface Notification {
@@ -20,18 +18,14 @@ interface Notification {
   totalPages: number
 }
 
-export default function NoticePage() {
-  // const { notifications, setNotifications } = useState<Notification[]>()
-  // const { data, refetch }: { Notification: Notification } = useNotices(0, 10)
+const NoticePage = () => {
   const { mutate: deleteNotice } = useDeleteNoticeMutation()
   const { mutate: deleteNoticeAll } = useDeleteNoticeAllMutation()
   const router = useRouter()
-  const {
-    data,
-    fetchNextPage,
-    hasNextPage,
-    isFetchingNextPage,
-  }: UseQueryResult<SelectNoticeListDTO, Error> = useNotices(0, 10)
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useNotices(
+    0,
+    9,
+  )
   const { ref, inView } = useInView()
 
   useEffect(() => {
@@ -64,8 +58,10 @@ export default function NoticePage() {
     <div className="min-h-screen p-6 bg-white text-black dark:bg-black dark:text-white">
       <h1 className="text-2xl font-bold mb-4">알림함</h1>
       <div className="flex justify-between mb-4">
-        <p className="text-gray-500">총 {data?.totalElements || 0}개의 알림</p>
-        {data?.notiList?.length > 0 && (
+        <p className="text-gray-500">
+          총 {data?.pages?.[0]?.totalElements || 0}개의 알림
+        </p>
+        {data?.pages?.some((page) => page.notiList.length > 0) && (
           <button
             onClick={handleDeleteAll}
             className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600"
@@ -76,19 +72,29 @@ export default function NoticePage() {
       </div>
 
       <div className="space-y-4">
-        {data?.notiList?.length > 0 ? (
-          data?.notiList?.map((notification, index) => (
+        {data?.pages.map((page) =>
+          page.notiList?.map((notification, index) => (
             <NoticeCard
               key={notification.noti_id}
               {...notification}
               onDelete={handleDelete}
               onAccept={handleAccept}
             />
-          ))
-        ) : (
-          <p className="text-gray-500">알림이 없습니다.</p>
+          )),
         )}
       </div>
+
+      {hasNextPage && (
+        <div ref={ref} className="flex justify-center py-4">
+          {isFetchingNextPage ? (
+            <span>로딩 중...</span>
+          ) : (
+            <span>더 불러오려면 스크롤하세요.</span>
+          )}
+        </div>
+      )}
     </div>
   )
 }
+
+export default NoticePage

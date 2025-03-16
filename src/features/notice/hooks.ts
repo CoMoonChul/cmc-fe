@@ -1,15 +1,32 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import {
+  useInfiniteQuery,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from '@tanstack/react-query'
 import { NOTICE } from '#/generate'
 import {
   deleteNotice,
   deleteNoticeAll,
   selectPageNotice,
 } from '@/entities/notification/api'
+import { QUERY_KEYS } from '@/features/battle/types'
 
+/**
+ * 알림 리스트 조회 Infinite Query
+ * @param page
+ * @param size
+ */
 export const useNotices = (page: number, size: number) => {
-  return useQuery<NOTICE.SelectNoticeListDTO>({
-    queryKey: ['notices', page, size],
-    queryFn: () => selectPageNotice(page, size ?? 10),
+  return useInfiniteQuery<NOTICE.SelectNoticeListDTO>({
+    queryKey: [QUERY_KEYS.NOTICE.LIST, page, size],
+    queryFn: ({ pageParam }) => selectPageNotice(pageParam as number, size),
+    initialPageParam: 0,
+    getNextPageParam: (lastPage) => {
+      const totalPages = lastPage.totalPages ?? 0
+      const currentPage = lastPage.pageNumber ?? 0
+      return totalPages - 1 > currentPage ? currentPage + 1 : undefined
+    },
   })
 }
 

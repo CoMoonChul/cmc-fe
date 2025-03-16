@@ -3,4 +3,7 @@ export const QUERY_KEYS = {
     DETAIL: 'battle.detail',
     LIST: 'battle.list',
   },
+  NOTICE: {
+    LIST: 'notice.list',
+  },
 }
