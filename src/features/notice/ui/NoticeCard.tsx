@@ -85,7 +85,8 @@ const NoticeCard = ({
             수락
           </button>
           <button
-            onClick={() => onDelete(noti_id)}
+            // onClick={() => onDelete(noti_id)}
+            onClick={() => noti_id !== undefined && onDelete(noti_id)}
             className="flex-1 px-4 py-2 bg-red-500 text-white text-sm rounded-md hover:bg-red-600 transition"
           >
             거절
