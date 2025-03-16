@@ -61,7 +61,7 @@ const NoticePage = () => {
         <p className="text-gray-500">
           총 {data?.pages?.[0]?.totalElements || 0}개의 알림
         </p>
-        {data?.pages?.some((page) => page.notiList.length > 0) && (
+        {data?.pages?.some((page) => page?.notiList?.length > 0) && (
           <button
             onClick={handleDeleteAll}
             className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600"
