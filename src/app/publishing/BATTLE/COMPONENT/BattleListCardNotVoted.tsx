@@ -1,4 +1,4 @@
-const BattleListCard = () => {
+const BattleListCardNotVoted = () => {
   return (
     <div className="relative bg-white dark:bg-gray-900 p-4 rounded-lg shadow-md border border-gray-300 dark:border-gray-700 hover:shadow-lg cursor-pointer transition duration-200 h-96 flex flex-col">
       <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-2">
@@ -34,23 +34,14 @@ const BattleListCard = () => {
       </p>
 
       <div className="absolute bottom-0 left-0 right-0 p-4 bg-white dark:bg-gray-900 border-t border-gray-300 dark:border-gray-700">
-        <div>
-          <p className="text-sm text-gray-600 dark:text-gray-300">
-            🔥 현재 투표율
+        <div className="text-center py-4">
+          <p className="text-sm text-gray-500 dark:text-gray-400">
+            아직 투표가 진행되지 않았어요.
           </p>
-          <div className="h-2 w-full bg-gray-300 dark:bg-gray-700 rounded-full overflow-hidden mt-1 flex">
-            <div className="bg-blue-500 h-full" style={{ width: '65%' }} />
-            <div className="bg-red-500 h-full" style={{ width: '35%' }} />
-          </div>
-          <div className="flex justify-between text-xs text-gray-600 dark:text-gray-400 mt-1">
-            <span>🟦 65% 선택</span>
-            <span>🟥 35% 선택</span>
-          </div>
+          <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+            투표에 참여해 보세요!
+          </p>
         </div>
-
-        <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-          총 1,245명이 투표했습니다.
-        </p>
 
         <div className="flex justify-between mt-3">
           <button className="px-3 py-1 text-sm bg-blue-500 text-white rounded-md hover:bg-blue-600 transition">
@@ -65,4 +56,4 @@ const BattleListCard = () => {
   )
 }
 
-export default BattleListCard
+export default BattleListCardNotVoted

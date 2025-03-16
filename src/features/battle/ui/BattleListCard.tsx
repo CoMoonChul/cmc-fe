@@ -1,3 +1,7 @@
+import { useRouter } from 'next/navigation'
+import { formatNumberWithCommas } from '@/shared/lib/number'
+import { getFormattedCreatedAt } from '@/shared/lib/date'
+
 const BattleListCard = ({
   battleId,
   title,
@@ -5,36 +9,111 @@ const BattleListCard = ({
   endTime,
   leftVote,
   rightVote,
-  created_at,
-  updated_at,
+  createdAt,
+  updatedAt,
+  username,
 }: {
-  battleId?: number
-  title?: string
-  content?: string
+  battleId: number
+  title: string
+  content: string
   endTime?: string
-  leftVote?: number
-  rightVote?: number
-  created_at?: string
-  updated_at?: string
+  leftVote: number
+  rightVote: number
+  createdAt?: string
+  updatedAt?: string
+  username: string
 }) => {
+  const isVoted = leftVote + rightVote > 0
+  const leftVotePercentage = isVoted
+    ? Math.round((leftVote / (leftVote + rightVote)) * 100)
+    : 0
+  const rightVotePercentage = isVoted
+    ? Math.round((rightVote / (leftVote + rightVote)) * 100)
+    : 0
+  const router = useRouter()
+
+  const onClickCard = () => {
+    router.push(`/battle/detail/${battleId}`)
+  }
+
+  const onClickGoResult = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation()
+    router.push(`/battle/result/${battleId}`)
+  }
+
   return (
-    <div className="bg-white dark:bg-gray-900 p-4 rounded-lg shadow-md border border-gray-300 dark:border-gray-700 hover:shadow-lg cursor-pointer">
-      <div className="p-2">
-        <div className="h-24 bg-gray-300 dark:bg-gray-700 rounded mb-2">
-          {title}
-        </div>
-        <div className="h-16 bg-gray-200 dark:bg-gray-600 rounded">
-          {content}
-        </div>
-        <div className="flex justify-between mt-4">
-          <button className="px-3 py-1 text-sm border border-gray-400 text-gray-700 dark:text-white rounded-md hover:bg-gray-200 dark:hover:bg-gray-700">
-            결과 보기
-          </button>
-          <button className="px-3 py-1 text-sm border border-gray-400 text-gray-700 dark:text-white rounded-md hover:bg-gray-200 dark:hover:bg-gray-700">
-            투표 정보
-          </button>
-        </div>
-      </div>
+    <div
+      onClick={onClickCard}
+      className="relative bg-white dark:bg-gray-900 p-4 rounded-lg shadow-md border border-gray-300 dark:border-gray-700 hover:shadow-lg cursor-pointer transition duration-200 h-96 flex flex-col"
+    >
+      <h3 className="text-lg font-semibold text-gray-800 dark:text-white mb-2">
+        {title}
+      </h3>
+      <p className="text-sm text-gray-600 dark:text-gray-300 mb-2 leading-relaxed overflow-hidden max-h-full">
+        {content}
+      </p>
+      {isVoted ? (
+        <>
+          <div className="absolute bottom-0 left-0 right-0 p-4 bg-white dark:bg-gray-900 border-t border-gray-300 dark:border-gray-700">
+            <div>
+              <p className="text-sm text-gray-600 dark:text-gray-300">
+                🔥 현재 투표율
+              </p>
+              <div className="h-2 w-full bg-gray-300 dark:bg-gray-700 rounded-full overflow-hidden mt-1 flex">
+                <div
+                  className="bg-blue-500 h-full"
+                  style={{ width: `${leftVotePercentage}%` }}
+                />
+                <div
+                  className="bg-red-500 h-full"
+                  style={{ width: `${rightVotePercentage}%` }}
+                />
+              </div>
+              <div className="flex justify-between text-xs text-gray-600 dark:text-gray-400 mt-1">
+                <span>🟦 {leftVotePercentage}% 선택</span>
+                <span>🟥 {rightVotePercentage}% 선택</span>
+              </div>
+            </div>
+
+            <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+              총 {formatNumberWithCommas(leftVote + rightVote)}명이
+              투표했습니다.
+            </p>
+            <div className="flex justify-between mt-3">
+              <button
+                onClick={onClickGoResult}
+                className="px-3 py-1 text-sm bg-blue-500 text-white rounded-md hover:bg-blue-600 transition"
+              >
+                결과 보기
+              </button>
+              <div className="px-3 py-1 text-sm text-gray-500 dark:text-gray-400">
+                {username}
+                {createdAt && `, ${getFormattedCreatedAt(createdAt)}`}
+              </div>
+            </div>
+          </div>
+        </>
+      ) : (
+        <>
+          <div className="absolute bottom-0 left-0 right-0 p-4 bg-white dark:bg-gray-900 border-t border-gray-300 dark:border-gray-700">
+            <div className="text-center py-4">
+              <p className="text-sm text-gray-500 dark:text-gray-400">
+                아직 투표가 진행되지 않았어요.
+              </p>
+              <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                투표에 참여해 보세요!
+              </p>
+            </div>
+
+            <div className="flex justify-end mt-3">
+              <div className="px-3 py-1 text-sm text-gray-500 dark:text-gray-400">
+                {username}
+                {createdAt && `, ${getFormattedCreatedAt(createdAt)}`}
+              </div>
+            </div>
+          </div>
+        </>
+      )}
     </div>
   )
 }

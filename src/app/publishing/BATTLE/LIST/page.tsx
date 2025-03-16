@@ -1,5 +1,6 @@
 import BattleListDropDown from '../COMPONENT/BattleListDropDown'
 import BattleListCard from '../COMPONENT/BattleListCard'
+import BattleListCardNotVoted from '../COMPONENT/BattleListCardNotVoted'
 
 const BattleListPage = () => {
   return (
@@ -20,9 +21,13 @@ const BattleListPage = () => {
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        {[1, 2, 3, 4, 5, 6].map((_, index) => (
-          <BattleListCard key={index} />
-        ))}
+        {[1, 2, 3, 4, 5, 6].map((_, index) => {
+          if (index % 2 == 0) {
+            return <BattleListCard key={index} />
+          } else {
+            return <BattleListCardNotVoted key={index} />
+          }
+        })}
       </div>
     </div>
   )
