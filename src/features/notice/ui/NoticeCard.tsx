@@ -37,7 +37,7 @@ const NoticeCard = ({
   reason_noti?: string
   noti_title?: string
   noti_type?: string
-  onDelete: (id: number) => void
+  onDelete: (id: number | undefined) => void
   onAccept: (id: number, link: string) => void
 }) => {
   return (
@@ -85,8 +85,7 @@ const NoticeCard = ({
             수락
           </button>
           <button
-            // onClick={() => onDelete(noti_id)}
-            onClick={() => noti_id !== undefined && onDelete(noti_id)}
+            onClick={() => onDelete(noti_id)}
             className="flex-1 px-4 py-2 bg-red-500 text-white text-sm rounded-md hover:bg-red-600 transition"
           >
             거절
