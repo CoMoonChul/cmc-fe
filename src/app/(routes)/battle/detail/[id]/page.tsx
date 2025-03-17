@@ -1,8 +1,8 @@
-import BattleCodeBlock from '@/features/battle/ui/BattleCodeBlock'
 import { selectBattle } from '@/entities/battle/api'
 import { notFound } from 'next/navigation'
 import { FC } from 'react'
 import { getFormattedCreatedAt } from '@/shared/lib/date'
+import BattleCodeArea from '@/features/battle/ui/BattleCodeArea'
 
 interface BattleDetailPageProps {
   params: Promise<{ id: string }>
@@ -24,7 +24,6 @@ const BattleDetailPage: FC<BattleDetailPageProps> = async ({ params }) => {
     codeTypeRight,
     viewCount,
     username,
-    voteValue,
     createdAt,
   } = await selectBattle(Number(id))
 
@@ -49,29 +48,13 @@ const BattleDetailPage: FC<BattleDetailPageProps> = async ({ params }) => {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-[1fr_auto_1fr] gap-4 items-center">
-        {codeContentLeft && (
-          <BattleCodeBlock
-            battleId={battleId}
-            code={codeContentLeft}
-            isVoted={false}
-            language={codeTypeLeft}
-            position="left"
-            editable={false}
-          />
-        )}
-        <div className="text-center text-lg font-bold min-w-max px-2 whitespace-nowrap">
-          VS
-        </div>
-        {codeContentRight && (
-          <BattleCodeBlock
-            battleId={battleId}
-            code={codeContentRight}
-            isVoted={false}
-            language={codeTypeRight}
-            position="right"
-            editable={false}
-          />
-        )}
+        <BattleCodeArea
+          battleId={battleId}
+          codeContentLeft={codeContentLeft}
+          codeTypeLeft={codeTypeLeft}
+          codeContentRight={codeContentRight}
+          codeTypeRight={codeTypeRight}
+        />
       </div>
 
       <div className="mt-4 text-center text-gray-700 dark:text-gray-300">
