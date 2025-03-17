@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 
-const WS_BASE_URL = "ws://localhost:8080/ws/livecoding/ws"; // ✅ 백엔드 WebSocket URL
+const WS_BASE_URL = "ws://localhost:8080/ws/livecoding"; // ✅ 백엔드 WebSocket URL
 
 export default function useWebSocket(roomId: string) {
   const [messages, setMessages] = useState<string[]>([]);
