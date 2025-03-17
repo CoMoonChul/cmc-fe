@@ -13,23 +13,14 @@ import { QUERY_KEYS } from '../types'
  * @returns 리뷰 리스트 무한 스크롤 데이터
  */
 export const useReviewListInfiniteQuery = (
-  pageSize: number = 10,
-  sort: 'createdAt' | 'updatedAt' | 'title' = 'createdAt',
-  order: 'asc' | 'desc' = 'desc',
-  keyword: string,
+  condition: number,
+  size: number = 10,
   manualErrorHandle: boolean,
 ) => {
   return useInfiniteQuery<REVIEW.SelectReviewListResDTO>({
-    queryKey: [QUERY_KEYS.REVIEW.LIST, pageSize, sort, order, keyword],
+    queryKey: [QUERY_KEYS.REVIEW.LIST, condition, size],
     queryFn: ({ pageParam = 0 }) =>
-      selectReviewList(
-        pageParam as number,
-        pageSize,
-        sort,
-        order,
-        keyword,
-        manualErrorHandle,
-      ),
+      selectReviewList(condition, pageParam as number, size, manualErrorHandle),
     initialPageParam: 0,
     getNextPageParam: (lastPage) => {
       const totalPages = lastPage.totalPages ?? 0

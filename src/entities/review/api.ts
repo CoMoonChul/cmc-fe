@@ -29,32 +29,25 @@ export async function selectReview(
 
 /**
  * 리뷰 리스트 조회
- * @param pageNumber 페이지 번호 (0부터 시작, 기본값: 0)
- * @param pageSize 한 페이지당 리뷰 개수 (기본값: 10)
- * @param sort 정렬 기준 (기본값: "createdAt")
- * @param order 정렬 순서 (기본값: "desc")
- * @param keyword 검색 키워드 (선택)
+ * @summary 리뷰 리스트 조회
+ * @param {number} condition 조회 조건(0:최신순, 1:인기순, 2:로그인회원작성, 3:로그인회원답변, 4:로그인회원좋아요)
+ * @param {number} [pageNumber] 페이지 번호 (0부터 시작)
+ * @param {number} [pageSize] 한 페이지당 리뷰 개수
  * @param manualErrorHandle 에러 핸들링 여부 (기본값: false)
- * @returns 리뷰 리스트 조회 결과
+ * @returns 리뷰 리스트
  */
 export async function selectReviewList(
-  pageNumber = 0,
-  pageSize = 10,
-  sort: 'createdAt' | 'updatedAt' | 'title' = 'createdAt',
-  order: 'asc' | 'desc' = 'desc',
-  keyword?: string,
+  condition: number,
+  pageNumber: number = 0,
+  pageSize: number = 10,
   manualErrorHandle = false,
 ): Promise<REVIEW.SelectReviewListResDTO> {
   const response = await apiClient(
     api.selectReviewList.bind(api),
     manualErrorHandle,
-    {
-      pageNumber,
-      pageSize,
-      sort,
-      order,
-      keyword,
-    },
+    condition,
+    pageNumber,
+    pageSize,
   )
   return response.data
 }
