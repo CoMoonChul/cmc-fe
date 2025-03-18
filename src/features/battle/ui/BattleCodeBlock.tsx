@@ -7,6 +7,7 @@ import CodeModal from './CodeModal'
 import { useThemeStore } from '@/shared/store/useThemeStore'
 import { languageExtensions } from '@/entities/editor/types'
 import { useUpdateVoteBattle } from '@/features/battle/hooks/useUpdateVoteBattle'
+import { useInvalidateBattleVoteState } from '@/features/battle/hooks/useInvalidateBattleVoteState'
 
 const BattleCodeBlock = ({
   battleId,
@@ -15,13 +16,15 @@ const BattleCodeBlock = ({
   language,
   position,
   editable,
+  onVote,
 }: {
   battleId: number
   code: string
   isVoted: boolean
-  language?: string
-  position: string
+  language: string
+  position: 'left' | 'right'
   editable: boolean
+  onVote: (position: 'left' | 'right') => void
 }) => {
   const [selectedCode, setSelectedCode] = useState<{
     code: string
@@ -32,6 +35,7 @@ const BattleCodeBlock = ({
   const { theme } = useThemeStore()
   const safeLanguage = language ?? 'javascript'
   const voteBattleMutation = useUpdateVoteBattle()
+  const invalidateBattleVoteState = useInvalidateBattleVoteState()
 
   const onClickCode = () => {
     const voteReq: BATTLE.UpdateVoteBattleReqDTO = {
@@ -40,7 +44,8 @@ const BattleCodeBlock = ({
     }
     voteBattleMutation.mutate(voteReq, {
       onSuccess: (data) => {
-        console.log('data', data)
+        invalidateBattleVoteState(battleId)
+        onVote(position)
       },
     })
   }
