@@ -8,6 +8,7 @@ import { useThemeStore } from '@/shared/store/useThemeStore'
 import { languageExtensions } from '@/entities/editor/types'
 import { useUpdateVoteBattle } from '@/features/battle/hooks/useUpdateVoteBattle'
 import { useInvalidateBattleVoteState } from '@/features/battle/hooks/useInvalidateBattleVoteState'
+import { motion } from 'framer-motion'
 
 const BattleCodeBlock = ({
   battleId,
@@ -17,6 +18,9 @@ const BattleCodeBlock = ({
   position,
   editable,
   onVote,
+  resultMode,
+  waveHeight,
+  overlayColor,
 }: {
   battleId: number
   code: string
@@ -25,6 +29,9 @@ const BattleCodeBlock = ({
   position: 'left' | 'right'
   editable: boolean
   onVote: (position: 'left' | 'right') => void
+  resultMode: boolean
+  waveHeight?: number
+  overlayColor?: string
 }) => {
   const [selectedCode, setSelectedCode] = useState<{
     code: string
@@ -38,6 +45,9 @@ const BattleCodeBlock = ({
   const invalidateBattleVoteState = useInvalidateBattleVoteState()
 
   const onClickCode = () => {
+    if (resultMode) {
+      return
+    }
     const voteReq: BATTLE.UpdateVoteBattleReqDTO = {
       battleId,
       voteValue: position === 'left' ? 0 : 1,
@@ -52,12 +62,21 @@ const BattleCodeBlock = ({
 
   return (
     <div
-      className={`relative bg-gray-200 dark:bg-gray-800 p-2 rounded-lg h-96 flex flex-col overflow-hidden 
-        ${isVoted ? 'border-2 border-blue-500' : 'border border-gray-300 dark:border-gray-700'}
-        ${selectedCode ? '' : 'hover:scale-105 active:opacity-80 transition-transform duration-300'}
+      className={`relative bg-gray-200 dark:bg-gray-800 p-2 rounded-lg h-96 flex flex-col overflow-hidden
+        ${isVoted ? ' border-2 border-blue-500' : ' border border-gray-300 dark:border-gray-700'}
+        ${resultMode ? '' : ' hover:scale-105 active:opacity-80 transition-transform duration-300'}
       `}
       onClick={onClickCode}
     >
+      {waveHeight && overlayColor && (
+        <motion.div
+          className="absolute inset-0"
+          style={{ background: overlayColor, zIndex: 10 }}
+          initial={{ clipPath: 'inset(100% 0% 0% 0%)' }} // 완전히 숨겨진 상태에서 시작
+          animate={{ clipPath: `inset(${100 - waveHeight}% 0% 0% 0%)` }} // 아래에서 위로 차오름
+          transition={{ duration: 0.8, ease: 'easeOut' }}
+        />
+      )}
       <button
         className="absolute top-2 right-2 bg-gray-700 text-white text-xs px-2 py-1 rounded-md z-10"
         onClick={() =>

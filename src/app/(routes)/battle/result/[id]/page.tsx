@@ -1,24 +1,80 @@
 'use client'
 import { useParams, useRouter } from 'next/navigation'
 import { useEffect } from 'react'
+import { useBattleDetailQuery } from '@/features/battle/hooks/useBattleDetailQuery'
+import { getFormattedCreatedAt } from '@/shared/lib/date'
+import { COMMENT_TARGET } from '@/features/comment/types'
+import BattleCodeArea from '@/features/battle/ui/BattleCodeArea'
+import BattleResultBar from '@/features/battle/ui/BattleResultBar'
+import CommentSection from '@/features/comment/ui/CommentSection'
 
 const BattleResultPage = () => {
-  const params = useParams()
+  const { id: queryBattleId } = useParams()
   const router = useRouter()
+  const battleId = Number(queryBattleId)
+  const { data, isSuccess, isLoading } = useBattleDetailQuery(battleId)
 
   useEffect(() => {
-    const { id } = params
-
-    if (isNaN(Number(id))) {
+    if (isNaN(battleId)) {
       router.replace('/404')
     }
-  }, [params, router])
+  }, [battleId, router])
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-white text-black dark:bg-black dark:text-white">
+        <p className="text-xl font-semibold">Loading...</p>
+      </div>
+    )
+  }
+
+  if (!isSuccess || !data) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-white text-black dark:bg-black dark:text-white">
+        <p className="text-xl font-semibold">존재하지 않는 배틀입니다.</p>
+      </div>
+    )
+  }
 
   return (
-    <>
-      <h1>Battle Result</h1>
-      <p>Battle ID: {params.id}</p>
-    </>
+    <div className="min-h-screen p-6 bg-white text-black dark:bg-black dark:text-white">
+      <h1 className="text-2xl font-bold mb-4">{data.title}</h1>
+
+      <div className="flex items-center justify-between space-x-4 mb-4">
+        <div>
+          <p className="text-sm font-medium">{data.username}</p>
+          <p className="text-xs text-gray-500 dark:text-gray-400">
+            {data.createdAt ? getFormattedCreatedAt(data.createdAt) : ''}
+          </p>
+        </div>
+        <p className="text-sm text-gray-600 dark:text-gray-400">
+          조회수: {data.viewCount}회
+        </p>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-[1fr_auto_1fr] gap-4 items-center">
+        <BattleCodeArea
+          battleId={data.battleId}
+          codeContentLeft={data.codeContentLeft}
+          codeTypeLeft={data.codeTypeLeft}
+          codeContentRight={data.codeContentRight}
+          codeTypeRight={data.codeTypeRight}
+          leftVote={data.leftVote}
+          rightVote={data.rightVote}
+          resultMode={true}
+        />
+      </div>
+
+      <BattleResultBar leftVote={data.leftVote} rightVote={data.rightVote} />
+
+      <div className="mt-6 bg-gray-100 dark:bg-gray-900 p-4 rounded-lg">
+        <p className="text-gray-700 dark:text-gray-300">{data.content}</p>
+      </div>
+
+      <hr className="my-8 border-gray-300 dark:border-gray-700" />
+
+      <CommentSection id={battleId} commentTarget={COMMENT_TARGET.BATTLE} />
+    </div>
   )
 }
 
