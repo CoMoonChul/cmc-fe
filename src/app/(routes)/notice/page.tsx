@@ -30,7 +30,7 @@ const NoticePage = () => {
    * 알림 삭제
    * @param id
    */
-  const handleDelete = (id: number) => {
+  const handleDelete = (id: number | undefined) => {
     console.log('알림 삭제 요청', id)
     deleteNotice({ noti_id: id }) // 요청 실행
   }
