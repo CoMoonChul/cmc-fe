@@ -1,25 +1,25 @@
 'use client'
-import { useReviewListInfiniteQuery } from '@/features/review/hooks/useReviewListInfiniteQuery'
+// import { useReviewListInfiniteQuery } from '@/features/review/hooks/useReviewListInfiniteQuery'
 // import ReviewListCard from "@/features/review/ui/ReviewListCard"
 import { useEffect, useState, useMemo } from 'react'
-import { useInView } from "'react-intersection-observer'"
-import { useRouter } from 'next/navigation'
+// import { useInView } from "'react-intersection-observer'"
+// import { useRouter } from 'next/navigation'
 
-const FILTERS = [
-  '최신',
-  '인기',
-  '내가 작성한',
-  '내가 답변한',
-  '내가 좋아한',
-] as const
-type FilterType = (typeof FILTERS)[number]
-const SEARCH_CONDITIONS: Record<FilterType, number> = {
-  최신: 0,
-  인기: 1,
-  '내가 작성한': 2,
-  '내가 답변한': 3,
-  '내가 좋아한': 4,
-}
+// const FILTERS = [
+//   '최신',
+//   '인기',
+//   '내가 작성한',
+//   '내가 답변한',
+//   '내가 좋아한',
+// ] as const
+// type FilterType = (typeof FILTERS)[number]
+// const SEARCH_CONDITIONS: Record<FilterType, number> = {
+//   최신: 0,
+//   인기: 1,
+//   '내가 작성한': 2,
+//   '내가 답변한': 3,
+//   '내가 좋아한': 4,
+// }
 
 interface Review {
   id: number
@@ -73,21 +73,21 @@ const ReviewCard = ({ review }: { review: Review }) => {
 }
 
 const ReviewListPage = () => {
-  const router = useRouter()
-  const [selectedFilter, setSelectedFilter] = useState<FilterType>('최신')
-  const searchCondition = useMemo(
-    () => SEARCH_CONDITIONS[selectedFilter],
-    [selectedFilter],
-  )
-  const { ref, inView } = useInView()
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
-    useReviewListInfiniteQuery(searchCondition, 5, true)
+  //   const router = useRouter()
+  //   const [selectedFilter, setSelectedFilter] = useState<FilterType>('최신')
+  //   const searchCondition = useMemo(
+  //     () => SEARCH_CONDITIONS[selectedFilter],
+  //     [selectedFilter],
+  //   )
+  //   const { ref, inView } = useInView()
+  //   const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
+  //     useReviewListInfiniteQuery(searchCondition, 5, true)
 
-  useEffect(() => {
-    if (inView && hasNextPage) {
-      fetchNextPage()
-    }
-  }, [inView, hasNextPage, fetchNextPage])
+  //   useEffect(() => {
+  //     if (inView && hasNextPage) {
+  //       fetchNextPage()
+  //     }
+  //   }, [inView, hasNextPage, fetchNextPage])
 
   const [myFilter, setMyFilter] = useState<string | null>(null)
   const [showMyDropdown, setShowMyDropdown] = useState(false)
