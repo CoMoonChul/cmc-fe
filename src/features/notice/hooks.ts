@@ -36,7 +36,7 @@ export const useDeleteNoticeMutation = () => {
   return useMutation({
     mutationFn: (data: NOTICE.DeleteNoticeReqDTO) => deleteNotice(data),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['notices'] })
+      queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.NOTICE.LIST] })
     },
     onError: (error) => {
       console.error('삭제 오류:', error)
