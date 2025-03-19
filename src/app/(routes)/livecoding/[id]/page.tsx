@@ -1,50 +1,67 @@
-"use client";
+'use client'
 
-import { useState } from "react";
-import { useParams } from "next/navigation";
-import useWebSocket from '@/features/livecoding/hooks/LiveCodingWebSocket'
+import { useParams } from 'next/navigation'
+import CodeEditor from '@/features/livecoding/ui/CodeEditor'
+import Chat from '@/features/livecoding/ui/Chat'
+import useWebSocket from '@/features/livecoding/hooks/useWebSocket'
+import { selectLiveCoding } from '@/entities/livecoding/api'
+import { LIVECODING } from '#/generate'
+import { useEffect, useState } from "react";
+
 
 export default function LiveCodingPage() {
-  const params = useParams();
-  const roomId = typeof params.id === "string" ? params.id : ""; // ✅ 안전한 값 체크
-  const { messages, sendMessage, isConnected } = useWebSocket(roomId);
-  const [input, setInput] = useState("");
+  const params = useParams()
+  const roomId = typeof params.id === 'string' ? params.id : '' // ✅ roomId 가져오기
 
-  const handleSend = () => {
-    if (input.trim()) {
-      sendMessage(input);
-      setInput("");
+  const [roomInfo, setRoomInfo] = useState<LIVECODING.SelectLiveCodingResDTO | null>(null);
+  const { messages, sendMessage } = useWebSocket(roomId) // ✅ 웹소켓 연결 (페이지에서 관리)
+
+  const selectRoom = async ()=> {
+    try {
+      const roomInfoRes = await selectLiveCoding(roomId)
+      setRoomInfo(roomInfoRes)
+    } catch (e) {
+      console.error("❌ 방 조회 실패:", e);
     }
+  }
+
+  const copyInviteLink = () => {
+    if (!roomInfo?.link) {
+      return;
+    }
+    navigator.clipboard
+      .writeText(roomInfo.link)
+      .then(() => alert("✅ 초대 링크가 복사되었습니다!"))
+      .catch(() => alert("❌ 초대 링크 복사에 실패했습니다."));
   };
 
+
+
+  useEffect(() => {
+    if (!roomId) {
+      return
+    }
+
+    (async () => {
+      await selectRoom();
+    })();
+
+  }, [roomId]); // roomId가 변경될 때 한 번만 실행
+
+
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-6">
-      <div className="w-full max-w-lg bg-white shadow-lg rounded-2xl p-6">
-        <h1 className="text-xl font-semibold mb-4">Live Coding Room: {roomId}</h1>
-        <div className="h-64 overflow-y-auto border rounded-lg p-4 bg-gray-50">
-          {messages.map((msg, idx) => (
-            <div key={idx} className="p-2 rounded-lg bg-blue-100 mb-2">{msg}</div>
-          ))}
-        </div>
-        <div className="mt-4 flex">
-          <input
-            type="text"
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            className="flex-1 p-2 border rounded-lg"
-            placeholder="Type a message..."
-          />
-          <button
-            onClick={handleSend}
-            className="ml-2 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition"
-          >
-            Send
-          </button>
-        </div>
-        <p className="mt-2 text-sm text-gray-500">
-          {isConnected ? "🟢 Connected" : "🔴 Disconnected"}
-        </p>
+    <div className="flex h-screen">
+      {/* 코드 편집기 */}
+      <div className="flex-1">
+        <CodeEditor />
       </div>
+
+      {/* 채팅 영역 (웹소켓 메시지와 전송 함수 전달) */}
+      <Chat
+        copyInviteLink={copyInviteLink}
+        messages={messages}
+        sendMessage={sendMessage}
+      />
     </div>
-  );
+  )
 }
