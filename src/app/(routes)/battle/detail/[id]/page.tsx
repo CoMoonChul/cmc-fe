@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation'
 import { FC } from 'react'
 import { getFormattedCreatedAt } from '@/shared/lib/date'
 import BattleCodeArea from '@/features/battle/ui/BattleCodeArea'
+import Link from 'next/link'
 
 interface BattleDetailPageProps {
   params: Promise<{ id: string }>
@@ -22,6 +23,8 @@ const BattleDetailPage: FC<BattleDetailPageProps> = async ({ params }) => {
     codeContentRight,
     codeTypeLeft,
     codeTypeRight,
+    leftVote,
+    rightVote,
     viewCount,
     username,
     createdAt,
@@ -54,6 +57,9 @@ const BattleDetailPage: FC<BattleDetailPageProps> = async ({ params }) => {
           codeTypeLeft={codeTypeLeft}
           codeContentRight={codeContentRight}
           codeTypeRight={codeTypeRight}
+          leftVote={leftVote}
+          rightVote={rightVote}
+          resultMode={false}
         />
       </div>
 
@@ -63,6 +69,14 @@ const BattleDetailPage: FC<BattleDetailPageProps> = async ({ params }) => {
 
       <div className="mt-6 bg-gray-100 dark:bg-gray-900 p-4 rounded-lg">
         <p className="text-gray-700 dark:text-gray-300">{content}</p>
+      </div>
+      <div className="mt-6 flex justify-end">
+        <Link
+          href={`/battle/result/${battleId}`}
+          className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+        >
+          결과 보기
+        </Link>
       </div>
     </div>
   )
