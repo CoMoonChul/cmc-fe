@@ -1,11 +1,7 @@
-'use client'
+import BattleForm from '@/features/battle/ui/BattleForm'
 
-const BattleFormPage = () => {
-  return (
-    <>
-      <h1>Battle Form</h1>
-    </>
-  )
+const BattleCreatePage = () => {
+  return <BattleForm />
 }
 
-export default BattleFormPage
+export default BattleCreatePage
