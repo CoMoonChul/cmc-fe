@@ -30,6 +30,7 @@ const Publishing = () => {
           <PubbleItem link="/BATTLE/DETAIL" />
           <PubbleItem link="/BATTLE/RESULT" />
           <PubbleItem link="/BATTLE/DETAIL" />
+          <PubbleItem link="/BATTLE/CREATE" />
         </ul>
         <h2 className="text-lg font-medium text-gray-800 dark:text-gray-200 mb-4">
           회원
@@ -45,6 +46,12 @@ const Publishing = () => {
         </h2>
         <ul className="space-y-3  mb-4">
           <PubbleItem link="/NOTI/LIST" />
+        </ul>
+        <h2 className="text-lg font-medium text-gray-800 dark:text-gray-200 mb-4">
+          실시간공유
+        </h2>
+        <ul className="space-y-3  mb-4">
+          <PubbleItem link="/LIVECODING/LIVE" />
         </ul>
       </div>
     </div>
