@@ -11,7 +11,7 @@ interface BattleDetailPageProps {
 
 const BattleDetailPage: FC<BattleDetailPageProps> = async ({ params }) => {
   const { id } = await params
-  if (isNaN(Number(id))) {
+  if (Number.isNaN(Number(id))) {
     notFound()
   }
 

@@ -30,6 +30,7 @@ const Publishing = () => {
           <PubbleItem link="/BATTLE/DETAIL" />
           <PubbleItem link="/BATTLE/RESULT" />
           <PubbleItem link="/BATTLE/DETAIL" />
+          <PubbleItem link="/BATTLE/CREATE" />
         </ul>
         <h2 className="text-lg font-medium text-gray-800 dark:text-gray-200 mb-4">
           회원
