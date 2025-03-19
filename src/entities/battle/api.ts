@@ -140,3 +140,21 @@ export async function deleteBattle(
   )
   return response.data
 }
+
+/**
+ * 배틀 투표 상태 조회
+ * @param battleId 배틀 ID
+ * @param manualErrorHandle 에러 핸들링 여부 (기본값: false)
+ * @returns 투표 정보
+ */
+export async function selectBattleVoteState(
+  battleId: number,
+  manualErrorHandle = false,
+): Promise<BATTLE.SelectBattleVoteStateResDTO> {
+  const response = await apiClient(
+    api.selectBattleVoteState.bind(api),
+    manualErrorHandle,
+    battleId,
+  )
+  return response.data
+}

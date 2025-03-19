@@ -10,7 +10,7 @@ import {
   deleteNoticeAll,
   selectPageNotice,
 } from '@/entities/notification/api'
-import { QUERY_KEYS } from '@/features/battle/types'
+import { QUERY_KEYS } from '@/features/notice/types'
 
 /**
  * 알림 리스트 조회 Infinite Query

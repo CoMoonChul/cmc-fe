@@ -52,7 +52,7 @@ const NoticeCard = ({
 
       {/* 생성 날짜 */}
       <p className="text-xs text-gray-500 dark:text-gray-400">
-        {formatDate(created_at)}
+        {formatDate(created_at ?? '')}
       </p>
 
       {/* 알림 제목 */}
@@ -80,7 +80,9 @@ const NoticeCard = ({
         <div className="flex gap-2 mt-2">
           <button
             className="flex-1 px-4 py-2 bg-green-500 text-white text-sm rounded-md hover:bg-green-600 transition"
-            onClick={() => onAccept(noti_id, link_url)}
+            onClick={() => {
+              if (noti_id !== undefined) onAccept(noti_id, link_url ?? '')
+            }}
           >
             수락
           </button>
