@@ -5,6 +5,7 @@ import BattleListCard from '@/features/battle/ui/BattleListCard'
 import { useInView } from 'react-intersection-observer'
 import { useEffect, useState, useMemo } from 'react'
 import { useRouter } from 'next/navigation'
+import { usePopupStore } from '@/shared/store/usePopupStore'
 
 const FILTERS = ['최신', '인기', '내가 작성한', '내가 참여한'] as const
 type FilterType = (typeof FILTERS)[number]
@@ -18,6 +19,7 @@ const SEARCH_CONDITIONS: Record<FilterType, number> = {
 const BattleListPage = () => {
   const router = useRouter()
   const [selectedFilter, setSelectedFilter] = useState<FilterType>('최신')
+  const { openPopup } = usePopupStore.getState()
   const searchCondition = useMemo(
     () => SEARCH_CONDITIONS[selectedFilter],
     [selectedFilter],
@@ -32,8 +34,12 @@ const BattleListPage = () => {
     }
   }, [inView, hasNextPage, fetchNextPage])
 
-  const onClickCreateBattle = () => {
+  const onClickConfirmGoForm = () => {
     router.push('/battle/form')
+  }
+
+  const onClickCreateBattle = () => {
+    openPopup('로그인 필수임1', '로그인했음?', onClickConfirmGoForm)
   }
 
   return (

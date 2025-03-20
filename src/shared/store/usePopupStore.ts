@@ -1,20 +1,32 @@
 import { create } from 'zustand'
 
-interface PopupState {
-  isOpen: boolean
+interface Popup {
+  id: string
   title: string
   message: string
   onConfirm?: () => void
+}
+
+interface PopupState {
+  popups: Popup[]
   openPopup: (title: string, message: string, onConfirm?: () => void) => void
-  closePopup: () => void
+  closePopup: (id: string) => void
 }
 
 export const usePopupStore = create<PopupState>((set) => ({
-  isOpen: false,
-  title: '',
-  message: '',
-  onConfirm: undefined,
+  popups: [],
   openPopup: (title, message, onConfirm) =>
-    set({ isOpen: true, title, message, onConfirm }),
-  closePopup: () => set({ isOpen: false }),
+    set((state) => {
+      const newPopup: Popup = {
+        id: crypto.randomUUID(),
+        title,
+        message,
+        onConfirm,
+      }
+      return { popups: [...state.popups, newPopup] }
+    }),
+  closePopup: (id) =>
+    set((state) => ({
+      popups: state.popups.filter((popup) => popup.id !== id),
+    })),
 }))

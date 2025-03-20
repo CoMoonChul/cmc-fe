@@ -42,7 +42,8 @@ const BattleCreatePage = () => {
   const [openModal, setOpenModal] = useState<'left' | 'right' | null>(null)
 
   const onSubmit = (formData: BattleFormValues) => {
-    mutation.mutate(formData)
+    // mutation.mutate(formData)
+    console.log('mutation 호출')
   }
 
   return (
