@@ -12,7 +12,7 @@ export default function ClientLayout({
 }: {
   children: React.ReactNode
 }) {
-  const { theme, toggleTheme } = useThemeStore()
+  const { theme } = useThemeStore()
   const pathname = usePathname()
   // 헤더 숨김 여부
   const [showHeader, setShowHeader] = useState(false)

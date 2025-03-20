@@ -3,10 +3,12 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useForm, Controller } from 'react-hook-form'
-import { useMutation, useQuery } from '@tanstack/react-query'
-// import { createBattle, getBattleDetail, updateBattle } from "@/entities/battle/api";
+import { useBattleDetailQuery } from '@/features/battle/hooks/useBattleDetailQuery'
+import { useCreateBattleQuery } from '@/features/battle/hooks/useCreateBattleQuery'
+import { useUpdateBattleQuery } from '@/features/battle/hooks/useUpdateBattleQuery'
 import { useFormStatus } from 'react-dom'
 import CodeEditorModal from '@/features/battle/ui/CodeEditorModal'
+import { BATTLE } from '#/generate'
 
 interface BattleFormValues {
   title: string
@@ -19,12 +21,7 @@ interface BattleFormValues {
 
 const BattleForm = ({ id }: { id?: string }) => {
   const router = useRouter()
-  // id가 있으면 수정 모드
   const isEditMode = !!id
-
-  console.log('id', id)
-  console.log('isEditMode', isEditMode)
-
   const { register, handleSubmit, control, setValue, getValues } =
     useForm<BattleFormValues>({
       defaultValues: {
@@ -38,48 +35,53 @@ const BattleForm = ({ id }: { id?: string }) => {
     })
 
   const { pending } = useFormStatus()
-
-  const isLoading = false
-
-  // const { data, isLoading } = useQuery({
-  //   queryKey: ["battle", id],
-  //   queryFn: () => getBattleDetail(Number(id)),
-  //   enabled: isEditMode, // id가 있을 때만 실행
-  // });
-
-  // // 기존 데이터 설정
-  // useEffect(() => {
-  //   if (data) {
-  //     setValue("title", data.title);
-  //     setValue("content", data.content);
-  //     setValue("codeLeft", data.codeContentLeft);
-  //     setValue("codeRight", data.codeContentRight);
-  //     setValue("codeTypeLeft", data.codeTypeLeft);
-  //     setValue("codeTypeRight", data.codeTypeRight);
-  //   }
-  // }, [data, setValue]);
-
-  // const mutation = useMutation({
-  //   mutationFn: isEditMode
-  //     ? (formData: BattleFormValues) => updateBattle(Number(id), formData) // 수정 API
-  //     : createBattle, // 등록 API
-  //   onSuccess: (result) => {
-  //     router.push(`/battle/detail/${result.battleId}`);
-  //   },
-  // });
-
   const [openModal, setOpenModal] = useState<'left' | 'right' | null>(null)
+  const { data } = useBattleDetailQuery(Number(id), isEditMode)
+  const createBattleMutation = useCreateBattleQuery()
+  const updateBattleMutation = useUpdateBattleQuery()
 
-  const onSubmit = (formData: BattleFormValues) => {
-    // mutation.mutate(formData);
-  }
+  useEffect(() => {
+    if (data) {
+      setValue('title', data.title)
+      setValue('content', data.content)
+      setValue('codeLeft', data.codeContentLeft)
+      setValue('codeRight', data.codeContentRight)
+    }
+  }, [data, setValue])
 
-  if (isEditMode && isLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        로딩 중...
-      </div>
-    )
+  const onSubmit = () => {
+    if (isEditMode) {
+      const updateReq: BATTLE.UpdateBattleReqDTO = {
+        battleId: Number(id),
+        title: getValues('title'),
+        content: getValues('content') || '', // undefined 방지
+        codeContentLeft: getValues('codeLeft'),
+        codeContentRight: getValues('codeRight'),
+        codeTypeLeft: getValues('codeTypeLeft'),
+        codeTypeRight: getValues('codeTypeRight'),
+      }
+
+      updateBattleMutation.mutate(updateReq, {
+        onSuccess: (response) => {
+          router.push(`/battle/detail/${response.battleId}`)
+        },
+      })
+    } else {
+      const createReq: BATTLE.CreateBattleReqDTO = {
+        title: getValues('title'),
+        content: getValues('content') || '', // undefined 방지
+        codeContentLeft: getValues('codeLeft'),
+        codeContentRight: getValues('codeRight'),
+        codeTypeLeft: getValues('codeTypeLeft'),
+        codeTypeRight: getValues('codeTypeRight'),
+      }
+
+      createBattleMutation.mutate(createReq, {
+        onSuccess: (response) => {
+          router.push(`/battle/detail/${response.battleId}`)
+        },
+      })
+    }
   }
 
   return (
@@ -89,35 +91,37 @@ const BattleForm = ({ id }: { id?: string }) => {
       </h1>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-        {/* 제목 입력 */}
         <input
-          {...register('title', { required: true, maxLength: 30 })}
+          {...register('title', {
+            required: true,
+            minLength: 5,
+            maxLength: 60,
+          })}
           className="w-full p-2 border rounded dark:bg-gray-800 dark:text-white"
           placeholder="제목 (최대 30자)"
           disabled={pending}
         />
 
-        {/* 내용 입력 */}
         <textarea
-          {...register('content')}
-          className="w-full p-2 border rounded dark:bg-gray-800 dark:text-white"
+          {...register('content', {
+            required: true,
+            maxLength: 1200,
+          })}
+          className="w-full h-96 p-2 border rounded dark:bg-gray-800 dark:text-white"
           placeholder="내용 입력"
-          rows={4}
           disabled={pending}
         />
 
-        {/* 코드 미리보기 (좌/우) */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {/* 왼쪽 코드 미리보기 */}
           <div
-            className="p-2 border rounded cursor-pointer hover:opacity-80"
+            className="p-2 border rounded cursor-pointer hover:opacity-80 overflow-auto max-h-96"
             onClick={() => setOpenModal('left')}
           >
             <Controller
               name="codeLeft"
               control={control}
               render={({ field }) => (
-                <pre className="text-sm bg-gray-100 dark:bg-gray-800 p-2 rounded">
+                <pre className="text-xs bg-gray-100 dark:bg-gray-800 p-2 rounded whitespace-pre-wrap break-words">
                   {field.value || '왼쪽 코드 입력'}
                 </pre>
               )}
@@ -127,16 +131,15 @@ const BattleForm = ({ id }: { id?: string }) => {
             </p>
           </div>
 
-          {/* 오른쪽 코드 미리보기 */}
           <div
-            className="p-2 border rounded cursor-pointer hover:opacity-80"
+            className="p-2 border rounded cursor-pointer hover:opacity-80 overflow-auto max-h-96"
             onClick={() => setOpenModal('right')}
           >
             <Controller
               name="codeRight"
               control={control}
               render={({ field }) => (
-                <pre className="text-sm bg-gray-100 dark:bg-gray-800 p-2 rounded">
+                <pre className="text-xs bg-gray-100 dark:bg-gray-800 p-2 rounded whitespace-pre-wrap break-words">
                   {field.value || '오른쪽 코드 입력'}
                 </pre>
               )}
@@ -147,7 +150,6 @@ const BattleForm = ({ id }: { id?: string }) => {
           </div>
         </div>
 
-        {/* 하단 버튼 */}
         <div className="flex justify-between mt-6">
           <button
             type="button"
@@ -157,17 +159,17 @@ const BattleForm = ({ id }: { id?: string }) => {
             나가기
           </button>
 
-          {/* <button
+          <button
             type="submit"
             className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition disabled:opacity-50"
-            disabled={pending || mutation.isPending}
+            // disabled={pending || mutation.isPending}
           >
-            {isEditMode ? "수정하기" : "등록하기"}
-          </button> */}
+            ss
+            {/* {isEditMode ? "수정하기" : "등록하기"} */}
+          </button>
         </div>
       </form>
 
-      {/* 코드 수정 모달 */}
       {openModal && (
         <CodeEditorModal
           initialCode={getValues(

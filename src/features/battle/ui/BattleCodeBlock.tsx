@@ -53,7 +53,7 @@ const BattleCodeBlock = ({
       voteValue: position === 'left' ? 0 : 1,
     }
     voteBattleMutation.mutate(voteReq, {
-      onSuccess: (data) => {
+      onSuccess: () => {
         invalidateBattleVoteState(battleId)
         onVote(position)
       },
@@ -64,7 +64,7 @@ const BattleCodeBlock = ({
     <div
       className={`relative bg-gray-200 dark:bg-gray-800 p-2 rounded-lg h-96 flex flex-col overflow-hidden
         ${isVoted ? ' border-2 border-blue-500' : ' border border-gray-300 dark:border-gray-700'}
-        ${resultMode ? '' : ' hover:scale-105 active:opacity-80 transition-transform duration-300'}
+        ${resultMode || selectedCode ? '' : ' hover:scale-105 active:opacity-80 transition-transform duration-300'}
       `}
       onClick={onClickCode}
     >
@@ -79,9 +79,10 @@ const BattleCodeBlock = ({
       )}
       <button
         className="absolute top-2 right-2 bg-gray-700 text-white text-xs px-2 py-1 rounded-md z-10"
-        onClick={() =>
+        onClick={(e) => {
+          e.stopPropagation()
           setSelectedCode({ code, editable, language: safeLanguage })
-        }
+        }}
       >
         전체보기
       </button>
