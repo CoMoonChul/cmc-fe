@@ -10,7 +10,7 @@ import {
   deleteNoticeAll,
   selectPageNotice,
 } from '@/entities/notification/api'
-import { QUERY_KEYS } from '@/features/battle/types'
+import { QUERY_KEYS } from '@/features/notice/types'
 
 /**
  * 알림 리스트 조회 Infinite Query
@@ -36,6 +36,7 @@ export const useDeleteNoticeMutation = () => {
   return useMutation({
     mutationFn: (data: NOTICE.DeleteNoticeReqDTO) => deleteNotice(data),
     onSuccess: () => {
+      // 성공시 캐시 무효화 리렌더링
       queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.NOTICE.LIST] })
     },
     onError: (error) => {
@@ -51,7 +52,7 @@ export const useDeleteNoticeAllMutation = () => {
   return useMutation({
     mutationFn: () => deleteNoticeAll(),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['notices'] })
+      queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.NOTICE.LIST] })
     },
     onError: (error) => {
       console.error('삭제 오류:', error)

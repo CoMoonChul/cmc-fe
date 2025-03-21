@@ -60,7 +60,14 @@ const NoticeCard = ({
 
       {/* 알림 내용 */}
       {noti_type === 'LINK' ? (
-        <a href={link_url} className="text-blue-500 hover:underline">
+        <a
+          // href={link_url}
+          onClick={(e) => {
+            e.preventDefault()
+            onAccept(noti_id, link_url)
+          }}
+          className="text-blue-500 hover:underline"
+        >
           {reason_noti}
         </a>
       ) : (
@@ -70,7 +77,11 @@ const NoticeCard = ({
       {/* 버튼 영역 */}
       {noti_type === 'LINK' && (
         <a
-          href={link_url}
+          // href={link_url}
+          onClick={(e) => {
+            e.preventDefault()
+            onAccept(noti_id, link_url)
+          }}
           className="mt-2 px-4 py-2 bg-blue-500 text-white text-sm rounded-md hover:bg-blue-600 transition"
         >
           이동

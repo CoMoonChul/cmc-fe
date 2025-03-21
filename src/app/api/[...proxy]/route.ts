@@ -17,8 +17,7 @@ async function handleRequest(
     const path = req.nextUrl.pathname.replace(/^\/api/, '')
     const searchParams = req.nextUrl.search
     const url = `${BACKEND_URL}${path}${searchParams ? searchParams : ''}`
-    const body =
-      req.method !== 'GET' ? JSON.stringify(await req.json()) : undefined
+    const body = await parseRequestBody(req)
 
     const accessToken = req.cookies.get('accessToken')?.value
     const refreshToken = req.cookies.get('refreshToken')?.value
@@ -101,6 +100,20 @@ async function refreshAccessToken(
   } catch (error) {
     console.error('[refreshAccessToken] Error:', error)
     return null
+  }
+}
+
+/**
+ * 요청 본문을 안전하게 파싱하는 함수
+ * @param req NextRequest
+ * @returns JSON 문자열 또는 undefined
+ */
+async function parseRequestBody(req: NextRequest): Promise<string | undefined> {
+  if (req.method === 'GET') return undefined
+  try {
+    return JSON.stringify(await req.json())
+  } catch {
+    return undefined
   }
 }
 
