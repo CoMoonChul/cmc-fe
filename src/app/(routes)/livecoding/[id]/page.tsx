@@ -5,6 +5,7 @@ import { useParams } from "next/navigation";
 import useWebSocket from "@/features/livecoding/hooks/LiveCodingWebSocket";
 import CodeMirror from "@uiw/react-codemirror";
 import { javascript } from "@codemirror/lang-javascript";
+import { java } from "@codemirror/lang-java";
 import { dracula } from "@uiw/codemirror-theme-dracula";
 
 export default function LiveCodingPage() {
@@ -13,17 +14,26 @@ export default function LiveCodingPage() {
   const { messages, sendMessage } = useWebSocket(roomId);
   const [input, setInput] = useState("");
   const [code, setCode] = useState("// 실시간 코드 공유\nconsole.log('Hello, World!');");
+  const [language, setLanguage] = useState<"javascript" | "java">("javascript");
 
   const inputRef = useRef<HTMLInputElement>(null);
   const chatBoxRef = useRef<HTMLDivElement>(null);
 
-  // 초대 링크 복사 함수
+  // 초대 링크 복사 함수 (얼러트 제거)
   const copyInviteLink = async () => {
     try {
       await navigator.clipboard.writeText(`https://livecoding.example.com/room/${roomId}`);
-      alert("초대 링크가 복사되었습니다!");
     } catch (err) {
       console.error("초대 링크 복사 실패:", err);
+    }
+  };
+
+  // 코드 복사 함수 (얼러트 제거)
+  const copyCodeToClipboard = async () => {
+    try {
+      await navigator.clipboard.writeText(code);
+    } catch (err) {
+      console.error("코드 복사 실패:", err);
     }
   };
 
@@ -51,12 +61,46 @@ export default function LiveCodingPage() {
       <div className="flex flex-grow">
         {/* 코드 편집기 (8) */}
         <div className="w-4/5 p-6 flex flex-col">
+          {/* 코드 편집기 상단 (제목 & 버튼) */}
+          <div className="flex items-center justify-between mb-2">
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">코드 편집기</h2>
+            <div className="space-x-2">
+              <button
+                onClick={copyCodeToClipboard}
+                className="px-3 py-1 text-xs bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition"
+              >
+                코드 복사
+              </button>
+              <button
+                onClick={() => setLanguage("javascript")}
+                className={`px-3 py-1 text-xs rounded-lg transition ${
+                  language === "javascript"
+                    ? "bg-blue-500 text-white"
+                    : "bg-gray-300 text-gray-900 hover:bg-gray-400"
+                }`}
+              >
+                JavaScript
+              </button>
+              <button
+                onClick={() => setLanguage("java")}
+                className={`px-3 py-1 text-xs rounded-lg transition ${
+                  language === "java"
+                    ? "bg-blue-500 text-white"
+                    : "bg-gray-300 text-gray-900 hover:bg-gray-400"
+                }`}
+              >
+                Java
+              </button>
+            </div>
+          </div>
+
+          {/* 코드 에디터 */}
           <div className="flex-grow border rounded-lg shadow-lg bg-white dark:bg-gray-800 p-4">
             <CodeMirror
               value={code}
               height="500px"
               theme={dracula}
-              extensions={[javascript()]}
+              extensions={[language === "javascript" ? javascript() : java()]}
               onChange={(value) => setCode(value)}
             />
           </div>
