@@ -35,7 +35,7 @@ const NoticePage = () => {
     deleteNotice({ noti_id: id }) // 요청 실행
   }
 
-  const handleAccept = (id: number, link: string) => {
+  const handleAccept = (id: number | undefined, link: string = '') => {
     console.log('컴포넌트 수락 클릭', link)
     router.push(link)
     handleDelete(id)
@@ -50,7 +50,7 @@ const NoticePage = () => {
     <div className="min-h-screen p-6 bg-white text-black dark:bg-black dark:text-white">
       <h1 className="text-2xl font-bold mb-4">알림함</h1>
       <div className="flex justify-between mb-4">
-        {data?.pages?.[0].totalElements > 0 && (
+        {(data?.pages?.[0]?.totalElements ?? 0) > 0 && (
           <button
             onClick={handleDeleteAll}
             className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600"
@@ -61,7 +61,7 @@ const NoticePage = () => {
       </div>
 
       <div className="space-y-4">
-        {data?.pages?.[0]?.notiList?.length > 0 ? (
+        {(data?.pages?.[0]?.notiList?.length ?? 0) > 0 ? (
           data?.pages.map((page) =>
             page.notiList?.map((notification, index) => (
               <NoticeCard

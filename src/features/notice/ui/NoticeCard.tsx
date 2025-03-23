@@ -1,5 +1,7 @@
-const formatDate = (date: string) => {
+const formatDate = (date?: string) => {
+  if (!date) return '날짜 없음' // 기본값 처리
   console.log('dddd : ', date)
+
   const date2 = new Date(date.replace(' ', 'T'))
   const now = new Date()
   const diffMs = now.getTime() - date2.getTime()
@@ -38,7 +40,7 @@ const NoticeCard = ({
   noti_title?: string
   noti_type?: string
   onDelete: (id: number | undefined) => void
-  onAccept: (id: number, link: string) => void
+  onAccept: (id: number | undefined, link: string | undefined) => void
 }) => {
   return (
     <div className="bg-gray-100 dark:bg-gray-800 p-4 rounded-lg shadow-md flex flex-col gap-2 relative">
@@ -64,7 +66,7 @@ const NoticeCard = ({
           // href={link_url}
           onClick={(e) => {
             e.preventDefault()
-            onAccept(noti_id, link_url)
+            onAccept(noti_id, link_url ?? '')
           }}
           className="text-blue-500 hover:underline"
         >
@@ -80,7 +82,7 @@ const NoticeCard = ({
           // href={link_url}
           onClick={(e) => {
             e.preventDefault()
-            onAccept(noti_id, link_url)
+            onAccept(noti_id, link_url ?? '')
           }}
           className="mt-2 px-4 py-2 bg-blue-500 text-white text-sm rounded-md hover:bg-blue-600 transition"
         >
@@ -91,7 +93,7 @@ const NoticeCard = ({
         <div className="flex gap-2 mt-2">
           <button
             className="flex-1 px-4 py-2 bg-green-500 text-white text-sm rounded-md hover:bg-green-600 transition"
-            onClick={() => onAccept(noti_id, link_url)}
+            onClick={() => onAccept(noti_id, link_url ?? '')}
           >
             수락
           </button>
