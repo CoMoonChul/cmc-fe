@@ -156,7 +156,10 @@ const UserJoinForm = () => {
       {/* 로그인 링크 */}
       <div className="flex justify-center items-center gap-2 mt-4 text-sm">
         <span>이미 회원이신가요?</span>
-        <button className="text-blue-500 hover:text-blue-700 dark:hover:text-blue-400 transition">
+        <button
+          onClick={() => router.replace('/user/login')}
+          className="text-blue-500 hover:text-blue-700 dark:hover:text-blue-400 transition"
+        >
           로그인
         </button>
       </div>
