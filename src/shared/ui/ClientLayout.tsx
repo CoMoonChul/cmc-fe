@@ -18,7 +18,7 @@ export default function ClientLayout({
   const [showHeader, setShowHeader] = useState(false)
 
   useEffect(() => {
-    const noHeaderPages = ['/user/login']
+    const noHeaderPages = ['/user/login', '/user/join']
     setShowHeader(!noHeaderPages.includes(pathname))
   }, [pathname])
 
