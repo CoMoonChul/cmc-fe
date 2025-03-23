@@ -5,6 +5,7 @@ export const API_PATH = {
   JOIN: '/user/join',
   LOGOUT: '/user/logout',
   REFRESH: '/user/refresh',
+  FINDACCOUNT: '/user/findAccount',
 }
 
 export const API_ENDPOINTS = {
@@ -12,4 +13,5 @@ export const API_ENDPOINTS = {
   JOIN: `${BACKEND_URL + API_PATH.JOIN}`,
   LOGOUT: `${BACKEND_URL + API_PATH.LOGOUT}`,
   REFRESH: `${BACKEND_URL + API_PATH.REFRESH}`,
+  FINDACCOUNT: `${BACKEND_URL + API_PATH.FINDACCOUNT}`,
 }
