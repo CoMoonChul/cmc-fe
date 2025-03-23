@@ -15,6 +15,7 @@ export default function LiveCodingPage() {
   const [input, setInput] = useState("");
   const [code, setCode] = useState("// 실시간 코드 공유\nconsole.log('Hello, World!');");
   const [language, setLanguage] = useState<"javascript" | "java">("javascript");
+  const [copyButtonText, setCopyButtonText] = useState("코드 복사");
 
   const inputRef = useRef<HTMLInputElement>(null);
   const chatBoxRef = useRef<HTMLDivElement>(null);
@@ -28,10 +29,12 @@ export default function LiveCodingPage() {
     }
   };
 
-  // 코드 복사 함수 (얼러트 제거)
+  // 코드 복사 함수 (버튼 텍스트 변경)
   const copyCodeToClipboard = async () => {
     try {
       await navigator.clipboard.writeText(code);
+      setCopyButtonText("복사됨");
+      setTimeout(() => setCopyButtonText("코드 복사"), 1000); // 1초 후 텍스트 변경
     } catch (err) {
       console.error("코드 복사 실패:", err);
     }
@@ -69,7 +72,7 @@ export default function LiveCodingPage() {
                 onClick={copyCodeToClipboard}
                 className="px-3 py-1 text-xs bg-gray-500 text-white rounded-lg hover:bg-gray-600 transition"
               >
-                코드 복사
+                {copyButtonText}
               </button>
               <button
                 onClick={() => setLanguage("javascript")}
@@ -152,3 +155,6 @@ export default function LiveCodingPage() {
     </div>
   );
 }
+
+
+
