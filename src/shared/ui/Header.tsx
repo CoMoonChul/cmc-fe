@@ -27,7 +27,7 @@ export default function Header() {
         {[
           // 다크/라이트 테스트(임시)
           { icon: '공유', onClick: toggleTheme },
-          { icon: '알림', onClick: () => router.push('/notifications') },
+          { icon: '알림', onClick: () => router.push('/notice') },
         ].map(({ icon, onClick }, idx) => (
           <motion.button
             key={idx}
