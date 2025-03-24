@@ -42,10 +42,7 @@ export default function LiveCodingTestPage() {
         alert('방 ID를 입력해야 합니다.')
         return
       }
-      console.log('inputRoomId')
-      console.log(inputRoomId)
       const response = await selectLiveCoding(inputRoomId)
-      console.log(response)
       setRoomInfo(response)
       console.log('✅ 조회된 방 정보:', response)
     } catch (error) {

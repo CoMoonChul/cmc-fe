@@ -1,36 +1,40 @@
-
-
-import { useState, useEffect, useRef } from "react";
+import { useState, useRef } from 'react'
 import { inviteCodeFn } from '@/features/livecoding/type'
 
-export default function Chat({ copyInviteLink }: inviteCodeFn) {
-  const [messages, setMessages] = useState<string[]>([]);
-  const [input, setInput] = useState("");
-  const inputRef = useRef<HTMLInputElement | null>(null);
-  const chatBoxRef = useRef<HTMLDivElement | null>(null);
+interface ChatProps extends inviteCodeFn {
+  messages: string[] // ✅ 웹소켓에서 받은 메시지 목록
+  sendMessage: (msg: string) => void // ✅ 메시지 전송 함수
+}
 
-  const sendMessage = () => {
-    if (input.trim() !== "") {
-      setMessages((prev) => [...prev, input]);
-      setInput("");
+export default function Chat({
+  copyInviteLink,
+  messages,
+  sendMessage,
+}: ChatProps) {
+  const [input, setInput] = useState('')
+  const inputRef = useRef<HTMLInputElement | null>(null)
+  const chatBoxRef = useRef<HTMLDivElement | null>(null)
+
+  const handleSendMessage = () => {
+    if (input.trim() !== '') {
+      sendMessage(input) // ✅ 웹소켓을 통해 메시지 전송
+      setInput('')
     }
-  };
+  }
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter" && !e.shiftKey) {
-      e.preventDefault();
-      sendMessage();
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault()
+      handleSendMessage()
     }
-  };
-
-  useEffect(() => {
-    chatBoxRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
+  }
 
   return (
     <div className="w-1/5 p-4 bg-gray-200 dark:bg-gray-800 border-l border-gray-400 dark:border-gray-700 flex flex-col">
       <div className="flex items-center justify-between mb-3">
-        <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">채팅</h2>
+        <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
+          채팅
+        </h2>
         <button
           onClick={copyInviteLink}
           className="px-3 py-1 text-xs bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition"
@@ -45,7 +49,10 @@ export default function Chat({ copyInviteLink }: inviteCodeFn) {
         onClick={() => inputRef.current?.focus()}
       >
         {messages.map((msg, idx) => (
-          <div key={idx} className="px-2 py-1 rounded-lg bg-blue-100 dark:bg-blue-600 mb-1 text-sm text-gray-900 dark:text-gray-100">
+          <div
+            key={idx}
+            className="px-2 py-1 rounded-lg bg-blue-100 dark:bg-blue-600 mb-1 text-sm text-gray-900 dark:text-gray-100"
+          >
             {msg}
           </div>
         ))}
@@ -65,5 +72,5 @@ export default function Chat({ copyInviteLink }: inviteCodeFn) {
         />
       </div>
     </div>
-  );
+  )
 }
