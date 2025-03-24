@@ -12,5 +12,6 @@ export const useBattleVoteStateQuery = (battleId: number) => {
   return useQuery<BATTLE.SelectBattleVoteStateResDTO>({
     queryKey: [QUERY_KEYS.BATTLE.VOTE_STATE, battleId],
     queryFn: () => selectBattleVoteState(battleId),
+    retry: false,
   })
 }

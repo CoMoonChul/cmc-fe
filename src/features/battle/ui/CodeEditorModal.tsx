@@ -10,12 +10,9 @@ import { useThemeStore } from '@/shared/store/useThemeStore'
 
 interface CodeEditorModalProps {
   initialCode: string
-  initialLanguage: 'javascript' | 'python' | 'java'
+  initialLanguage: string
   onClose: () => void
-  onSave: (
-    updatedCode: string,
-    updatedLanguage: 'javascript' | 'python' | 'java',
-  ) => void
+  onSave: (updatedCode: string, updatedLanguage: string) => void
 }
 
 const CodeEditorModal = ({
@@ -25,9 +22,7 @@ const CodeEditorModal = ({
   onSave,
 }: CodeEditorModalProps) => {
   const [code, setCode] = useState(initialCode)
-  const [language, setLanguage] = useState<'javascript' | 'python' | 'java'>(
-    initialLanguage,
-  )
+  const [language, setLanguage] = useState(initialLanguage)
   const { theme } = useThemeStore()
 
   useEffect(() => {

@@ -9,6 +9,9 @@ import { languageExtensions } from '@/entities/editor/types'
 import { useUpdateVoteBattle } from '@/features/battle/hooks/useUpdateVoteBattle'
 import { useInvalidateBattleVoteState } from '@/features/battle/hooks/useInvalidateBattleVoteState'
 import { motion } from 'framer-motion'
+import { AxiosError } from 'axios'
+import { useRouter, usePathname } from 'next/navigation'
+import { usePopupStore } from '@/shared/store/usePopupStore'
 
 const BattleCodeBlock = ({
   battleId,
@@ -33,16 +36,20 @@ const BattleCodeBlock = ({
   waveHeight?: number
   overlayColor?: string
 }) => {
+  const router = useRouter()
+  const pathname = usePathname()
+
   const [selectedCode, setSelectedCode] = useState<{
     code: string
     editable: boolean
     language: string
   } | null>(null)
-
+  const { openPopup } = usePopupStore()
   const { theme } = useThemeStore()
   const safeLanguage = language ?? 'javascript'
-  const voteBattleMutation = useUpdateVoteBattle()
+  const voteBattleMutation = useUpdateVoteBattle(true)
   const invalidateBattleVoteState = useInvalidateBattleVoteState()
+  const isMotionDivVisible = waveHeight && overlayColor
 
   const onClickCode = () => {
     if (resultMode) {
@@ -57,6 +64,13 @@ const BattleCodeBlock = ({
         invalidateBattleVoteState(battleId)
         onVote(position)
       },
+      onError: (e) => {
+        if (e instanceof AxiosError && e.status === 403) {
+          openPopup('로그인 후 투표가 가능합니다.', '', () => {
+            router.replace(`/user/login?redirect=${pathname}`)
+          })
+        }
+      },
     })
   }
 
@@ -68,14 +82,16 @@ const BattleCodeBlock = ({
       `}
       onClick={onClickCode}
     >
-      {waveHeight && overlayColor && (
+      {isMotionDivVisible ? (
         <motion.div
           className="absolute inset-0"
           style={{ background: overlayColor, zIndex: 10 }}
-          initial={{ clipPath: 'inset(100% 0% 0% 0%)' }} // 완전히 숨겨진 상태에서 시작
-          animate={{ clipPath: `inset(${100 - waveHeight}% 0% 0% 0%)` }} // 아래에서 위로 차오름
+          initial={{ clipPath: 'inset(100% 0% 0% 0%)' }}
+          animate={{ clipPath: `inset(${100 - waveHeight}% 0% 0% 0%)` }}
           transition={{ duration: 0.8, ease: 'easeOut' }}
         />
+      ) : (
+        <></>
       )}
       <button
         className="absolute top-2 right-2 bg-gray-700 text-white text-xs px-2 py-1 rounded-md z-10"
