@@ -13,7 +13,7 @@ export default function LiveCodingTestPage() {
   const [roomInfo, setRoomInfo] =
     useState<LIVECODING.SelectLiveCodingResDTO | null>(null)
 
-  const handleCreateRoom = async () => {
+  const createRoom = async () => {
     try {
       const hostIdInput = prompt('호스트 ID를 입력하세요.')
       if (!hostIdInput) {
@@ -31,21 +31,19 @@ export default function LiveCodingTestPage() {
       setRoomId(response.roomId)
       console.log('✅ 생성된 방 ID:', response.roomId)
     } catch (error) {
+      alert('방 ID 오류.')
       console.error('❌ 방 생성 실패:', error)
     }
   }
 
-  const handleSelectRoom = async () => {
+  const selectRoom = async () => {
     try {
       const inputRoomId = prompt('조회할 방 ID를 입력하세요.')
       if (!inputRoomId) {
         alert('방 ID를 입력해야 합니다.')
         return
       }
-      console.log('inputRoomId')
-      console.log(inputRoomId)
       const response = await selectLiveCoding(inputRoomId)
-      console.log(response)
       setRoomInfo(response)
       console.log('✅ 조회된 방 정보:', response)
     } catch (error) {
@@ -53,7 +51,7 @@ export default function LiveCodingTestPage() {
     }
   }
 
-  const handleDeleteRoom = async () => {
+  const deleteRoom = async () => {
     try {
       const inputRoomId = prompt('삭제할 방 ID를 입력하세요.')
       if (!inputRoomId) {
@@ -84,7 +82,7 @@ export default function LiveCodingTestPage() {
 
       {/* 방 생성 버튼 */}
       <button
-        onClick={handleCreateRoom}
+        onClick={createRoom}
         className="px-4 py-2 bg-blue-500 text-white rounded mb-2"
       >
         라이브코딩 방 생성
@@ -95,7 +93,7 @@ export default function LiveCodingTestPage() {
 
       {/* 방 조회 버튼 */}
       <button
-        onClick={handleSelectRoom}
+        onClick={selectRoom}
         className="px-4 py-2 bg-green-500 text-white rounded mt-4"
       >
         라이브코딩 방 조회
@@ -111,7 +109,7 @@ export default function LiveCodingTestPage() {
 
       {/* 방 삭제 버튼 */}
       <button
-        onClick={handleDeleteRoom}
+        onClick={deleteRoom}
         className="px-4 py-2 bg-red-500 text-white rounded mt-4"
       >
         라이브코딩 방 삭제

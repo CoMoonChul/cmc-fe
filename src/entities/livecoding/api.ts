@@ -62,3 +62,46 @@ export async function deleteLiveCoding(
   )
   return response.data
 }
+
+
+/**
+ * 라이브코딩방 업데이트
+ * @param roomId
+ * @param userNum
+ * @param action 0 참여 1 나가기
+ * @param manualErrorHandle 에러 핸들링 여부 (기본값: false)
+ * @returns 삭제 성공 여부
+ */
+export async function updateLiveCoding(
+  roomId: string,
+  userNum: number,
+  action: number,
+  manualErrorHandle = false,
+): Promise<LIVECODING.UpdateLiveCodingResDTO> {
+  const response = await apiClient(
+    api.selectLiveCoding.bind(api),
+    manualErrorHandle,
+    roomId,
+    userNum,
+    action
+  )
+  return response.data
+}
+
+/**
+ * 라이브코딩방 토큰 검증
+ * @param token - jwt 토큰
+ * @param manualErrorHandle 에러 핸들링 여부 (기본값: false)
+ * @returns 삭제 성공 여부
+ */
+export async function verifyLiveCoding(
+  token: string,
+  manualErrorHandle = false,
+): Promise<LIVECODING.VerifyLiveCodingResDTO> {
+  const response = await apiClient(
+    api.verifyLiveCoding.bind(api),
+    manualErrorHandle,
+    token,
+  )
+  return response.data
+}
