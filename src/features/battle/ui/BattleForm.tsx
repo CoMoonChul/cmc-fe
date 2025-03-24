@@ -15,8 +15,8 @@ interface BattleFormValues {
   content: string
   codeLeft: string
   codeRight: string
-  codeTypeLeft: 'javascript' | 'python' | 'java'
-  codeTypeRight: 'javascript' | 'python' | 'java'
+  codeTypeLeft: string
+  codeTypeRight: string
 }
 
 const BattleForm = ({ id }: { id?: string }) => {
@@ -46,6 +46,8 @@ const BattleForm = ({ id }: { id?: string }) => {
       setValue('content', data.content)
       setValue('codeLeft', data.codeContentLeft)
       setValue('codeRight', data.codeContentRight)
+      setValue('codeTypeLeft', data.codeTypeLeft)
+      setValue('codeTypeRight', data.codeTypeRight)
     }
   }, [data, setValue])
 
@@ -126,9 +128,6 @@ const BattleForm = ({ id }: { id?: string }) => {
                 </pre>
               )}
             />
-            <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-              언어: {getValues('codeTypeLeft')}
-            </p>
           </div>
 
           <div
@@ -144,9 +143,6 @@ const BattleForm = ({ id }: { id?: string }) => {
                 </pre>
               )}
             />
-            <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-              언어: {getValues('codeTypeRight')}
-            </p>
           </div>
         </div>
 
@@ -159,14 +155,23 @@ const BattleForm = ({ id }: { id?: string }) => {
             나가기
           </button>
 
-          <button
-            type="submit"
-            className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition disabled:opacity-50"
-            // disabled={pending || mutation.isPending}
-          >
-            ss
-            {/* {isEditMode ? "수정하기" : "등록하기"} */}
-          </button>
+          {isEditMode ? (
+            <button
+              type="submit"
+              className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition disabled:opacity-50"
+              disabled={pending || updateBattleMutation.isPending}
+            >
+              수정하기
+            </button>
+          ) : (
+            <button
+              type="submit"
+              className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition disabled:opacity-50"
+              disabled={pending || createBattleMutation.isPending}
+            >
+              등록하기
+            </button>
+          )}
         </div>
       </form>
 
