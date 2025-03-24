@@ -114,7 +114,10 @@ const UserLoginForm = () => {
 
       <div className="flex justify-center items-center gap-2 mt-2 text-sm">
         <span>계정 정보가 기억나지 않으신가요?</span>
-        <button className="text-blue-500 hover:text-blue-700 dark:hover:text-blue-400 transition">
+        <button
+          onClick={() => router.replace('/user/findAccount')}
+          className="text-blue-500 hover:text-blue-700 dark:hover:text-blue-400 transition"
+        >
           계정 찾기
         </button>
       </div>
