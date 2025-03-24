@@ -1,9 +1,10 @@
 'use client'
 import { motion } from 'framer-motion'
-import { useIsFetching } from '@tanstack/react-query'
+import { useIsFetching, useIsMutating } from '@tanstack/react-query'
 
 const Loading = () => {
-  const isFetching = useIsFetching() > 0
+  const isFetching = useIsFetching() + useIsMutating() > 0
+  console.log('isF', isFetching)
 
   if (!isFetching) return null
   return (
