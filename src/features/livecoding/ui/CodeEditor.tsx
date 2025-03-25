@@ -3,12 +3,30 @@ import { javascript } from "@codemirror/lang-javascript";
 import { java } from "@codemirror/lang-java";
 import { dracula } from "@uiw/codemirror-theme-dracula";
 import CodeMirror from "@uiw/react-codemirror";
+import { LIVECODING } from '#/generate'
 
-export default function CodeEditor() {
+
+// CodeEditor 컴포넌트
+export default function CodeEditor({ roomInfo }: { roomInfo: LIVECODING.SelectLiveCodingResDTO | null }) {
   const [code, setCode] = useState("console.log('CMC')");
   const [language, setLanguage] = useState("javascript");
   const [copyButtonText, setCopyButtonText] = useState("복사");
   const [isHovered, setIsHovered] = useState(false);
+
+  const copyInviteLink = () => {
+    console.log('copyInviteLink>>>>>');
+    console.log('copyInviteLink>>>>>');
+    console.log('copyInviteLink>>>>>');
+    console.log('copyInviteLink>>>>>');
+    console.log(roomInfo);
+    if (!roomInfo?.link) {
+      return;
+    }
+    navigator.clipboard
+      .writeText(roomInfo.link)
+      .then(() => alert("✅ 초대 링크가 복사되었습니다!"))
+      .catch(() => alert("❌ 초대 링크 복사에 실패했습니다."));
+  };
 
   const copyCodeToClipboard = () => {
     navigator.clipboard.writeText(code).then(() => {
@@ -19,26 +37,40 @@ export default function CodeEditor() {
 
   return (
     <div className="flex flex-col">
-      {/* 헤더 영역 */}
-      <div className="flex items-center justify-between mb-2">
-        <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">코드 편집기</h2>
-        <div className="space-x-2">
+      {/* 방정보 영역 */}
+      <div className="flex items-center justify-between mb-4 p-4 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-lg shadow-lg">
+        <div className="flex space-x-4">
+          <button
+            onClick={copyInviteLink}
+            className="px-4 py-2 text-sm rounded-lg bg-gray-200 text-gray-800 hover:bg-blue-400 hover:text-white transition duration-300 ease-in-out"
+          >
+            초대링크 복사
+          </button>
+          <button
+            onClick={() => {/* 강퇴 동작 */}}
+            className="px-4 py-2 text-sm rounded-lg bg-gray-200 text-gray-800 hover:bg-red-400 hover:text-white transition duration-300 ease-in-out"
+          >
+            강퇴
+          </button>
+        </div>
+        <h2 className="text-xl font-semibold text-white">언어 선택</h2>
+        <div className="space-x-4">
           <button
             onClick={() => setLanguage("javascript")}
-            className={`px-3 py-1 text-xs rounded-lg transition ${
+            className={`px-4 py-2 text-sm rounded-lg transition duration-300 ease-in-out transform ${
               language === "javascript"
-                ? "bg-blue-500 text-white"
-                : "bg-gray-300 text-gray-900 hover:bg-gray-400"
+                ? "bg-blue-600 text-white scale-105"
+                : "bg-gray-200 text-gray-800 hover:bg-blue-400 hover:text-white"
             }`}
           >
             JavaScript
           </button>
           <button
             onClick={() => setLanguage("java")}
-            className={`px-3 py-1 text-xs rounded-lg transition ${
+            className={`px-4 py-2 text-sm rounded-lg transition duration-300 ease-in-out transform ${
               language === "java"
-                ? "bg-blue-500 text-white"
-                : "bg-gray-300 text-gray-900 hover:bg-gray-400"
+                ? "bg-blue-600 text-white scale-105"
+                : "bg-gray-200 text-gray-800 hover:bg-blue-400 hover:text-white"
             }`}
           >
             Java
@@ -47,12 +79,7 @@ export default function CodeEditor() {
       </div>
 
       {/* 코드 에디터 영역 */}
-      <div
-        className="relative flex-grow border rounded-lg shadow-lg bg-white dark:bg-gray-800 p-4"
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
-      >
-        {/* CodeMirror를 감싸는 컨테이너(여기서 버튼의 absolute 위치 기준이 됨) */}
+      <div className="relative flex-grow border rounded-lg shadow-lg bg-white dark:bg-gray-800 p-4">
         <div className="relative">
           <CodeMirror
             value={code}
@@ -66,8 +93,8 @@ export default function CodeEditor() {
               onClick={copyCodeToClipboard}
               style={{ top: "12px", right: "12px" }}
               className="absolute px-3 py-1 text-xs font-medium text-gray-800
-                         bg-gray-300 border border-gray-400 rounded-md shadow-sm
-                         hover:bg-gray-400 transition"
+                     bg-gray-300 border border-gray-400 rounded-md shadow-sm
+                     hover:bg-gray-400 transition"
             >
               {copyButtonText}
             </button>
