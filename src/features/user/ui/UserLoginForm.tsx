@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useLogin } from '@/features/user/hooks/useLogin'
 import { USER } from '#/generate'
+import useUserStore from '@/shared/store/useUserStore'
 import Image from 'next/image'
 import GoogleIcon from '#/public/google-icon.svg'
 import { AxiosError } from 'axios'
@@ -12,6 +13,8 @@ const UserLoginForm = () => {
   // routing
   const router = useRouter()
   const searchParams = useSearchParams()
+
+  const { setUser } = useUserStore()
 
   // business
   const { mutate: loginMutate } = useLogin()
@@ -42,7 +45,13 @@ const UserLoginForm = () => {
     }
 
     loginMutate(loginParam, {
-      onSuccess: () => {
+      onSuccess: (res) => {
+        console.log('res: ', res)
+
+        setUser({
+          userNum: res.userNum,
+        })
+
         router.replace(redirectPath)
       },
       onError: (err) => {
