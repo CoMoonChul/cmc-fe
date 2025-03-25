@@ -19,26 +19,27 @@ export default function CodeEditor() {
 
   return (
     <div className="flex flex-col">
-      {/* 헤더 영역 */}
-      <div className="flex items-center justify-between mb-2">
-        <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">코드 편집기</h2>
-        <div className="space-x-2">
+      {/* 방정보 영역 */}
+      <div
+        className="flex items-center justify-between mb-4 p-4 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-lg shadow-lg">
+        <h2 className="text-xl font-semibold text-white">언어 선택</h2>
+        <div className="space-x-4">
           <button
             onClick={() => setLanguage("javascript")}
-            className={`px-3 py-1 text-xs rounded-lg transition ${
+            className={`px-4 py-2 text-sm rounded-lg transition duration-300 ease-in-out transform ${
               language === "javascript"
-                ? "bg-blue-500 text-white"
-                : "bg-gray-300 text-gray-900 hover:bg-gray-400"
+                ? "bg-blue-600 text-white scale-105"
+                : "bg-gray-200 text-gray-800 hover:bg-blue-400 hover:text-white"
             }`}
           >
             JavaScript
           </button>
           <button
             onClick={() => setLanguage("java")}
-            className={`px-3 py-1 text-xs rounded-lg transition ${
+            className={`px-4 py-2 text-sm rounded-lg transition duration-300 ease-in-out transform ${
               language === "java"
-                ? "bg-blue-500 text-white"
-                : "bg-gray-300 text-gray-900 hover:bg-gray-400"
+                ? "bg-blue-600 text-white scale-105"
+                : "bg-gray-200 text-gray-800 hover:bg-blue-400 hover:text-white"
             }`}
           >
             Java
@@ -66,8 +67,8 @@ export default function CodeEditor() {
               onClick={copyCodeToClipboard}
               style={{ top: "12px", right: "12px" }}
               className="absolute px-3 py-1 text-xs font-medium text-gray-800
-                         bg-gray-300 border border-gray-400 rounded-md shadow-sm
-                         hover:bg-gray-400 transition"
+                     bg-gray-300 border border-gray-400 rounded-md shadow-sm
+                     hover:bg-gray-400 transition"
             >
               {copyButtonText}
             </button>
@@ -75,5 +76,6 @@ export default function CodeEditor() {
         </div>
       </div>
     </div>
+
   );
 }
