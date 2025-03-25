@@ -96,6 +96,16 @@ const ReviewListPage = () => {
           )),
         )}
       </div>
+
+      {hasNextPage && (
+        <div ref={ref} className="flex justify-center py-4">
+          {isFetchingNextPage ? (
+            <span>로딩 중...</span>
+          ) : (
+            <span>더 불러오려면 스크롤하세요.</span>
+          )}
+        </div>
+      )}
     </div>
   )
 }
