@@ -8,3 +8,9 @@ export interface LiveCodingRoom {
   participants: number[] // 참가자 ID 목록
   link: string // 초대 링크
 }
+
+
+export interface LcdMessage {
+  text: string;
+  sender: "me" | "other"; // 메시지를 보낸 사람이 본인인지 다른 사람인지 구분
+}

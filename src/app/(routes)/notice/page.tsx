@@ -32,7 +32,7 @@ const NoticePage = () => {
    */
   const handleDelete = (id: number | undefined) => {
     console.log('알림 삭제 요청', id)
-    deleteNotice({ noti_id: id }) // 요청 실행
+    deleteNotice({ notiId: id }) // 요청 실행
   }
 
   const handleAccept = (id: number | undefined, link: string = '') => {
