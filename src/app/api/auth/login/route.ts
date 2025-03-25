@@ -19,9 +19,9 @@ export async function POST(req: NextRequest) {
     }
 
     const setCookieHeader = response.headers.get('set-cookie')
-    const { accessToken } = await response.json()
+    const { accessToken, userNum } = await response.json()
 
-    const res = NextResponse.json({ message: 'Login successful' })
+    const res = NextResponse.json({ userNum: userNum })
     if (setCookieHeader) {
       res.headers.set('Set-Cookie', setCookieHeader)
     }
