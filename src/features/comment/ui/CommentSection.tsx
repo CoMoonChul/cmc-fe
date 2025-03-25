@@ -3,6 +3,8 @@ import { useState, useEffect } from 'react'
 import { getFormattedCreatedAt } from '@/shared/lib/date'
 import { useInView } from 'react-intersection-observer'
 import { useCommentListInfiniteQuery } from '../hooks/useCommentListInfiniteQuery'
+import { useCreateCommentQuery } from '@/features/comment/hooks/useCreateCommentQuery'
+import { COMMENT } from '#/generate'
 
 interface CommentSectionProps {
   id: number
@@ -15,7 +17,7 @@ const CommentSection: React.FC<CommentSectionProps> = ({
 }) => {
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
     useCommentListInfiniteQuery(id, commentTarget, 10)
-
+  const createCommentMutation = useCreateCommentQuery(id, commentTarget, 10)
   const [comment, setComment] = useState('')
   const { ref, inView } = useInView()
 
@@ -26,10 +28,21 @@ const CommentSection: React.FC<CommentSectionProps> = ({
   }, [inView, hasNextPage, fetchNextPage])
 
   const handleSubmit = async () => {
-    // if (comment.trim()) {
-    //   await addCommentMutation.mutateAsync({ battleId, content: comment })
-    //   setComment('')
-    // }
+    if (!comment.trim()) {
+      return
+    }
+
+    const createReq: COMMENT.CreateCommentReqDTO = {
+      content: comment.trim(),
+      targetId: id,
+      commentTarget: commentTarget,
+    }
+
+    createCommentMutation.mutate(createReq, {
+      onSuccess: () => {
+        setComment('')
+      },
+    })
   }
 
   return (
@@ -43,6 +56,12 @@ const CommentSection: React.FC<CommentSectionProps> = ({
           type="text"
           value={comment}
           onChange={(e) => setComment(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              e.preventDefault()
+              handleSubmit()
+            }
+          }}
           placeholder="댓글을 작성해 보세요"
           className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 rounded-lg text-black dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
@@ -93,7 +112,6 @@ const CommentSection: React.FC<CommentSectionProps> = ({
         )}
       </div>
 
-      {/* 더 이상 댓글이 없을 경우 */}
       {!hasNextPage && (data?.pages?.length ?? 0) > 0 && (
         <p className="mt-4 text-center text-gray-500 dark:text-gray-400">
           더 이상 댓글이 없습니다.

@@ -5,6 +5,7 @@ import CodeMirror from '@uiw/react-codemirror'
 import { javascript } from '@codemirror/lang-javascript'
 import { dracula } from '@uiw/codemirror-theme-dracula'
 import { useThemeStore } from '@/shared/store/useThemeStore'
+import CommentSection from '@/features/comment/ui/CommentSection'
 
 const sampleJavaScriptCode = `
 // Example Code
@@ -71,13 +72,9 @@ const ReviewDetailPage = () => {
         />
       </div>
 
-      {/* 댓글 영역 */}
-      <div className="mt-6 bg-gray-100 dark:bg-gray-900 p-4 rounded-lg">
-        <h3 className="text-lg font-semibold mb-2">댓글</h3>
-        <p className="text-gray-700 dark:text-gray-300">
-          댓글 목록이 여기에 표시됩니다.
-        </p>
-      </div>
+      <hr className="my-8 border-gray-300 dark:border-gray-700" />
+
+      <CommentSection id={3} commentTarget={1} />
     </div>
   )
 }

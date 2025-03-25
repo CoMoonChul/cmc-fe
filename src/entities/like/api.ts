@@ -1,13 +1,10 @@
 import { LIKE } from '#/generate'
 import { apiClient } from '@/shared/api/apiClient'
-import { apiConfig } from '@/shared/config/apiConfig'
+import { getApiConfig } from '@/shared/config/apiConfig'
 import { axiosInstance } from '@/shared/config/axiosInstance'
 
-const api = new LIKE.LikeControllerApi(
-  apiConfig,
-  apiConfig.basePath,
-  axiosInstance,
-)
+const config = getApiConfig()
+const api = new LIKE.LikeControllerApi(config, config.basePath, axiosInstance)
 
 /**
  * 리뷰 좋아요 생성/업데이트
