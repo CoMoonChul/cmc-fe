@@ -21,7 +21,24 @@ export default function CodeEditor() {
     <div className="flex flex-col">
       {/* 방정보 영역 */}
       <div
-        className="flex items-center justify-between mb-4 p-4 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-lg shadow-lg">
+        className="flex items-center justify-between mb-4 p-4 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-lg shadow-lg"
+      >
+        <div className="flex space-x-4">
+          <button
+            onClick={() => {/* 초대링크 복사 동작 */
+            }}
+            className="px-4 py-2 text-sm rounded-lg bg-gray-200 text-gray-800 hover:bg-blue-400 hover:text-white transition duration-300 ease-in-out"
+          >
+            초대링크 복사
+          </button>
+          <button
+            onClick={() => {/* 강퇴 동작 */
+            }}
+            className="px-4 py-2 text-sm rounded-lg bg-gray-200 text-gray-800 hover:bg-red-400 hover:text-white transition duration-300 ease-in-out"
+          >
+            강퇴
+          </button>
+        </div>
         <h2 className="text-xl font-semibold text-white">언어 선택</h2>
         <div className="space-x-4">
           <button
