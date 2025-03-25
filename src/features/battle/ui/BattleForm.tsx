@@ -35,8 +35,6 @@ const BattleForm = ({ id }: { id?: string }) => {
       },
     })
 
-  const isAuthenticated = useAuth()
-
   const { pending } = useFormStatus()
   const [openModal, setOpenModal] = useState<'left' | 'right' | null>(null)
   const { data } = useBattleDetailQuery(Number(id), isEditMode)

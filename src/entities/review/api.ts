@@ -1,11 +1,12 @@
 import { REVIEW } from '#/generate'
 import { apiClient } from '@/shared/api/apiClient'
-import { apiConfig } from '@/shared/config/apiConfig'
+import { getApiConfig } from '@/shared/config/apiConfig'
 import { axiosInstance } from '@/shared/config/axiosInstance'
 
+const config = getApiConfig()
 const api = new REVIEW.ReviewControllerApi(
-  apiConfig,
-  apiConfig.basePath,
+  config,
+  config.basePath,
   axiosInstance,
 )
 

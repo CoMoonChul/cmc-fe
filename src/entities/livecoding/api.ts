@@ -1,11 +1,12 @@
 import { LIVECODING } from '#/generate' // OpenAPI로 생성된 LIVECODING API
 import { apiClient } from '@/shared/api/apiClient' // 공통 API 클라이언트
-import { apiConfig } from '@/shared/config/apiConfig'
+import { getApiConfig } from '@/shared/config/apiConfig'
 import { axiosInstance } from '@/shared/config/axiosInstance'
 
+const config = getApiConfig()
 const api = new LIVECODING.LiveCodingControllerApi(
-  apiConfig,
-  apiConfig.basePath,
+  config,
+  config.basePath,
   axiosInstance,
 )
 
@@ -63,7 +64,6 @@ export async function deleteLiveCoding(
   return response.data
 }
 
-
 /**
  * 라이브코딩방 업데이트
  * @param roomId
@@ -83,7 +83,7 @@ export async function updateLiveCoding(
     manualErrorHandle,
     roomId,
     userNum,
-    action
+    action,
   )
   return response.data
 }
