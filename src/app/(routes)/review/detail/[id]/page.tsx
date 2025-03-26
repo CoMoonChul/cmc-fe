@@ -1,6 +1,7 @@
 import { selectReview } from '@/entities/review/api'
 import { notFound } from 'next/navigation'
 import { FC } from 'react'
+import LikeComponent from '@/features/like/ui/LikeComponent'
 import { getFormattedCreatedAt } from '@/shared/lib/date'
 import Link from 'next/link'
 
@@ -51,15 +52,7 @@ const ReviewDetailPage: FC<ReviewDetailPageProps> = async ({ params }) => {
           <div className="flex items-center space-x-1">
             <span>👁 123</span>
           </div>
-          <button
-          // onClick={() => setLiked(!liked)}
-          // className={`flex items-center space-x-1 transition ${
-          //   liked ? 'text-red-500' : 'text-gray-600 dark:text-gray-400'
-          // }`}
-          >
-            <span>❤️</span>
-            {/* <span>{liked ? '좋아요 취소' : '좋아요'}</span> */}
-          </button>
+          <LikeComponent reviewId={reviewId} />
           <button className="text-blue-500">🔗 공유</button>
           <button className="text-green-500">✏ 수정하기</button>
         </div>

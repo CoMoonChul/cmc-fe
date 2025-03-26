@@ -9,7 +9,6 @@ import { useUpdateBattleQuery } from '@/features/battle/hooks/useUpdateBattleQue
 import { useFormStatus } from 'react-dom'
 import CodeEditorModal from '@/features/battle/ui/CodeEditorModal'
 import { BATTLE } from '#/generate'
-import { useAuth } from '@/shared/hook/useAuth'
 
 interface BattleFormValues {
   title: string
