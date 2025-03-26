@@ -19,11 +19,6 @@ export const useReviewListQuery = (
   return useQuery<REVIEW.SelectReviewListResDTO>({
     queryKey: [QUERY_KEYS.REVIEW.LIST, condition, pageSize],
     queryFn: () =>
-      selectReviewList(
-        condition,
-        pageNumber,
-        pageSize,
-        manualErrorHandle,
-      ),
+      selectReviewList(condition, pageNumber, pageSize, manualErrorHandle),
   })
 }

@@ -3554,8 +3554,9 @@ snapshots:
     dependencies:
       undici-types: 6.19.8
 
-  '@types/react-dom@19.0.4(@types/react@19.0.12)':
   '@types/pako@2.0.3': {}
+
+  '@types/react-dom@19.0.4(@types/react@19.0.12)':
     dependencies:
       '@types/react': 19.0.12
 

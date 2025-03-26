@@ -1,11 +1,12 @@
 import { EDITOR } from '#/generate'
 import { apiClient } from '@/shared/api/apiClient'
-import { apiConfig } from '@/shared/config/apiConfig'
+import { getApiConfig } from '@/shared/config/apiConfig'
 import { axiosInstance } from '@/shared/config/axiosInstance'
 
+const config = getApiConfig()
 const api = new EDITOR.EditorControllerApi(
-  apiConfig,
-  apiConfig.basePath,
+  config,
+  config.basePath,
   axiosInstance,
 )
 
