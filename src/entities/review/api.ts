@@ -22,7 +22,7 @@ export async function selectReview(
   const response = await apiClient(
     api.selectReview.bind(api),
     manualErrorHandle,
-    { review_id: reviewId },
+    reviewId,
   )
   return response.data
 }
