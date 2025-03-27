@@ -5,35 +5,36 @@ import CodeEditor from '@/features/livecoding/ui/CodeEditor'
 import Chat from '@/features/livecoding/ui/Chat'
 import useWebSocket from '@/features/livecoding/hooks/useWebSocket'
 import { selectLiveCoding } from '@/entities/livecoding/api'
-import { LIVECODING } from '#/generate'
 import { useEffect, useState } from "react";
-
+import { SelectLiveCodingResDTO } from '#/generate/livecoding/api'
 
 export default function LiveCodingPage() {
-  const params = useParams();
-  const roomId = typeof params.id === "string" ? params.id : ""; // ✅ roomId 가져오기
+  const params = useParams()
+  const roomId = typeof params.id === "string" ? params.id : ""
 
-  const [roomInfo, setRoomInfo] = useState<LIVECODING.SelectLiveCodingResDTO | null>(null);
-  const { messages, sendMessage } = useWebSocket(roomId); // ✅ 웹소켓 연결 (페이지에서 관리)
+  const [roomInfo, setRoomInfo] = useState<SelectLiveCodingResDTO | null>(null)
+  const [isRoomVerified, setIsRoomVerified] = useState(false) // 방이 유효한지 확인하는 상태
+  const { messages, sendMessage } = useWebSocket(roomId, isRoomVerified)
 
   const selectRoom = async () => {
     try {
-      const roomInfoRes = await selectLiveCoding(roomId);
-      setRoomInfo(roomInfoRes);
+      const roomInfoRes = await selectLiveCoding(roomId)
+      setRoomInfo(roomInfoRes) // roomInfo 업데이트
+      setIsRoomVerified(true) // 방 정보가 유효하다면 연결 상태 변경
     } catch (e) {
-      console.error("❌ 방 조회 실패:", e);
+      console.error("❌ 방 조회 실패:", e)
     }
-  };
+  }
 
   useEffect(() => {
-    if (!roomId) {
-      return;
+    if (!roomId || isRoomVerified) {
+      return
     }
 
     (async () => {
-      await selectRoom();
-    })();
-  }, [roomId]); // roomId가 변경될 때 한 번만 실행
+      await selectRoom() // 한 번만 호출되도록 조정
+    })()
+  }, [roomId, isRoomVerified]) // roomId나 isRoomVerified 변경 시에만 실행
 
   return (
     <div className="flex h-screen">
@@ -45,6 +46,5 @@ export default function LiveCodingPage() {
       {/* 채팅 영역 (웹소켓 메시지와 전송 함수 전달) */}
       <Chat messages={messages} sendMessage={sendMessage} />
     </div>
-  );
+  )
 }
-
