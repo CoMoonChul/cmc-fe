@@ -1,35 +1,28 @@
 'use client'
 
+import useUserStore from '@/shared/store/useUserStore'
 import { useState } from 'react'
 import { LIVECODING } from '#/generate'
-import {
-  createLiveCoding,
-  selectLiveCoding,
-  deleteLiveCoding,
-} from '@/entities/livecoding/api'
+import { createLiveCoding, selectLiveCoding, deleteLiveCoding } from '@/entities/livecoding/api'
+import { useRouter } from 'next/navigation'
 
 export default function LiveCodingTestPage() {
   const [roomId, setRoomId] = useState<string | null>(null)
-  const [roomInfo, setRoomInfo] =
-    useState<LIVECODING.SelectLiveCodingResDTO | null>(null)
+  const [roomInfo, setRoomInfo] = useState<LIVECODING.SelectLiveCodingResDTO | null>(null)
+  const { user } = useUserStore()
+  const router = useRouter() // next/router의 useRouter 훅 사용
 
   const createRoom = async () => {
     try {
-      const hostIdInput = prompt('호스트 ID를 입력하세요.')
-      if (!hostIdInput) {
-        alert('호스트 ID를 입력해야 합니다.')
-        return
-      }
-      if (!/^\d+$/.test(hostIdInput)) {
-        alert('숫자만 입력 가능합니다.')
-        return
-      }
       const req: LIVECODING.CreateLiveCodingReqDTO = {
-        hostId: Number(hostIdInput),
+        hostId: Number(user?.userNum),
       }
       const response = await createLiveCoding(req)
       setRoomId(response.roomId)
       console.log('✅ 생성된 방 ID:', response.roomId)
+
+      // 방 생성 후 해당 roomId로 URL 변경
+      router.push(`/livecoding/${response.roomId}`)
     } catch (error) {
       alert('방 ID 오류.')
       console.error('❌ 방 생성 실패:', error)
