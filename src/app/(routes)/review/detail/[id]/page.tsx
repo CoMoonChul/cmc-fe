@@ -34,7 +34,7 @@ const ReviewDetailPage: FC<ReviewDetailPageProps> = async ({ params }) => {
   return (
     <div className="min-h-screen p-6 bg-white text-black dark:bg-black dark:text-white">
       {/* 리뷰 제목 */}
-      <h1 className="text-2xl font-bold mb-4">React 최적화 전략</h1>
+      <h1 className="text-2xl font-bold mb-4">{title}</h1>
 
       {/* 작성 정보 & 부가 정보 */}
       <div className="flex justify-between text-sm text-gray-600 dark:text-gray-400 mb-4">
@@ -44,13 +44,13 @@ const ReviewDetailPage: FC<ReviewDetailPageProps> = async ({ params }) => {
             alt="작성자"
             className="w-8 h-8 rounded-full"
           />
-          <span className="font-medium">dev_master</span>
+          <span className="font-medium">{username}</span>
           <span>|</span>
-          <span>2025년 3월 9일</span>
+          <span>{createdAt && getFormattedCreatedAt(createdAt)}</span>
         </div>
         <div className="flex items-center space-x-4">
           <div className="flex items-center space-x-1">
-            <span>👁 123</span>
+            <span>👁 {viewCount ?? 1}</span>
           </div>
           <LikeComponent reviewId={reviewId} />
           <button className="text-blue-500">🔗 공유</button>
@@ -60,7 +60,7 @@ const ReviewDetailPage: FC<ReviewDetailPageProps> = async ({ params }) => {
 
       {/* 리뷰 내용 */}
       <div className="bg-gray-100 dark:bg-gray-900 p-4 rounded-lg text-gray-700 dark:text-gray-300 mb-4">
-        React에서 성능을 최적화하는 다양한 방법을 정리했습니다...
+        {content}
       </div>
 
       {/* 코드 에디터 */}
