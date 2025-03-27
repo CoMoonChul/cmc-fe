@@ -4,7 +4,6 @@ import { useIsFetching, useIsMutating } from '@tanstack/react-query'
 
 const Loading = () => {
   const isFetching = useIsFetching() + useIsMutating() > 0
-  console.log('isF', isFetching)
 
   if (!isFetching) return null
   return (

@@ -1,13 +1,28 @@
 import { LIKE } from '#/generate'
 import { apiClient } from '@/shared/api/apiClient'
-import { apiConfig } from '@/shared/config/apiConfig'
+import { getApiConfig } from '@/shared/config/apiConfig'
 import { axiosInstance } from '@/shared/config/axiosInstance'
 
-const api = new LIKE.LikeControllerApi(
-  apiConfig,
-  apiConfig.basePath,
-  axiosInstance,
-)
+const config = getApiConfig()
+const api = new LIKE.LikeControllerApi(config, config.basePath, axiosInstance)
+
+/**
+ * 리뷰 좋아요 상태조회
+ * @param id reviewId
+ * @param manualErrorHandle 에러 핸들링 여부 (기본값: false)
+ * @returns 리뷰 좋아요 상태 반환
+ */
+export async function selectReviewLikeState(
+  id: number,
+  manualErrorHandle = false,
+): Promise<LIKE.SelectReviewLikeStateResDTO> {
+  const response = await apiClient(
+    api.selectReviewLikeState.bind(api),
+    manualErrorHandle,
+    id,
+  )
+  return response.data
+}
 
 /**
  * 리뷰 좋아요 생성/업데이트

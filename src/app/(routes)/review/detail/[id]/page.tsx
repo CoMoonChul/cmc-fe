@@ -1,23 +1,35 @@
-'use client'
+import { selectReview } from '@/entities/review/api'
+import { notFound } from 'next/navigation'
+import { FC } from 'react'
+import LikeComponent from '@/features/like/ui/LikeComponent'
+import { getFormattedCreatedAt } from '@/shared/lib/date'
+import Link from 'next/link'
 
-import { useState } from 'react'
-import CodeMirror from '@uiw/react-codemirror'
-import { javascript } from '@codemirror/lang-javascript'
-import { dracula } from '@uiw/codemirror-theme-dracula'
-import { useThemeStore } from '@/shared/store/useThemeStore'
-import CommentSection from '@/features/comment/ui/CommentSection'
-
-const sampleJavaScriptCode = `
-// Example Code
-function sayHello() {
-  console.log("Hello, world!");
+interface ReviewDetailPageProps {
+  params: Promise<{ id: string }>
 }
-sayHello();
-`
 
-const ReviewDetailPage = () => {
-  const [liked, setLiked] = useState(false)
-  const { theme } = useThemeStore()
+const ReviewDetailPage: FC<ReviewDetailPageProps> = async ({ params }) => {
+  const { id } = await params
+  if (Number.isNaN(Number(id))) {
+    notFound()
+  }
+
+  const {
+    reviewId,
+    title,
+    username,
+    content,
+    codeContent,
+    viewCount,
+    likeCount,
+    createdAt,
+    updatedAt,
+  } = await selectReview(Number(id))
+
+  if (!reviewId) {
+    throw new Error('리뷰 조회에 실패했습니다!!')
+  }
 
   return (
     <div className="min-h-screen p-6 bg-white text-black dark:bg-black dark:text-white">
@@ -40,15 +52,7 @@ const ReviewDetailPage = () => {
           <div className="flex items-center space-x-1">
             <span>👁 123</span>
           </div>
-          <button
-            onClick={() => setLiked(!liked)}
-            className={`flex items-center space-x-1 transition ${
-              liked ? 'text-red-500' : 'text-gray-600 dark:text-gray-400'
-            }`}
-          >
-            <span>❤️</span>
-            <span>{liked ? '좋아요 취소' : '좋아요'}</span>
-          </button>
+          <LikeComponent reviewId={reviewId} />
           <button className="text-blue-500">🔗 공유</button>
           <button className="text-green-500">✏ 수정하기</button>
         </div>
@@ -61,7 +65,7 @@ const ReviewDetailPage = () => {
 
       {/* 코드 에디터 */}
       <div className="bg-gray-200 dark:bg-gray-800 p-2 rounded-lg overflow-hidden">
-        <CodeMirror
+        {/* <CodeMirror
           value={sampleJavaScriptCode}
           extensions={[javascript()]}
           theme={theme === 'light' ? undefined : dracula}
@@ -69,12 +73,16 @@ const ReviewDetailPage = () => {
           readOnly={true}
           basicSetup={{ highlightActiveLine: false }}
           style={{ minHeight: '100%', maxHeight: '100%', width: '100%' }}
-        />
+        /> */}
       </div>
 
-      <hr className="my-8 border-gray-300 dark:border-gray-700" />
-
-      <CommentSection id={3} commentTarget={1} />
+      {/* 댓글 영역 */}
+      <div className="mt-6 bg-gray-100 dark:bg-gray-900 p-4 rounded-lg">
+        <h3 className="text-lg font-semibold mb-2">댓글</h3>
+        <p className="text-gray-700 dark:text-gray-300">
+          댓글 목록이 여기에 표시됩니다.
+        </p>
+      </div>
     </div>
   )
 }

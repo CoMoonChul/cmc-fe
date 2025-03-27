@@ -1,21 +1,23 @@
 import { USER } from '#/generate'
 import { apiClient } from '@/shared/api/apiClient'
-import { apiConfig } from '@/shared/config/apiConfig'
+import { getApiConfig } from '@/shared/config/apiConfig'
 import { axiosInstance } from '@/shared/config/axiosInstance'
 
+const config = getApiConfig()
+
 const userApi = new USER.UserControllerApi(
-  apiConfig,
-  apiConfig.basePath,
+  config,
+  config.basePath,
   axiosInstance,
 )
 const joinApi = new USER.JoinControllerApi(
-  apiConfig,
-  apiConfig.basePath,
+  config,
+  config.basePath,
   axiosInstance,
 )
 const loginApi = new USER.LoginControllerApi(
-  apiConfig,
-  apiConfig.basePath,
+  config,
+  config.basePath,
   axiosInstance,
 )
 

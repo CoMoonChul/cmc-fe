@@ -3,12 +3,19 @@ import { NextRequest, NextResponse } from 'next/server'
 const BACKEND_URL = process.env.BACKEND_URL || 'http://localhost:8080'
 const REFRESH_TOKEN_URL = `${BACKEND_URL}/user/tempRefresh`
 
-/**
- * API 호출 핸들러
- * @param req NextRequest
- * @param retried 재시도 여부
- * @returns NextResponse
- */
+export async function GET(req: NextRequest) {
+  return handleRequest(req)
+}
+export async function POST(req: NextRequest) {
+  return handleRequest(req)
+}
+export async function PUT(req: NextRequest) {
+  return handleRequest(req)
+}
+export async function DELETE(req: NextRequest) {
+  return handleRequest(req)
+}
+
 async function handleRequest(
   req: NextRequest,
   retried = false,
@@ -16,7 +23,7 @@ async function handleRequest(
   try {
     const path = req.nextUrl.pathname.replace(/^\/api/, '')
     const searchParams = req.nextUrl.search
-    const url = `${BACKEND_URL}${path}${searchParams ? searchParams : ''}`
+    const url = `${BACKEND_URL}${path}${searchParams}`
     const body = await parseRequestBody(req)
 
     const accessToken = req.cookies.get('accessToken')?.value
@@ -34,16 +41,11 @@ async function handleRequest(
       credentials: 'include',
     })
 
-    // accessToken이 만료된 경우, refreshToken을 사용하여 새로운 accessToken을 받아온다.
     if (response.status === 401 && !retried && refreshToken) {
-      // 새로운 accessToken 요청
       const newAccessToken = await refreshAccessToken(refreshToken)
-
       if (!newAccessToken) {
         return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
       }
-
-      // 새로운 accessToken을 헤더에 추가하여 다시 요청
       headers.Authorization = `Bearer ${newAccessToken}`
       response = await fetch(url, {
         method: req.method,
@@ -52,7 +54,6 @@ async function handleRequest(
         credentials: 'include',
       })
 
-      // 새로운 accessToken을 쿠키로 설정하여 응답 반환
       const newResponse = NextResponse.json(await response.json(), {
         status: response.status,
       })
@@ -62,6 +63,7 @@ async function handleRequest(
       )
       return newResponse
     }
+
     return NextResponse.json(await response.json(), { status: response.status })
   } catch (error) {
     console.error('[api][route.ts] error', error)
@@ -69,6 +71,22 @@ async function handleRequest(
       { error: 'Internal Server Error' },
       { status: 500 },
     )
+  }
+}
+
+function getCookie(req: NextRequest, name: string): string | undefined {
+  const raw = req.headers.get('cookie')
+  if (!raw) return undefined
+  const cookies = raw.split(';').map((c) => c.trim())
+  return cookies.find((c) => c.startsWith(`${name}=`))?.split('=')[1]
+}
+
+async function parseRequestBody(req: NextRequest): Promise<string | undefined> {
+  if (req.method === 'GET') return undefined
+  try {
+    return JSON.stringify(await req.json())
+  } catch {
+    return undefined
   }
 }
 
@@ -96,39 +114,10 @@ async function refreshAccessToken(
     }
 
     const { accessToken } = await response.json()
+    console.log('[route.ts][refreshAccessToken] success')
     return accessToken
   } catch (error) {
-    console.error('[refreshAccessToken] Error:', error)
+    console.error('[apiClient][refreshAccessToken] Failed:', error)
     return null
   }
-}
-
-/**
- * 요청 본문을 안전하게 파싱하는 함수
- * @param req NextRequest
- * @returns JSON 문자열 또는 undefined
- */
-async function parseRequestBody(req: NextRequest): Promise<string | undefined> {
-  if (req.method === 'GET') return undefined
-  try {
-    return JSON.stringify(await req.json())
-  } catch {
-    return undefined
-  }
-}
-
-export async function GET(req: NextRequest) {
-  return handleRequest(req)
-}
-
-export async function POST(req: NextRequest) {
-  return handleRequest(req)
-}
-
-export async function PUT(req: NextRequest) {
-  return handleRequest(req)
-}
-
-export async function DELETE(req: NextRequest) {
-  return handleRequest(req)
 }
