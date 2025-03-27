@@ -2,8 +2,11 @@ import { selectReview } from '@/entities/review/api'
 import { notFound } from 'next/navigation'
 import { FC } from 'react'
 import LikeComponent from '@/features/like/ui/LikeComponent'
+// import ReviewCodeArea from '@/features/review/ui/ReviewCodeArea'
 import { getFormattedCreatedAt } from '@/shared/lib/date'
 import Link from 'next/link'
+import CommentSection from '@/features/comment/ui/CommentSection'
+import { COMMENT_TARGET } from '@/features/comment/types'
 
 interface ReviewDetailPageProps {
   params: Promise<{ id: string }>
@@ -65,23 +68,12 @@ const ReviewDetailPage: FC<ReviewDetailPageProps> = async ({ params }) => {
 
       {/* 코드 에디터 */}
       <div className="bg-gray-200 dark:bg-gray-800 p-2 rounded-lg overflow-hidden">
-        {/* <CodeMirror
-          value={sampleJavaScriptCode}
-          extensions={[javascript()]}
-          theme={theme === 'light' ? undefined : dracula}
-          className="w-full h-72 rounded-md"
-          readOnly={true}
-          basicSetup={{ highlightActiveLine: false }}
-          style={{ minHeight: '100%', maxHeight: '100%', width: '100%' }}
-        /> */}
+        {/* <ReviewCodeArea/> */}
       </div>
 
       {/* 댓글 영역 */}
       <div className="mt-6 bg-gray-100 dark:bg-gray-900 p-4 rounded-lg">
-        <h3 className="text-lg font-semibold mb-2">댓글</h3>
-        <p className="text-gray-700 dark:text-gray-300">
-          댓글 목록이 여기에 표시됩니다.
-        </p>
+        <CommentSection id={reviewId} commentTarget={COMMENT_TARGET.REVIEW} />
       </div>
     </div>
   )
