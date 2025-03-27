@@ -1,20 +1,20 @@
 import { useState, useEffect, useRef } from 'react'
 
-const WS_BASE_URL = 'ws://localhost:8080/ws/livecoding' // ✅ 백엔드 WebSocket URL
+const WS_BASE_URL = 'ws://localhost:8080/ws/livecoding'
 
-export default function useWebSocket(roomId: string) {
+export default function useWebSocket(roomId: string, isConnected: boolean) {
   const [messages, setMessages] = useState<string[]>([])
-  const [isConnected, setIsConnected] = useState(false)
   const socketRef = useRef<WebSocket | null>(null)
 
   useEffect(() => {
-    if (!roomId) return
+    if (!roomId || !isConnected) {
+      return
+    }
 
     const ws = new WebSocket(`${WS_BASE_URL}/${roomId}`)
     socketRef.current = ws
 
     ws.onopen = () => {
-      setIsConnected(true)
       console.log('✅ WebSocket Connected')
     }
 
@@ -27,14 +27,13 @@ export default function useWebSocket(roomId: string) {
     }
 
     ws.onclose = () => {
-      setIsConnected(false)
       console.log('❌ WebSocket Disconnected')
     }
 
     return () => {
       ws.close()
     }
-  }, [roomId])
+  }, [roomId, isConnected])
 
   const sendMessage = (message: string) => {
     if (socketRef.current && socketRef.current.readyState === WebSocket.OPEN) {
@@ -44,5 +43,5 @@ export default function useWebSocket(roomId: string) {
     }
   }
 
-  return { messages, sendMessage, isConnected }
+  return { messages, sendMessage }
 }
