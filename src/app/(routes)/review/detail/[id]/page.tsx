@@ -60,7 +60,7 @@ const ReviewDetailPage: FC<ReviewDetailPageProps> = async ({ params }) => {
 
       {/* 리뷰 내용 */}
       <div className="bg-gray-100 dark:bg-gray-900 p-4 rounded-lg text-gray-700 dark:text-gray-300 mb-4">
-        React에서 성능을 최적화하는 다양한 방법을 정리했습니다...
+        {content}
       </div>
 
       {/* 코드 에디터 */}
