@@ -4,9 +4,9 @@ import { FC } from 'react'
 import LikeComponent from '@/features/like/ui/LikeComponent'
 // import ReviewCodeArea from '@/features/review/ui/ReviewCodeArea'
 import { getFormattedCreatedAt } from '@/shared/lib/date'
-import Link from 'next/link'
 import CommentSection from '@/features/comment/ui/CommentSection'
 import { COMMENT_TARGET } from '@/features/comment/types'
+import useUserStore from '@/shared/store/useUserStore'
 
 interface ReviewDetailPageProps {
   params: Promise<{ id: string }>
@@ -58,6 +58,7 @@ const ReviewDetailPage: FC<ReviewDetailPageProps> = async ({ params }) => {
           <LikeComponent reviewId={reviewId} />
           <button className="text-blue-500">🔗 공유</button>
           <button className="text-green-500">✏ 수정하기</button>
+          <button className="text-red-500">❌ 삭제하기</button>
         </div>
       </div>
 

@@ -4,6 +4,8 @@ import ReviewListCard from '@/features/review/ui/ReviewListCard'
 import { useEffect, useState, useMemo } from 'react'
 import { useInView } from 'react-intersection-observer'
 import { useRouter } from 'next/navigation'
+import { filter } from 'lodash'
+import ReviewListDropDown from '@/features/review/ui/ReviewListDropDown'
 
 const FILTERS = [
   '최신',
@@ -48,43 +50,25 @@ const ReviewListPage = () => {
           리뷰 작성하기
         </button>
         <div className="flex items-center gap-2 border border-gray-300 rounded-lg dark:border-gray-600 overflow-visible">
-          <button className="px-4 py-2 hover:bg-gray-200 dark:hover:bg-gray-700">
-            최신
-          </button>
-          <button className="px-4 py-2 hover:bg-gray-200 dark:hover:bg-gray-700">
-            인기
-          </button>
-          {/* My 드롭다운 */}
-          <div className="relative">
+          {/* 최신순, 인기순 */}
+          {FILTERS.slice(0, 2).map((filter) => (
             <button
-              className="px-4 py-2 hover:bg-gray-200 dark:hover:bg-gray-700"
-              onClick={() => setShowMyDropdown(!showMyDropdown)}
+              key={filter}
+              onClick={() => setSelectedFilter(filter)}
+              className={`px-4 py-2 ${
+                selectedFilter === filter
+                  ? 'bg-gray-200 dark:hover:bg-gray-700'
+                  : 'hover:bg-gray-200 dark:hover:bg-gray-700'
+              }`}
             >
-              My ▼
+              {filter}
             </button>
-            {showMyDropdown && (
-              <div className="absolute right-0 mt-2 w-40 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg shadow-lg">
-                <button
-                  className="block w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"
-                  onClick={() => setMyFilter('작성한')}
-                >
-                  내가 작성한
-                </button>
-                <button
-                  className="block w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"
-                  onClick={() => setMyFilter('답변한')}
-                >
-                  내가 답변한
-                </button>
-                <button
-                  className="block w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"
-                  onClick={() => setMyFilter('좋아요')}
-                >
-                  내가 좋아한
-                </button>
-              </div>
-            )}
-          </div>
+          ))}
+          {/* My 드롭다운 */}
+          <ReviewListDropDown
+            selectedFilter={selectedFilter}
+            setSelectedFilter={setSelectedFilter}
+          />
         </div>
       </div>
 
