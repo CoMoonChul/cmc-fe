@@ -21,6 +21,7 @@ const Publishing = () => {
         <ul className="space-y-3 mb-4">
           <PubbleItem link="/REVIEW/LIST" />
           <PubbleItem link="/REVIEW/DETAIL" />
+          <PubbleItem link="/REVIEW/FORM" />
         </ul>
         <h2 className="text-lg font-medium text-gray-800 dark:text-gray-200 mb-4">
           배틀
