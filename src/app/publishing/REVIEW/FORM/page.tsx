@@ -7,7 +7,10 @@ import { dracula } from '@uiw/codemirror-theme-dracula'
 import { useThemeStore } from '@/shared/store/useThemeStore'
 import ReviewMetaModal from '../COMPONENT/ReviewMetaModal'
 
-const ReviewFormPage = ({ isEditMode = false }: { isEditMode?: boolean }) => {
+const ReviewFormPage = () => {
+  // 수정/등록 분기
+  const isEditMode = false
+
   const { theme } = useThemeStore()
 
   const [title, setTitle] = useState('')
