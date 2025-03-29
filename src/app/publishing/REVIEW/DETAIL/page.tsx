@@ -13,6 +13,18 @@ function sayHello() {
   console.log("Hello, world!");
 }
 sayHello();
+sayHello();
+sayHello();
+sayHello();
+sayHello();sayHello();sayHello();sayHello();
+sayHello();
+sayHello();
+sayHello();
+sayHello();
+sayHello();
+sayHello();
+sayHello();
+sayHello();
 `
 
 const ReviewDetailPage = () => {
@@ -59,18 +71,14 @@ const ReviewDetailPage = () => {
         React에서 성능을 최적화하는 다양한 방법을 정리했습니다...
       </div>
 
-      {/* 코드 에디터 */}
-      <div className="bg-gray-200 dark:bg-gray-800 p-2 rounded-lg overflow-hidden">
-        <CodeMirror
-          value={sampleJavaScriptCode}
-          extensions={[javascript()]}
-          theme={theme === 'light' ? undefined : dracula}
-          className="w-full h-72 rounded-md"
-          readOnly={true}
-          basicSetup={{ highlightActiveLine: false }}
-          style={{ minHeight: '100%', maxHeight: '100%', width: '100%' }}
-        />
-      </div>
+      <CodeMirror
+        value={sampleJavaScriptCode}
+        extensions={[javascript()]}
+        theme={theme === 'light' ? undefined : dracula}
+        readOnly={true}
+        basicSetup={{ highlightActiveLine: false }}
+        className="my-8 border-gray-300 dark:border-gray-700"
+      />
 
       <hr className="my-8 border-gray-300 dark:border-gray-700" />
 
