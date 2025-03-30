@@ -1,13 +1,12 @@
 import { useState, useRef } from 'react'
 import { inviteCodeFn } from '@/features/livecoding/type'
 
-interface ChatProps extends inviteCodeFn {
+interface ChatProps  {
   messages: string[] // ✅ 웹소켓에서 받은 메시지 목록
   sendMessage: (msg: string) => void // ✅ 메시지 전송 함수
 }
 
 export default function Chat({
-  copyInviteLink,
   messages,
   sendMessage,
 }: ChatProps) {
@@ -35,12 +34,6 @@ export default function Chat({
         <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
           채팅
         </h2>
-        <button
-          onClick={copyInviteLink}
-          className="px-3 py-1 text-xs bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition"
-        >
-          초대링크 복사
-        </button>
       </div>
 
       {/* 채팅 메시지 영역 */}
