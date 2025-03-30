@@ -35,7 +35,7 @@ export function middleware(req: NextRequest) {
   // 로그인 필수 경로에 접근했지만 로그인 안 된 경우
   if ((isProtectedRoute || isDynamicProtectedRoute) && !token) {
     url.pathname = API_PATH.LOGIN
-    url.searchParams.set('redirect', req.nextUrl.pathname)
+    url.searchParams.set('redirect', req.nextUrl.pathname + req.nextUrl.search)
     return NextResponse.redirect(url)
   }
   return NextResponse.next()
