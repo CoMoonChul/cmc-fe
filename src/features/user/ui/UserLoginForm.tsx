@@ -95,6 +95,11 @@ const UserLoginForm = () => {
               onChange={(e) =>
                 setFormData({ ...formData, [name]: e.target.value })
               }
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  handleLogin()
+                }
+              }}
               className="w-full p-3 border rounded-md dark:bg-gray-800 dark:border-gray-600 focus:ring-2 focus:ring-blue-500 border-gray-300"
               placeholder={placeholder}
             />

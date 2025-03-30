@@ -4,6 +4,7 @@ import { FC } from 'react'
 import { getFormattedCreatedAt } from '@/shared/lib/date'
 import BattleCodeArea from '@/features/battle/ui/BattleCodeArea'
 import Link from 'next/link'
+import { decompressGzip } from '@/features/editor/helper'
 
 interface BattleDetailPageProps {
   params: Promise<{ id: string }>
@@ -31,7 +32,14 @@ const BattleDetailPage: FC<BattleDetailPageProps> = async ({ params }) => {
   } = await selectBattle(Number(id))
 
   if (!battleId) {
-    throw new Error('배틀 조회에 실패했습니다...')
+    throw new Error('배틀 조회에 실패했습니다.')
+  }
+
+  const deCompCodeLeft = decompressGzip(codeContentLeft)
+  const deCompCodeRight = decompressGzip(codeContentRight)
+
+  if (!deCompCodeLeft || !deCompCodeRight) {
+    throw new Error('배틀 코드 내용 불러오기에 실패했습니다.')
   }
 
   return (
@@ -53,9 +61,9 @@ const BattleDetailPage: FC<BattleDetailPageProps> = async ({ params }) => {
       <div className="grid grid-cols-1 md:grid-cols-[1fr_auto_1fr] gap-4 items-center">
         <BattleCodeArea
           battleId={battleId}
-          codeContentLeft={codeContentLeft}
+          codeContentLeft={deCompCodeLeft}
           codeTypeLeft={codeTypeLeft}
-          codeContentRight={codeContentRight}
+          codeContentRight={deCompCodeRight}
           codeTypeRight={codeTypeRight}
           leftVote={leftVote}
           rightVote={rightVote}
