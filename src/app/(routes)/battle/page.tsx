@@ -6,6 +6,7 @@ import { useInView } from 'react-intersection-observer'
 import { useEffect, useState, useMemo } from 'react'
 import { useRouter } from 'next/navigation'
 import { usePopupStore } from '@/shared/store/usePopupStore'
+import { useAuth } from '@/shared/hook/useAuth'
 
 const FILTERS = ['최신', '인기', '내가 작성한', '내가 참여한'] as const
 type FilterType = (typeof FILTERS)[number]
@@ -18,7 +19,9 @@ const SEARCH_CONDITIONS: Record<FilterType, number> = {
 
 const BattleListPage = () => {
   const router = useRouter()
+  const checkAuth = useAuth()
   const [selectedFilter, setSelectedFilter] = useState<FilterType>('최신')
+
   const { openPopup } = usePopupStore.getState()
   const searchCondition = useMemo(
     () => SEARCH_CONDITIONS[selectedFilter],
@@ -28,19 +31,28 @@ const BattleListPage = () => {
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
     useBattleListInfiniteQuery(searchCondition, 9, true)
 
+  const goBattleForm = () => {
+    router.push('/battle/form')
+  }
+
+  const onClickCreateBattle = async () => {
+    const result = await checkAuth()
+    if (!result) {
+      openPopup(
+        '로그인 후에 배틀을 등록할 수 있어요.',
+        '로그인 하시겠습니까?',
+        goBattleForm,
+      )
+      return
+    }
+    goBattleForm()
+  }
+
   useEffect(() => {
     if (inView && hasNextPage) {
       fetchNextPage()
     }
   }, [inView, hasNextPage, fetchNextPage])
-
-  const onClickConfirmGoForm = () => {
-    router.push('/battle/form')
-  }
-
-  const onClickCreateBattle = () => {
-    openPopup('로그인 필수임1', '로그인했음?', onClickConfirmGoForm)
-  }
 
   return (
     <div className="min-h-screen p-6 bg-white text-black dark:bg-black dark:text-white">
