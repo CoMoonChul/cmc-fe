@@ -60,6 +60,11 @@ const BattleForm = ({ id }: { id?: string }) => {
   }, [data, setValue])
 
   const onSubmit = () => {
+    if (!getValues('codeLeft') || !getValues('codeRight')) {
+      openPopup('코드는 1~20000자 이내로 입력해 주세요.', '')
+      return
+    }
+
     const compCodeLeft = compressGzip(getValues('codeLeft'))
     const compCodeRight = compressGzip(getValues('codeRight'))
 

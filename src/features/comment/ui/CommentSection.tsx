@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react'
 import { getFormattedCreatedAt } from '@/shared/lib/date'
 import { useInView } from 'react-intersection-observer'
-import { useCommentListInfiniteQuery } from '../hooks/useCommentListInfiniteQuery'
+import { useCommentListInfiniteQuery } from '@/features/comment/hooks/useCommentListInfiniteQuery'
 import { useCreateCommentQuery } from '@/features/comment/hooks/useCreateCommentQuery'
 import { COMMENT } from '#/generate'
 

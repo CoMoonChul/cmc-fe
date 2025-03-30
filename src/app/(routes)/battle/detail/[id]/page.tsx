@@ -5,6 +5,7 @@ import { getFormattedCreatedAt } from '@/shared/lib/date'
 import BattleCodeArea from '@/features/battle/ui/BattleCodeArea'
 import Link from 'next/link'
 import { decompressGzip } from '@/features/editor/helper'
+import BattleControlArea from '@/features/battle/ui/BattleControlArea'
 
 interface BattleDetailPageProps {
   params: Promise<{ id: string }>
@@ -28,6 +29,7 @@ const BattleDetailPage: FC<BattleDetailPageProps> = async ({ params }) => {
     rightVote,
     viewCount,
     username,
+    userNum,
     createdAt,
   } = await selectBattle(Number(id))
 
@@ -44,7 +46,10 @@ const BattleDetailPage: FC<BattleDetailPageProps> = async ({ params }) => {
 
   return (
     <div className="min-h-screen p-6 bg-white text-black dark:bg-black dark:text-white">
-      <h1 className="text-2xl font-bold mb-4">{title}</h1>
+      <div className="flex justify-between items-start mb-4">
+        <h1 className="text-2xl font-bold">{title}</h1>
+        <BattleControlArea battleId={battleId} auditerNum={userNum} />
+      </div>
 
       <div className="flex items-center justify-between space-x-4 mb-4">
         <div>

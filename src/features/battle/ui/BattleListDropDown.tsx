@@ -1,5 +1,8 @@
 'use client'
 import { Dispatch, SetStateAction, useState } from 'react'
+import { useAuth } from '@/shared/hook/useAuth'
+import { usePopupStore } from '@/shared/store/usePopupStore'
+import { useRouter } from 'next/navigation'
 
 const FILTERS = ['최신', '인기', '내가 작성한', '내가 참여한'] as const
 type FilterType = (typeof FILTERS)[number]
@@ -13,8 +16,22 @@ const BattleListDropDown = ({
   selectedFilter,
   setSelectedFilter,
 }: BattleListDropDownProps) => {
+  const router = useRouter()
+  const checkAuth = useAuth()
+  const { openPopup } = usePopupStore.getState()
   const [dropdownOpen, setDropdownOpen] = useState(false)
-  const toggleDropdown = () => setDropdownOpen((prev) => !prev)
+  const toggleDropdown = async () => {
+    const result = await checkAuth()
+    if (!result) {
+      openPopup('로그인 후에 가능합니다.', '로그인 하시겠습니까?', goLogin)
+      return
+    }
+    setDropdownOpen((prev) => !prev)
+  }
+
+  const goLogin = () => {
+    router.push('/user/login?redirect=/battle')
+  }
 
   return (
     <div className="relative">
