@@ -1,23 +1,19 @@
 'use client'
 
 import React, { useEffect, useState } from 'react'
-import {
-  useDeleteNoticeAllMutation,
-  useDeleteNoticeMutation,
-  useNotices,
-} from '@/features/notice/hooks'
 import NoticeCard from '@/features/notice/ui/NoticeCard'
 import { useRouter } from 'next/navigation'
 import { useInView } from 'react-intersection-observer'
+import { useNoticeListInfiniteQuery } from '@/features/notice/hooks/useNoticeListInfiniteQuery'
+import { useDeleteNoticeQuery } from '@/features/notice/hooks/useDeleteNoticeQuery'
+import { useDeleteNoticeAllQuery } from '@/features/notice/hooks/useDeleteNoticeAllQuery'
 
 const NoticePage = () => {
-  const { mutate: deleteNotice } = useDeleteNoticeMutation()
-  const { mutate: deleteNoticeAll } = useDeleteNoticeAllMutation()
+  const { mutate: deleteNotice } = useDeleteNoticeQuery()
+  const { mutate: deleteNoticeAll } = useDeleteNoticeAllQuery()
   const router = useRouter()
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useNotices(
-    0,
-    2,
-  )
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
+    useNoticeListInfiniteQuery(0, 9)
   const { ref, inView } = useInView()
 
   useEffect(() => {

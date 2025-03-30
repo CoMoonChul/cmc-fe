@@ -58,6 +58,11 @@ async function apiClient<T>(
     }
     return await requestFn(...args)
   } catch (error: any) {
+    if (error.response.status === 403) {
+      window.location.href = '/user/login?redirect=' + window.location.pathname
+      throw new Error('Forbidden')
+    }
+
     console.error('[apiClient] error', error)
     if (!manualErrorHandle) {
       const parsedMessage = getErrorMessage(error?.response?.data?.message)
