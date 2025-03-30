@@ -1,18 +1,35 @@
 'use client'
 import { useParams, useRouter } from 'next/navigation'
-import { useEffect } from 'react'
+import { useEffect, useMemo } from 'react'
 import { useBattleDetailQuery } from '@/features/battle/hooks/useBattleDetailQuery'
 import { getFormattedCreatedAt } from '@/shared/lib/date'
 import { COMMENT_TARGET } from '@/features/comment/types'
 import BattleCodeArea from '@/features/battle/ui/BattleCodeArea'
 import BattleResultBar from '@/features/battle/ui/BattleResultBar'
 import CommentSection from '@/features/comment/ui/CommentSection'
+import { decompressGzip } from '@/features/editor/helper'
+import { usePopupStore } from '@/shared/store/usePopupStore'
 
 const BattleResultPage = () => {
   const { id: queryBattleId } = useParams()
   const router = useRouter()
   const battleId = Number(queryBattleId)
+  const { openPopup } = usePopupStore.getState()
   const { data, isSuccess, isLoading } = useBattleDetailQuery(battleId)
+
+  const { deCompCodeLeft, deCompCodeRight } = useMemo(() => {
+    if (!data) return { deCompCodeLeft: '', deCompCodeRight: '' }
+
+    const left = decompressGzip(data.codeContentLeft)
+    const right = decompressGzip(data.codeContentRight)
+
+    if (!left || !right) {
+      openPopup('코드 압축해제에 실패했어요. 코드 내용을 확인해 주세요.', '')
+      return { deCompCodeLeft: '', deCompCodeRight: '' }
+    }
+
+    return { deCompCodeLeft: left, deCompCodeRight: right }
+  }, [data, openPopup])
 
   useEffect(() => {
     if (isNaN(battleId)) {
@@ -55,9 +72,9 @@ const BattleResultPage = () => {
       <div className="grid grid-cols-1 md:grid-cols-[1fr_auto_1fr] gap-4 items-center">
         <BattleCodeArea
           battleId={data.battleId}
-          codeContentLeft={data.codeContentLeft}
+          codeContentLeft={deCompCodeLeft}
           codeTypeLeft={data.codeTypeLeft}
-          codeContentRight={data.codeContentRight}
+          codeContentRight={deCompCodeRight}
           codeTypeRight={data.codeTypeRight}
           leftVote={data.leftVote}
           rightVote={data.rightVote}

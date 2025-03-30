@@ -1,5 +1,4 @@
 'use client'
-
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useForm, Controller } from 'react-hook-form'
@@ -9,6 +8,8 @@ import { useUpdateBattleQuery } from '@/features/battle/hooks/useUpdateBattleQue
 import { useFormStatus } from 'react-dom'
 import CodeEditorModal from '@/features/battle/ui/CodeEditorModal'
 import { BATTLE } from '#/generate'
+import { decompressGzip, compressGzip } from '@/features/editor/helper'
+import { usePopupStore } from '@/shared/store/usePopupStore'
 
 interface BattleFormValues {
   title: string
@@ -22,6 +23,7 @@ interface BattleFormValues {
 const BattleForm = ({ id }: { id?: string }) => {
   const router = useRouter()
   const isEditMode = !!id
+  const { openPopup } = usePopupStore.getState()
   const { register, handleSubmit, control, setValue, getValues } =
     useForm<BattleFormValues>({
       defaultValues: {
@@ -42,23 +44,37 @@ const BattleForm = ({ id }: { id?: string }) => {
 
   useEffect(() => {
     if (data) {
+      const deCompCodeLeft = decompressGzip(data.codeContentLeft)
+      const deCompCodeRight = decompressGzip(data.codeContentRight)
+      if (!deCompCodeLeft || !deCompCodeRight) {
+        throw new Error('배틀 코드 내용 불러오기에 실패했습니다.')
+      }
+
       setValue('title', data.title)
       setValue('content', data.content)
-      setValue('codeLeft', data.codeContentLeft)
-      setValue('codeRight', data.codeContentRight)
+      setValue('codeLeft', deCompCodeLeft)
+      setValue('codeRight', deCompCodeRight)
       setValue('codeTypeLeft', data.codeTypeLeft)
       setValue('codeTypeRight', data.codeTypeRight)
     }
   }, [data, setValue])
 
   const onSubmit = () => {
+    const compCodeLeft = compressGzip(getValues('codeLeft'))
+    const compCodeRight = compressGzip(getValues('codeRight'))
+
+    if (!compCodeLeft || !compCodeRight) {
+      openPopup('코드 압축에 실패했어요. 코드 내용을 확인해 주세요.', '')
+      return
+    }
+
     if (isEditMode) {
       const updateReq: BATTLE.UpdateBattleReqDTO = {
         battleId: Number(id),
         title: getValues('title'),
-        content: getValues('content') || '', // undefined 방지
-        codeContentLeft: getValues('codeLeft'),
-        codeContentRight: getValues('codeRight'),
+        content: getValues('content') || '',
+        codeContentLeft: compCodeLeft,
+        codeContentRight: compCodeRight,
         codeTypeLeft: getValues('codeTypeLeft'),
         codeTypeRight: getValues('codeTypeRight'),
       }
@@ -71,9 +87,9 @@ const BattleForm = ({ id }: { id?: string }) => {
     } else {
       const createReq: BATTLE.CreateBattleReqDTO = {
         title: getValues('title'),
-        content: getValues('content') || '', // undefined 방지
-        codeContentLeft: getValues('codeLeft'),
-        codeContentRight: getValues('codeRight'),
+        content: getValues('content') || '',
+        codeContentLeft: compCodeLeft,
+        codeContentRight: compCodeRight,
         codeTypeLeft: getValues('codeTypeLeft'),
         codeTypeRight: getValues('codeTypeRight'),
       }
