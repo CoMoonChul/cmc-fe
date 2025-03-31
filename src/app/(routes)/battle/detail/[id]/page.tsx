@@ -83,7 +83,13 @@ const BattleDetailPage: FC<BattleDetailPageProps> = async ({ params }) => {
       <div className="mt-6 bg-gray-100 dark:bg-gray-900 p-4 rounded-lg">
         <p className="text-gray-700 dark:text-gray-300">{content}</p>
       </div>
-      <div className="mt-6 flex justify-end">
+      <div className="mt-6 flex justify-end gap-3">
+        <Link
+          href={'/battle'}
+          className="px-4 py-2 bg-gray-400 text-white rounded-lg hover:bg-grey-500 transition"
+        >
+          목록 보기
+        </Link>
         <Link
           href={`/battle/result/${battleId}`}
           className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"

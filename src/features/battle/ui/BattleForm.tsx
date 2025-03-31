@@ -40,7 +40,7 @@ const BattleForm = ({ id }: { id?: string }) => {
   const [openModal, setOpenModal] = useState<'left' | 'right' | null>(null)
   const { data } = useBattleDetailQuery(Number(id), isEditMode)
   const createBattleMutation = useCreateBattleQuery()
-  const updateBattleMutation = useUpdateBattleQuery()
+  const updateBattleMutation = useUpdateBattleQuery(Number(id))
 
   useEffect(() => {
     if (data) {

@@ -17,5 +17,7 @@ export const useBattleDetailQuery = (
     queryKey: [QUERY_KEYS.BATTLE.DETAIL, battleId],
     queryFn: () => selectBattle(battleId),
     enabled: enabled,
+    staleTime: 1000 * 60 * 5, // 10 min
+    gcTime: 1000 * 60 * 30, // 30 min
   })
 }
