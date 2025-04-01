@@ -2,11 +2,11 @@ import { selectReview } from '@/entities/review/api'
 import { notFound } from 'next/navigation'
 import { FC } from 'react'
 import LikeComponent from '@/features/like/ui/LikeComponent'
-// import ReviewCodeArea from '@/features/review/ui/ReviewCodeArea'
+import ReviewCodeArea from '@/features/review/ui/ReviewCodeArea'
 import { getFormattedCreatedAt } from '@/shared/lib/date'
 import CommentSection from '@/features/comment/ui/CommentSection'
 import { COMMENT_TARGET } from '@/features/comment/types'
-import useUserStore from '@/shared/store/useUserStore'
+import ReviewButtonsComponent from '@/features/review/ui/ReviewButtonsComponent'
 
 interface ReviewDetailPageProps {
   params: Promise<{ id: string }>
@@ -22,8 +22,10 @@ const ReviewDetailPage: FC<ReviewDetailPageProps> = async ({ params }) => {
     reviewId,
     title,
     username,
+    userNum,
     content,
     codeContent,
+    codeType,
     viewCount,
     likeCount,
     createdAt,
@@ -53,12 +55,11 @@ const ReviewDetailPage: FC<ReviewDetailPageProps> = async ({ params }) => {
         </div>
         <div className="flex items-center space-x-4">
           <div className="flex items-center space-x-1">
-            <span>👁 {viewCount ?? 1}</span>
+            <span>조회수 : {viewCount ?? 1}회</span>
           </div>
           <LikeComponent reviewId={reviewId} />
           <button className="text-blue-500">🔗 공유</button>
-          <button className="text-green-500">✏ 수정하기</button>
-          <button className="text-red-500">❌ 삭제하기</button>
+          <ReviewButtonsComponent reviewId={reviewId} userNum={userNum} />
         </div>
       </div>
 
@@ -68,10 +69,12 @@ const ReviewDetailPage: FC<ReviewDetailPageProps> = async ({ params }) => {
       </div>
 
       {/* 코드 에디터 */}
-      <div className="bg-gray-200 dark:bg-gray-800 p-2 rounded-lg overflow-hidden">
-        {/* <ReviewCodeArea/> */}
-      </div>
-
+      <ReviewCodeArea
+        reviewId={reviewId}
+        code={codeContent}
+        language={codeType}
+      />
+      <hr className="my-8 border-gray-300 dark:border-gray-700" />
       {/* 댓글 영역 */}
       <div className="mt-6 bg-gray-100 dark:bg-gray-900 p-4 rounded-lg">
         <CommentSection id={reviewId} commentTarget={COMMENT_TARGET.REVIEW} />
