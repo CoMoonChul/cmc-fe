@@ -1,23 +1,17 @@
 import { useState, useRef } from 'react'
-import { inviteCodeFn } from '@/features/livecoding/type'
+import { LIVECODING } from '#/generate'
+import useWebSocket from '@/features/livecoding/hooks/useWebSocket'
 
-interface ChatProps  {
-  messages: string[] // ✅ 웹소켓에서 받은 메시지 목록
-  sendMessage: (msg: string) => void // ✅ 메시지 전송 함수
-}
-
-export default function Chat({
-  messages,
-  sendMessage,
-}: ChatProps) {
+export default function Chat({ roomInfo }: { roomInfo: LIVECODING.SelectLiveCodingResDTO | null }) {
   const [input, setInput] = useState('')
   const inputRef = useRef<HTMLInputElement | null>(null)
   const chatBoxRef = useRef<HTMLDivElement | null>(null)
+  const { messages, sendMessage, isConnected } = useWebSocket(roomInfo?.roomId)
 
   const handleSendMessage = () => {
     if (input.trim() !== '') {
-      sendMessage(input) // ✅ 웹소켓을 통해 메시지 전송
-      setInput('')
+      sendMessage(input)  // 웹소켓을 통해 메시지 전송
+      setInput('')  // 입력값 초기화
     }
   }
 
