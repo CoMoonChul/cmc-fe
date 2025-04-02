@@ -1,6 +1,7 @@
 export * as BATTLE from './battle/api'
 export * as COMMENT from './comment/api'
 export * as EDITOR from './editor/api'
+export * as GROUP from './group/api'
 export * as LIKE from './like/api'
 export * as LIVECODING from './livecoding/api'
 export * as NOTICE from './notice/api'
