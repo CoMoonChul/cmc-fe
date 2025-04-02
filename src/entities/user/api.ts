@@ -227,3 +227,21 @@ export async function withdraw(
   )
   return response.data
 }
+
+/**
+ * 회원 정보 변경
+ * @param data UpdateReqDTO
+ * @param manualErrorHandle 에러 핸들링 여부 (기본값: false)
+ * @returns 탈퇴 결과
+ */
+export async function updateUser(
+  data: USER.UpdateReqDTO,
+  manualErrorHandle = false,
+): Promise<USER.UpdateResDTO> {
+  const response = await apiClient(
+    userApi.update.bind(userApi),
+    manualErrorHandle,
+    data,
+  )
+  return response.data
+}

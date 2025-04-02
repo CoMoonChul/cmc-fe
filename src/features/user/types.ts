@@ -15,3 +15,9 @@ export const API_ENDPOINTS = {
   REFRESH: `${BACKEND_URL + API_PATH.REFRESH}`,
   FINDACCOUNT: `${BACKEND_URL + API_PATH.FINDACCOUNT}`,
 }
+
+export const QUERY_KEYS = {
+  USER: {
+    DETAIL: 'user.detail',
+  } as const,
+}

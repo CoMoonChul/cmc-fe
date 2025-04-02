@@ -64,7 +64,23 @@ async function handleRequest(
       return newResponse
     }
 
-    return NextResponse.json(await response.json(), { status: response.status })
+    const rawBody = await response.text()
+    const nextRes = new NextResponse(rawBody, {
+      status: response.status,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+
+    // Set-Cookie 헤더가 있다면 브라우저에 전달하도록 복사
+    const setCookie = response.headers.get('set-cookie')
+    if (setCookie) {
+      nextRes.headers.set('Set-Cookie', setCookie)
+    }
+
+    return nextRes
+
+    // return NextResponse.json(await response.json(), { status: response.status })
   } catch (error) {
     console.error('[api][route.ts] error', error)
     return NextResponse.json(
@@ -72,13 +88,6 @@ async function handleRequest(
       { status: 500 },
     )
   }
-}
-
-function getCookie(req: NextRequest, name: string): string | undefined {
-  const raw = req.headers.get('cookie')
-  if (!raw) return undefined
-  const cookies = raw.split(';').map((c) => c.trim())
-  return cookies.find((c) => c.startsWith(`${name}=`))?.split('=')[1]
 }
 
 async function parseRequestBody(req: NextRequest): Promise<string | undefined> {
