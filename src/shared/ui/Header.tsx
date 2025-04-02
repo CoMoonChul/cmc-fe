@@ -1,6 +1,6 @@
 'use client'
 
-import { useRouter } from 'next/navigation'
+import { useRouter, usePathname } from 'next/navigation'
 import { useThemeStore } from '@/shared/store/useThemeStore'
 import Image from 'next/image'
 import { motion } from 'framer-motion'
@@ -9,6 +9,7 @@ import { useState, useEffect } from 'react'
 
 export default function Header() {
   const router = useRouter()
+  const pathname = usePathname()
   const [isAuthed, setIsAuthed] = useState<boolean | null>(null)
 
   const { toggleTheme } = useThemeStore()
@@ -20,7 +21,7 @@ export default function Header() {
       setIsAuthed(result)
     }
     check()
-  }, [checkAuth])
+  }, [checkAuth, pathname])
 
   return (
     <header className="w-full h-16 px-6 flex items-center justify-between bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700 shadow-sm">

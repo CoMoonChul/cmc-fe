@@ -5,10 +5,7 @@ import { useState } from 'react'
 const UserProfilePage = () => {
   const [nickname, setNickname] = useState('닉네임')
   const [email, setEmail] = useState('user@cmc.kr')
-  const [editMode, setEditMode] = useState<{
-    nickname: boolean
-    email: boolean
-  }>({
+  const [editMode, setEditMode] = useState({
     nickname: false,
     email: false,
   })
@@ -25,17 +22,14 @@ const UserProfilePage = () => {
   }
 
   return (
-    <div className="min-h-screen flex flex-col items-start justify-start bg-gray-50 dark:bg-[#1E1E1E] text-gray-900 dark:text-gray-300 p-6">
-      {/* 전체 레이아웃 - 좌우 배치 */}
+    <div className="min-h-screen flex flex-col items-start justify-start bg-white dark:bg-black text-black dark:text-white p-6">
       <div className="grid grid-cols-[1fr_2fr] gap-10 w-full max-w-4xl mx-auto">
         {/* 왼쪽 영역 */}
         <div className="flex flex-col items-start">
-          {/* 프로필 이미지 */}
           <div className="w-32 h-32 bg-gray-300 dark:bg-gray-700 rounded-full mb-4 flex items-center justify-center text-xl">
             프로필
           </div>
 
-          {/* 이미지 선택 & 제거 */}
           <div className="flex gap-4">
             <button className="text-blue-500 hover:text-blue-700 dark:hover:text-blue-400 transition">
               이미지 선택
@@ -48,13 +42,12 @@ const UserProfilePage = () => {
             </button>
           </div>
 
-          {/* 그룹 관리 */}
           <div className="mt-6 w-full">
             <p className="font-medium">나의 그룹</p>
             <p className="text-sm text-gray-600 dark:text-gray-400">
               그룹을 만들어 회의에 초대하거나 게시물을 공유해보세요.
             </p>
-            <button className="mt-2 px-4 py-2 rounded-md bg-blue-500 text-white hover:bg-blue-600 transition">
+            <button className="mt-2 px-4 py-2 rounded-md bg-blue-500 text-white hover:bg-blue-700 transition">
               그룹 만들기
             </button>
           </div>
@@ -71,7 +64,7 @@ const UserProfilePage = () => {
                   type="text"
                   value={nickname}
                   onChange={(e) => setNickname(e.target.value)}
-                  className="w-48 p-2 border rounded-md dark:bg-gray-800 dark:border-gray-600 border-gray-300"
+                  className="w-48 p-2 border rounded-md bg-white dark:bg-gray-900 dark:border-gray-600 border-gray-300 text-black dark:text-white"
                 />
               ) : (
                 <p className="text-gray-600 dark:text-gray-400">{nickname}</p>
@@ -118,7 +111,7 @@ const UserProfilePage = () => {
                   className={`w-12 h-6 flex items-center rounded-full p-1 transition ${
                     toggles[key as keyof typeof toggles]
                       ? 'bg-blue-500'
-                      : 'bg-gray-400'
+                      : 'bg-gray-400 dark:bg-gray-600'
                   }`}
                 >
                   <div

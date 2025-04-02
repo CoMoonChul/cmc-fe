@@ -1,5 +1,11 @@
 // 정적 라우팅 경로
-export const PROTECTED_ROUTES = ['/battle/form', '/livecoding', '/livecoding/join', '/notice']
+export const PROTECTED_ROUTES = [
+  '/battle/form',
+  '/livecoding',
+  '/livecoding/join',
+  '/notice',
+  '/user/profile',
+]
 
 // 동적 라우팅 경로
 export const DYNAMIC_PROTECTED_ROUTES = [
