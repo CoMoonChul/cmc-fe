@@ -9,6 +9,8 @@ import { USER } from '#/generate'
 import { useRouter } from 'next/navigation'
 import { usePopupStore } from '@/shared/store/usePopupStore'
 import ConfirmWithdrawalPopup from '@/features/user/ui/ConfirmWithdrawalPopup'
+import ProfileImageSelectorModal from '@/features/user/ui/ProfileImageSelectorModal'
+import Image from 'next/image'
 
 const UserProfilePage = () => {
   const router = useRouter()
@@ -18,12 +20,14 @@ const UserProfilePage = () => {
   const { data } = useGetMyInfoQuery()
   const { openPopup } = usePopupStore.getState()
   const [showWithdrawPopup, setShowWithdrawPopup] = useState(false)
-  const [nickname, setNickname] = useState('닉네임')
-  const [email, setEmail] = useState('user@cmc.kr')
+  const [nickname, setNickname] = useState('')
+  const [email, setEmail] = useState('')
   const [editMode, setEditMode] = useState({
     nickname: false,
     email: false,
   })
+  const [showImageSelector, setShowImageSelector] = useState(false)
+  const [selectedImage, setSelectedImage] = useState('')
 
   const onClickLogout = () => {
     logoutMutation.mutate(undefined, {
@@ -33,10 +37,11 @@ const UserProfilePage = () => {
     })
   }
 
-  const updateUser = () => {
+  const updateUser = (nickname: string, email: string, profileImg: string) => {
     const req: USER.UpdateReqDTO = {
       username: nickname,
       email: email,
+      profileImg: profileImg,
     }
 
     updateMutation.mutate(req, {
@@ -68,9 +73,9 @@ const UserProfilePage = () => {
 
   useEffect(() => {
     if (data) {
-      console.log('data', data)
       setNickname(data.username)
       setEmail(data.email)
+      setSelectedImage(data.profileImg ?? '')
     }
   }, [data])
 
@@ -78,16 +83,33 @@ const UserProfilePage = () => {
     <div className="min-h-screen flex flex-col items-start justify-start bg-white dark:bg-black text-black dark:text-white p-6">
       <div className="grid grid-cols-[1fr_2fr] gap-10 w-full max-w-4xl mx-auto">
         <div className="flex flex-col items-start">
-          <div className="w-32 h-32 bg-gray-300 dark:bg-gray-700 rounded-full mb-4 flex items-center justify-center text-xl">
-            프로필
-          </div>
-
+          {selectedImage ? (
+            <div className="w-32 h-32 rounded-full overflow-hidden mb-4 relative border-2 border-gray-300 dark:border-gray-600">
+              <Image
+                src={selectedImage}
+                alt="선택한 프로필"
+                fill
+                className="object-cover"
+                sizes="128px"
+              />
+            </div>
+          ) : (
+            <div className="w-32 h-32 bg-gray-300 dark:bg-gray-700 rounded-full mb-4 flex items-center justify-center text-xl text-white">
+              프로필
+            </div>
+          )}
           <div className="flex gap-4">
-            <button className="text-blue-500 hover:text-blue-700 dark:hover:text-blue-400 transition">
+            <button
+              className="text-blue-500 hover:text-blue-700 dark:hover:text-blue-400 transition"
+              onClick={() => setShowImageSelector(true)}
+            >
               이미지 선택
             </button>
             <button
-              onClick={() => alert('이미지가 제거되었습니다.')}
+              onClick={() => {
+                setSelectedImage('')
+                updateUser(nickname, email, '')
+              }}
               className="text-red-500 hover:text-red-700 dark:hover:text-red-400 transition"
             >
               이미지 제거
@@ -122,7 +144,7 @@ const UserProfilePage = () => {
               <button
                 onClick={() => {
                   setEditMode({ ...editMode, nickname: !editMode.nickname })
-                  updateUser()
+                  updateUser(nickname, email, selectedImage)
                 }}
                 className="text-blue-500 hover:text-blue-700 dark:hover:text-blue-400 transition"
               >
@@ -147,7 +169,7 @@ const UserProfilePage = () => {
               <button
                 onClick={() => {
                   setEditMode({ ...editMode, email: !editMode.email })
-                  updateUser()
+                  updateUser(nickname, email, selectedImage)
                 }}
                 className="text-blue-500 hover:text-blue-700 dark:hover:text-blue-400 transition"
               >
@@ -179,6 +201,16 @@ const UserProfilePage = () => {
           onConfirm={(password) => {
             withDraw(password)
             setShowWithdrawPopup(false)
+          }}
+        />
+      )}
+      {showImageSelector && (
+        <ProfileImageSelectorModal
+          onClose={() => setShowImageSelector(false)}
+          onSelect={(url) => {
+            setSelectedImage(url)
+            setShowImageSelector(false)
+            updateUser(nickname, email, url)
           }}
         />
       )}
