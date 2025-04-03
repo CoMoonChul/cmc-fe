@@ -3,22 +3,13 @@
 import { useState, useEffect } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useLogin } from '@/features/user/hooks/useLogin'
-import { GROUP, USER } from '#/generate'
+import { USER } from '#/generate'
 import useUserStore from '@/shared/store/useUserStore'
 import Image from 'next/image'
 import GoogleIcon from '#/public/google-icon.svg'
 import { AxiosError } from 'axios'
-import GroupCreateModal from '@/features/group/ui/GroupCreateModal'
-import GroupManageModal from '@/features/group/ui/GroupManageModal'
-import { useCreateGroup } from '@/features/group/hooks/useCreateGroup'
 
 const UserLoginForm = () => {
-  // 성수
-  const [openModal, setOpenModal] = useState<'group' | null>(null)
-  const [groupName, setGroupName] = useState('')
-  const createGroupMutation = useCreateGroup()
-  const [successMessage, setSuccessMessage] = useState<string | null>(null)
-
   // routing
   const router = useRouter()
   const searchParams = useSearchParams()
@@ -67,20 +58,6 @@ const UserLoginForm = () => {
         if (err instanceof AxiosError) {
           setError(err.response?.data.message)
         }
-      },
-    })
-  }
-
-  // (성수 그룹생성)
-  const handleCreateGroup = (groupName: string) => {
-    const CreateReq: GROUP.CreateReqDTO = {
-      groupName,
-    }
-
-    createGroupMutation.mutate(CreateReq, {
-      onSuccess: (res) => {
-        console.log('res: ', res)
-        setSuccessMessage(res.resultMessage ?? null)
       },
     })
   }
@@ -152,20 +129,12 @@ const UserLoginForm = () => {
       <div className="flex justify-center items-center gap-2 mt-2 text-sm">
         <span>계정 정보가 기억나지 않으신가요?</span>
         <button
-          // onClick={() => router.replace('/user/findAccount')}
-          onClick={() => setOpenModal('group')}
+          onClick={() => router.replace('/user/findAccount')}
           className="text-blue-500 hover:text-blue-700 dark:hover:text-blue-400 transition"
         >
           계정 찾기
         </button>
       </div>
-
-      {openModal && (
-        <GroupCreateModal
-          onClose={() => setOpenModal(null)}
-          onSave={handleCreateGroup}
-        />
-      )}
     </div>
   )
 }
