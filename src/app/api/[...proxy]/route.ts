@@ -25,7 +25,6 @@ async function handleRequest(
     const searchParams = req.nextUrl.search
     const url = `${BACKEND_URL}${path}${searchParams}`
     const body = await parseRequestBody(req)
-
     const accessToken = req.cookies.get('accessToken')?.value
     const refreshToken = req.cookies.get('refreshToken')?.value
 
@@ -79,8 +78,6 @@ async function handleRequest(
     }
 
     return nextRes
-
-    // return NextResponse.json(await response.json(), { status: response.status })
   } catch (error) {
     console.error('[api][route.ts] error', error)
     return NextResponse.json(

@@ -37,21 +37,30 @@ const CommonPopup = () => {
 
             {/* 버튼 영역 */}
             <div className="flex justify-center gap-3 mt-4">
-              <button
-                onClick={() => closePopup(popup.id)}
-                className="px-4 py-2 text-gray-700 dark:text-gray-300 border border-gray-400 dark:border-gray-600 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition"
-              >
-                닫기
-              </button>
-              {popup.onConfirm && (
+              {popup.onConfirm ? (
+                <>
+                  <button
+                    onClick={() => closePopup(popup.id)}
+                    className="px-4 py-2 text-gray-700 dark:text-gray-300 border border-gray-400 dark:border-gray-600 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition"
+                  >
+                    닫기
+                  </button>
+                  <button
+                    onClick={() => {
+                      if (typeof popup.onConfirm === 'function') {
+                        popup.onConfirm()
+                      }
+                      closePopup(popup.id)
+                    }}
+                    className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+                  >
+                    확인
+                  </button>
+                </>
+              ) : (
                 <button
-                  onClick={() => {
-                    if (typeof popup.onConfirm === 'function') {
-                      popup.onConfirm()
-                    }
-                    closePopup(popup.id)
-                  }}
-                  className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+                  onClick={() => closePopup(popup.id)}
+                  className="px-4 py-2 text-gray-700 dark:text-gray-300 border border-gray-400 dark:border-gray-600 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition"
                 >
                   확인
                 </button>

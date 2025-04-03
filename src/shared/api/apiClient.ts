@@ -68,7 +68,7 @@ async function apiClient<T>(
       const parsedMessage = getErrorMessage(error?.response?.data?.message)
       if (typeof window !== 'undefined') {
         const { openPopup } = usePopupStore.getState()
-        openPopup('에러', parsedMessage)
+        openPopup('', parsedMessage)
       } else {
         throw new Error(parsedMessage)
       }
