@@ -1,21 +1,20 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { REVIEW } from '#/generate'
+import { updateReview } from '@/entities/review/api'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { QUERY_KEYS } from '../types'
-import { deleteReview } from '@/entities/review/api'
 
-/**
- * 리뷰 삭제 mutation
- * @param reviewId 리뷰 id
+/*
+ * 리뷰 수정
  */
-export const useDeleteReviewMutation = (reviewId: number) => {
+export const useUpdateReviewQuery = (reviewId: number) => {
   const queryClient = useQueryClient()
 
   return useMutation<
-    REVIEW.DeleteReviewResDTO,
+    REVIEW.UpdateReviewResDTO,
     Error,
-    REVIEW.DeleteReviewReqDTO
+    REVIEW.UpdateReviewReqDTO
   >({
-    mutationFn: (data) => deleteReview(data),
+    mutationFn: (data) => updateReview(data),
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: [QUERY_KEYS.REVIEW.LIST],

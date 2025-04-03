@@ -6,6 +6,8 @@ import { useInView } from 'react-intersection-observer'
 import { useRouter } from 'next/navigation'
 import { filter } from 'lodash'
 import ReviewListDropDown from '@/features/review/ui/ReviewListDropDown'
+import { useAuth } from '@/shared/hook/useAuth'
+import { usePopupStore } from '@/shared/store/usePopupStore'
 
 const FILTERS = [
   '최신',
@@ -25,7 +27,10 @@ const SEARCH_CONDITIONS: Record<FilterType, number> = {
 
 const ReviewListPage = () => {
   const router = useRouter()
+  const checkAuth = useAuth()
+  const { openPopup } = usePopupStore.getState()
   const [selectedFilter, setSelectedFilter] = useState<FilterType>('최신')
+
   const searchCondition = useMemo(
     () => SEARCH_CONDITIONS[selectedFilter],
     [selectedFilter],
@@ -33,6 +38,23 @@ const ReviewListPage = () => {
   const { ref, inView } = useInView()
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
     useReviewListInfiniteQuery(searchCondition, 5, true)
+
+  const goReviewForm = () => {
+    router.push('/review/form')
+  }
+
+  const onclickCreateReview = async () => {
+    const isLogin = await checkAuth()
+    if (!isLogin) {
+      openPopup(
+        '로그인 후에 리뷰 등록이 가능합니다.',
+        '로그인 하시겠습니까?',
+        goReviewForm,
+      )
+      return
+    }
+    goReviewForm()
+  }
 
   useEffect(() => {
     if (inView && hasNextPage) {
@@ -46,7 +68,10 @@ const ReviewListPage = () => {
   return (
     <div className="min-h-screen p-6 bg-white text-black dark:bg-black dark:text-white">
       <div className="flex justify-between items-center mb-4">
-        <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+        <button
+          onClick={onclickCreateReview}
+          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+        >
           리뷰 작성하기
         </button>
         <div className="flex items-center gap-2 border border-gray-300 rounded-lg dark:border-gray-600 overflow-visible">

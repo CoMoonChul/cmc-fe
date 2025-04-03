@@ -7,6 +7,7 @@ import { getFormattedCreatedAt } from '@/shared/lib/date'
 import CommentSection from '@/features/comment/ui/CommentSection'
 import { COMMENT_TARGET } from '@/features/comment/types'
 import ReviewButtonsComponent from '@/features/review/ui/ReviewButtonsComponent'
+import Link from 'next/link'
 
 interface ReviewDetailPageProps {
   params: Promise<{ id: string }>
@@ -78,6 +79,14 @@ const ReviewDetailPage: FC<ReviewDetailPageProps> = async ({ params }) => {
       {/* 댓글 영역 */}
       <div className="mt-6 bg-gray-100 dark:bg-gray-900 p-4 rounded-lg">
         <CommentSection id={reviewId} commentTarget={COMMENT_TARGET.REVIEW} />
+      </div>
+      <div className="mt-6 flex justify-end gap-3">
+        <Link
+          href={'/'}
+          className="px-4 py-2 bg-gray-400 text-white rounded-lg hover:bg-grey-500 transition"
+        >
+          목록 보기
+        </Link>
       </div>
     </div>
   )
