@@ -1,7 +1,20 @@
-import type { NextConfig } from "next";
+import type { NextConfig } from 'next'
 
 const nextConfig: NextConfig = {
-  /* config options here */
-};
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'cmc-public-bucket.s3.ap-northeast-2.amazonaws.com',
+        pathname: '/profiles/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'cmc-public-bucket.s3.ap-northeast-2.amazonaws.com',
+        pathname: '/logos/**',
+      },
+    ],
+  },
+}
 
-export default nextConfig;
+module.exports = nextConfig
