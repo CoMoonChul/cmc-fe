@@ -2,7 +2,6 @@
 
 import { useRouter, usePathname } from 'next/navigation'
 import { useThemeStore } from '@/shared/store/useThemeStore'
-import Image from 'next/image'
 import { motion } from 'framer-motion'
 import { useAuth } from '@/shared/hook/useAuth'
 import { useState, useEffect } from 'react'
@@ -30,17 +29,6 @@ export default function Header() {
           onClick={() => router.push('/')}
           className="flex items-center gap-2"
         >
-          <Image
-            src="https://cmc-public-bucket.s3.ap-northeast-2.amazonaws.com/logos/cmc_icon.png"
-            alt="로고"
-            width={36}
-            height={36}
-            className="object-contain"
-            onError={(e) => {
-              const target = e.target as HTMLImageElement
-              target.style.display = 'none'
-            }}
-          />
           <span className="text-xl font-bold text-gray-900 dark:text-white">
             코문철
           </span>

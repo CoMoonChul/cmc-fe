@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { API_ENDPOINTS } from '@/features/user/types'
+import { getErrorMessage } from '@/shared/lib/messages'
 
 export async function POST(req: NextRequest) {
   try {
@@ -12,23 +13,26 @@ export async function POST(req: NextRequest) {
       credentials: 'include',
     })
 
+    // 로그인 api 에러 반환
     if (!response.ok) {
-      return NextResponse.json(await response.json(), {
+      const errResponse = await response.json()
+      return NextResponse.json({
+        message: getErrorMessage(errResponse.message),
         status: response.status,
       })
     }
 
+    // refresh token set cookie header
     const setCookieHeader = response.headers.get('set-cookie')
     const { accessToken, userNum } = await response.json()
-
-    const res = NextResponse.json({ userNum: userNum })
+    const res = NextResponse.json({ userNum: userNum, status: response.status })
     if (setCookieHeader) {
       res.headers.set('Set-Cookie', setCookieHeader)
     }
-
+    // access token set cookie header
     res.headers.append(
       'Set-Cookie',
-      `accessToken=${accessToken}; Path=/; HttpOnly; Secure=${process.env.NODE_ENV === 'production'}; SameSite=Strict; Max-Age=900`,
+      `accessToken=${accessToken}; Path=/; HttpOnly; Secure=${process.env.NODE_ENV === 'production'}; SameSite=Strict; Max-Age=600`,
     )
     return res
   } catch (error) {

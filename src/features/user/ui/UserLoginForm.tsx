@@ -2,12 +2,10 @@
 
 import { useState, useEffect } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { useLogin } from '@/features/user/hooks/useLogin'
-import { USER } from '#/generate'
 import useUserStore from '@/shared/store/useUserStore'
 import Image from 'next/image'
 import GoogleIcon from '#/public/google-icon.svg'
-import { AxiosError } from 'axios'
+import { loginNext } from '@/entities/user/api'
 
 const UserLoginForm = () => {
   // routing
@@ -15,9 +13,6 @@ const UserLoginForm = () => {
   const searchParams = useSearchParams()
 
   const { setUser } = useUserStore()
-
-  // business
-  const { mutate: loginMutate } = useLogin()
 
   // state
   const [formData, setFormData] = useState({
@@ -33,33 +28,26 @@ const UserLoginForm = () => {
   }, [searchParams])
 
   // handler
-  const handleLogin = () => {
+  const handleLogin = async () => {
     if (!formData.userId || !formData.password) {
       setError('아이디와 비밀번호를 입력해주세요.')
       return
     }
 
-    const loginParam: USER.LoginReqDTO = {
-      userId: formData.userId,
-      password: formData.password,
+    const resLogin = await loginNext(formData.userId, formData.password)
+
+    if (resLogin?.status === 200) {
+      setUser({
+        userNum: resLogin?.userNum,
+      })
+      router.replace(redirectPath)
+    } else {
+      if (resLogin?.message && typeof resLogin?.message === 'string') {
+        setError(resLogin.message)
+      } else {
+        setError('로그인 실패했어요. 잠시 후 다시 시도해 주세요.')
+      }
     }
-
-    loginMutate(loginParam, {
-      onSuccess: (res) => {
-        console.log('res: ', res)
-
-        setUser({
-          userNum: res.userNum,
-        })
-
-        router.replace(redirectPath)
-      },
-      onError: (err) => {
-        if (err instanceof AxiosError) {
-          setError(err.response?.data.message)
-        }
-      },
-    })
   }
 
   return (
@@ -69,10 +57,8 @@ const UserLoginForm = () => {
         <span className="text-sm font-medium">구글 간편 로그인</span>
       </button>
 
-      {/* 로그인 오류 메시지 */}
       {error && <p className="mt-4 text-red-500 text-sm">{error}</p>}
 
-      {/* 로그인 폼 */}
       <div className="mt-6 space-y-4">
         {[
           {

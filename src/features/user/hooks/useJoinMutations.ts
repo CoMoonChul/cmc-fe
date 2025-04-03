@@ -5,7 +5,7 @@ import type { USER } from '#/generate'
 /**
  * 회원가입
  */
-export const useJoin = () => {
+export const useJoinMutations = () => {
   return useMutation<USER.JoinResDTO, Error, USER.JoinReqDTO>({
     mutationFn: (data) => join(data),
   })

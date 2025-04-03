@@ -1,14 +1,15 @@
 'use client'
-
 import { useState, useEffect } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { useJoin } from '@/features/user/hooks/useJoin'
+import { useJoinMutations } from '@/features/user/hooks/useJoinMutations'
 import { USER } from '#/generate'
-
 import Image from 'next/image'
 import GoogleIcon from '#/public/google-icon.svg'
 
 const UserJoinForm = () => {
+  const router = useRouter()
+  const searchParams = useSearchParams()
+
   const [formData, setFormData] = useState({
     userId: '',
     password: '',
@@ -25,12 +26,9 @@ const UserJoinForm = () => {
     email: '',
   })
 
-  const joinMutation = useJoin()
-
-  const router = useRouter()
-  const searchParams = useSearchParams()
-
   const [redirectPath, setRedirectPath] = useState('/')
+
+  const joinMutation = useJoinMutations()
 
   useEffect(() => {
     setRedirectPath(searchParams.get('redirect') || '/user/login')
@@ -65,7 +63,6 @@ const UserJoinForm = () => {
   }
 
   const handleJoin = () => {
-    console.log('??@!?#@!?')
     if (validateForm()) {
       const joinReq: USER.JoinReqDTO = {
         userId: formData.userId,
@@ -75,8 +72,7 @@ const UserJoinForm = () => {
       }
 
       joinMutation.mutate(joinReq, {
-        onSuccess: (res) => {
-          console.log('res: ', res)
+        onSuccess: () => {
           router.replace(redirectPath)
         },
       })
@@ -85,13 +81,11 @@ const UserJoinForm = () => {
 
   return (
     <div className="w-full max-w-md">
-      {/* 구글 간편 가입 */}
       <button className="w-full max-w-md flex items-center justify-center gap-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 p-3 rounded-md shadow hover:bg-gray-100 dark:hover:bg-gray-700 transition active:opacity-80">
         <Image src={GoogleIcon} alt="Google" />
         <span className="text-sm font-medium">구글 간편 회원가입</span>
       </button>
 
-      {/* 폼 입력 필드 */}
       <div className="w-full max-w-md mt-6 space-y-4">
         {[
           {
@@ -143,7 +137,6 @@ const UserJoinForm = () => {
         ))}
       </div>
 
-      {/* 회원가입 버튼 */}
       <button
         onClick={handleJoin}
         disabled={Object.values(formData).some((val) => !val)}
@@ -153,7 +146,6 @@ const UserJoinForm = () => {
         회원가입
       </button>
 
-      {/* 로그인 링크 */}
       <div className="flex justify-center items-center gap-2 mt-4 text-sm">
         <span>이미 회원이신가요?</span>
         <button
