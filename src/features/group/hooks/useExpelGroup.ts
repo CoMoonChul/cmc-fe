@@ -5,7 +5,7 @@ import type { GROUP } from '#/generate'
 /**
  * 그룹 멤버 내보내기
  */
-export const useCreateGroup = () => {
+export const useExpel = () => {
   return useMutation<GROUP.ExpelResDTO, Error, GROUP.ExpelReqDTO>({
     mutationFn: (data) => expel(data),
   })

@@ -1,47 +1,82 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { useGetGroupMemberList } from '@/features/group/hooks/useGroupMemeberList'
+import { GROUP } from '#/generate'
+import { useInviteGroup } from '../hooks/useInviteGroup'
+import { useExpel } from '../hooks/useExpelGroup'
 
 interface GroupManageModalProps {
+  groupId: number | null
   onClose: () => void
   onSave: () => void
 }
 
-const GroupManageModal = ({ onClose, onSave }: GroupManageModalProps) => {
-  const [groupName, setGroupName] = useState('')
+const GroupManageModal = ({
+  groupId,
+  onClose,
+  onSave,
+}: GroupManageModalProps) => {
+  const [username, setUsername] = useState('')
   const [error, setError] = useState<string | null>(null)
+  const { data: memberData } = useGetGroupMemberList(groupId ?? 0, {
+    enabled: groupId !== null,
+  })
+  const InviteGroupMutation = useInviteGroup()
+  const ExpelMutation = useExpel()
 
-  const [members, setMembers] = useState([
-    { id: 1, nickname: 'DevMaster', email: 'dev@codebattle.com' },
-    { id: 2, nickname: 'CodeWarrior', email: 'warrior@codebattle.com' },
-  ])
-  const [nickname, setNickname] = useState('')
+  const [members, setMembers] = useState<
+    {
+      userNum?: number
+      username?: string
+      email?: string
+      groupRole?: string
+      groupMemberId?: number
+    }[]
+  >([])
 
   useEffect(() => {
+    if (memberData?.members) {
+      setMembers(memberData?.members)
+      console.log('aaaaaa', memberData)
+    }
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') onClose()
     }
     window.addEventListener('keydown', handleKeyDown)
     return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [onClose])
+  }, [memberData, onClose])
 
-  const handleRemoveMember = (id: number, nickname: string) => {
-    // setShowConfirm({ id, nickname })
-    console.log('내보내기 ㅋ', id)
+  const handleRemoveMember = (userNum?: number) => {
+    console.log('내보내기 ㅋ', userNum, groupId)
+
+    const ExpelReq: GROUP.ExpelReqDTO = {
+      userNum: userNum!,
+      groupId: groupId!,
+    }
+
+    ExpelMutation.mutate(ExpelReq, {
+      onSuccess: (res) => {
+        console.log('res: ', res)
+        alert(res.resultMessage)
+      },
+    })
   }
   const handleInvite = () => {
-    console.log('닉네임 ㅋ', nickname)
-    if (!nickname.trim()) return
-    const isExisting = members.some((member) => member.nickname === nickname)
-    if (isExisting) {
-      alert('이미 그룹에 속한 멤버입니다.')
-      return
+    console.log('닉네임 : ', username)
+    if (!username.trim()) return
+
+    const InviteReq: GROUP.InviteReqDTO = {
+      username: username!,
+      groupId: groupId!,
     }
-    setMembers([
-      ...members,
-      { id: Date.now(), nickname, email: `${nickname}@codebattle.com` },
-    ])
-    setNickname('')
+
+    InviteGroupMutation.mutate(InviteReq, {
+      onSuccess: (res) => {
+        console.log('res: ', res)
+        alert(res.resultMessage)
+      },
+    })
   }
 
   return (
@@ -59,41 +94,39 @@ const GroupManageModal = ({ onClose, onSave }: GroupManageModalProps) => {
         </div>
 
         {/* 멤버 리스트 */}
-        <div className="space-y-3 border-t border-gray-300 dark:border-gray-600 pt-4">
-          {members.map((member) => (
-            <div
-              key={member.id}
-              className="flex items-center justify-between bg-gray-100 dark:bg-gray-800 p-3 rounded-md"
-            >
-              <div className="flex items-center gap-4">
-                {/* 멤버 이미지 */}
-                <div className="w-10 h-10 bg-gray-300 dark:bg-gray-700 rounded-full flex items-center justify-center text-sm">
-                  {member.nickname.charAt(0).toUpperCase()}
-                </div>
-                {/* 멤버 정보 */}
-                <div>
-                  <p className="font-medium">{member.nickname}</p>
-                  <p className="text-xs text-gray-500 dark:text-gray-400">
-                    {member.email}
-                  </p>
-                </div>
-              </div>
-              {/* 멤버 내보내기 버튼 */}
-              <button
-                onClick={() => handleRemoveMember(member.id, member.nickname)}
-                className="text-red-500 hover:text-red-700 dark:hover:text-red-400 transition"
+        <div className="space-y-3 border-t border-gray-300 dark:border-gray-600 pt-4 max-h-60 overflow-y-auto">
+          {members?.length === 0 ? (
+            <p className="text-center text-sm text-gray-500">
+              그룹에 멤버가 없습니다.
+            </p>
+          ) : (
+            members?.map((member) => (
+              <div
+                key={member.userNum}
+                className="flex justify-between items-center bg-gray-100 dark:bg-gray-800 p-3 rounded"
               >
-                X
-              </button>
-            </div>
-          ))}
+                <div>
+                  <p className="text-sm font-semibold">{member.username}</p>
+                  <p className="text-xs text-gray-500">{member.email}</p>
+                </div>
+                {member.groupRole === 'SLAVE' && (
+                  <button
+                    className="text-red-500 text-sm hover:underline"
+                    onClick={() => handleRemoveMember(member.userNum)}
+                  >
+                    내보내기
+                  </button>
+                )}
+              </div>
+            ))
+          )}
         </div>
 
         <div className="mt-6 space-y-4">
           <input
             type="text"
-            value={groupName}
-            onChange={(e) => setGroupName(e.target.value)}
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
             className={`w-full p-3 border rounded-md dark:bg-gray-800 dark:border-gray-600 focus:ring-2 focus:ring-blue-500 ${
               error ? 'border-red-500' : 'border-gray-300'
             }`}

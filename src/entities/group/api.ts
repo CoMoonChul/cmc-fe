@@ -36,13 +36,13 @@ export async function create(
  * @returns 그룹 멤버 리스트 조회 결과
  */
 export async function getGroupMemberList(
-  groupId: string,
+  groupId: number,
   manualErrorHandle = false,
 ): Promise<GROUP.GetGroupMemberListResDTO> {
   const response = await apiClient(
     groupApi.getGroupMemberList.bind(groupApi),
     manualErrorHandle,
-    { groupId },
+    groupId,
   )
   return response.data
 }
@@ -97,6 +97,22 @@ export async function expel(
     groupApi.expel.bind(groupApi),
     manualErrorHandle,
     data,
+  )
+  return response.data
+}
+
+/**
+ * 나의 그룹 리스트 조회
+ * @param data ExpelReqDTO
+ * @param manualErrorHandle 에러 핸들링 여부 (기본값: false)
+ * @returns 나의 그룹 리스트 조회
+ */
+export async function getMyGroupList(
+  manualErrorHandle = false,
+): Promise<GROUP.GetMyGroupListResDTO> {
+  const response = await apiClient(
+    groupApi.getMyGroupList.bind(groupApi),
+    manualErrorHandle,
   )
   return response.data
 }

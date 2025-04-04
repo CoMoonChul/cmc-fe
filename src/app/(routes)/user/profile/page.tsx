@@ -5,12 +5,17 @@ import { useWithdrawMutation } from '@/features/user/hooks/useWithdrawMutation'
 import { useUpdateUserMutation } from '@/features/user/hooks/useUpdateUserMutation'
 import { useLogout } from '@/features/user/hooks/useLogout'
 import { useGetMyInfoQuery } from '@/features/user/hooks/useGetMyInfoQuery'
-import { USER } from '#/generate'
+import { GROUP, USER } from '#/generate'
 import { useRouter } from 'next/navigation'
 import { usePopupStore } from '@/shared/store/usePopupStore'
 import ConfirmWithdrawalPopup from '@/features/user/ui/ConfirmWithdrawalPopup'
 import ProfileImageSelectorModal from '@/features/user/ui/ProfileImageSelectorModal'
 import Image from 'next/image'
+import { useCreateGroup } from '@/features/group/hooks/useCreateGroup'
+import GroupCreateModal from '@/features/group/ui/GroupCreateModal'
+import { useGetMyGroupList } from '@/features/group/hooks/useMyGroupList'
+import GroupManageModal from '@/features/group/ui/GroupManageModal'
+import { useGetGroupMemberList } from '@/features/group/hooks/useGroupMemeberList'
 
 const UserProfilePage = () => {
   const router = useRouter()
@@ -28,6 +33,14 @@ const UserProfilePage = () => {
   })
   const [showImageSelector, setShowImageSelector] = useState(false)
   const [selectedImage, setSelectedImage] = useState('')
+
+  // (성수)
+  const [openCreateModal, setOpenCreateModal] = useState<'group' | null>(null)
+  const [openManageModal, setOpenManageModal] = useState<'group' | null>(null)
+
+  const [groupId, setGroupId] = useState<number | null>(null)
+  const createGroupMutation = useCreateGroup()
+  const { data: groupData } = useGetMyGroupList()
 
   const onClickLogout = () => {
     logoutMutation.mutate(undefined, {
@@ -71,13 +84,29 @@ const UserProfilePage = () => {
     )
   }
 
+  const handleCreateGroup = (groupName: string) => {
+    const CreateReq: GROUP.CreateReqDTO = {
+      groupName,
+    }
+
+    createGroupMutation.mutate(CreateReq, {
+      onSuccess: (res) => {
+        console.log('res: ', res)
+        alert(res.resultMessage)
+      },
+    })
+  }
+
   useEffect(() => {
     if (data) {
       setNickname(data.username)
       setEmail(data.email)
       setSelectedImage(data.profileImg ?? '')
     }
-  }, [data])
+    if (groupData) {
+      console.log('?@@@@@@@', groupData)
+    }
+  }, [data, groupData])
 
   return (
     <div className="min-h-screen flex flex-col items-start justify-start bg-white dark:bg-black text-black dark:text-white p-6">
@@ -121,9 +150,31 @@ const UserProfilePage = () => {
             <p className="text-sm text-gray-600 dark:text-gray-400">
               그룹을 만들어 회의에 초대하거나 게시물을 공유해보세요.
             </p>
-            <button className="mt-2 px-4 py-2 rounded-md bg-blue-500 text-white hover:bg-blue-700 transition">
-              그룹 만들기
-            </button>
+            <ul className="space-y-4">
+              {groupData?.groups?.map((group) => (
+                <li
+                  key={group.groupId}
+                  onClick={() => {
+                    setGroupId(group.groupId ?? 0)
+                    setOpenManageModal('group')
+                  }}
+                  className="p-4 border-b border-gray-300"
+                >
+                  <p className="font-semibold">그룹명: {group.groupName}</p>
+                  <p className="text-sm text-gray-500">
+                    역할: {group.groupRole}
+                  </p>
+                </li>
+              ))}
+            </ul>
+            {(groupData?.groups?.length ?? 0) < 123 && (
+              <button
+                onClick={() => setOpenCreateModal('group')}
+                className="mt-2 px-4 py-2 rounded-md bg-blue-500 text-white hover:bg-blue-700 transition"
+              >
+                그룹 만들기
+              </button>
+            )}
           </div>
         </div>
 
@@ -212,6 +263,19 @@ const UserProfilePage = () => {
             setShowImageSelector(false)
             updateUser(nickname, email, url)
           }}
+        />
+      )}
+      {openCreateModal && (
+        <GroupCreateModal
+          onClose={() => setOpenCreateModal(null)}
+          onSave={handleCreateGroup}
+        />
+      )}
+      {openManageModal && (
+        <GroupManageModal
+          groupId={groupId} // 선택된 그룹 ID 전달
+          onClose={() => setOpenManageModal(null)}
+          onSave={() => null}
         />
       )}
     </div>
