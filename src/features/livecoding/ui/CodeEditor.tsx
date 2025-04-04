@@ -5,26 +5,24 @@ import { dracula } from "@uiw/codemirror-theme-dracula";
 import CodeMirror from "@uiw/react-codemirror";
 import { LIVECODING } from '#/generate'
 
-
 // CodeEditor 컴포넌트
 export default function CodeEditor({ roomInfo }: { roomInfo: LIVECODING.SelectLiveCodingResDTO | null }) {
   const [code, setCode] = useState("console.log('CMC')");
   const [language, setLanguage] = useState("javascript");
   const [copyButtonText, setCopyButtonText] = useState("복사");
+  const [inviteButtonText, setInviteButtonText] = useState("초대링크 복사");
   const [isHovered, setIsHovered] = useState(false);
 
   const copyInviteLink = () => {
-    console.log('copyInviteLink>>>>>');
-    console.log('copyInviteLink>>>>>');
-    console.log('copyInviteLink>>>>>');
-    console.log('copyInviteLink>>>>>');
-    console.log(roomInfo);
     if (!roomInfo?.link) {
       return;
     }
     navigator.clipboard
       .writeText(roomInfo.link)
-      .then(() => alert("✅ 초대 링크가 복사되었습니다!"))
+      .then(() => {
+        setInviteButtonText("초대링크 복사됨!");
+        setTimeout(() => setInviteButtonText("초대링크 복사"), 2000);
+      })
       .catch(() => alert("❌ 초대 링크 복사에 실패했습니다."));
   };
 
@@ -44,7 +42,7 @@ export default function CodeEditor({ roomInfo }: { roomInfo: LIVECODING.SelectLi
             onClick={copyInviteLink}
             className="px-4 py-2 text-sm rounded-lg bg-gray-200 text-gray-800 hover:bg-blue-400 hover:text-white transition duration-300 ease-in-out"
           >
-            초대링크 복사
+            {inviteButtonText}
           </button>
           <button
             onClick={() => {/* 강퇴 동작 */}}
@@ -80,7 +78,11 @@ export default function CodeEditor({ roomInfo }: { roomInfo: LIVECODING.SelectLi
 
       {/* 코드 에디터 영역 */}
       <div className="relative flex-grow border rounded-lg shadow-lg bg-white dark:bg-gray-800 p-4">
-        <div className="relative">
+        <div
+          className="relative"
+          onMouseEnter={() => setIsHovered(true)}  // 마우스 오버 시 상태 변경
+          onMouseLeave={() => setIsHovered(false)} // 마우스 떠나면 상태 변경
+        >
           <CodeMirror
             value={code}
             height="500px"
