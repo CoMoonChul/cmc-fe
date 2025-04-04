@@ -13,6 +13,10 @@ import { compressGzip, decompressGzip } from '@/features/editor/helper'
 import { REVIEW } from '#/generate'
 import { useFormStatus } from 'react-dom'
 import { useRouter } from 'next/navigation'
+import ReviewCodeArea from './ReviewCodeArea'
+import { languageExtensions } from '@/entities/editor/types'
+import { useThemeStore } from '@/shared/store/useThemeStore'
+import ReviewTargetModal from './ReviewTargetModal'
 
 interface ReviewFormValues {
   title: string
@@ -22,23 +26,31 @@ interface ReviewFormValues {
 }
 
 const ReviewForm = ({ reviewId }: { reviewId?: string }) => {
+  const [metaModalOpen, setMetaModalOpen] = useState(false)
   const router = useRouter()
 
   // 수정/등록 분기
   const isEditMode = !!reviewId
   const { openPopup } = usePopupStore.getState()
-  const { register, handleSubmit, control, setValue, getValues } =
-    useForm<ReviewFormValues>({
-      defaultValues: {
-        title: '',
-        content: '',
-        codeContent: '',
-        codeType: 'javascript',
-      },
-    })
+  const { theme } = useThemeStore()
+  const {
+    register,
+    setValue,
+    getValues,
+    formState: { isSubmitting },
+  } = useForm<ReviewFormValues>({
+    defaultValues: {
+      title: '',
+      content: '',
+      codeContent: '',
+      codeType: 'javascript',
+    },
+  })
 
   const { pending } = useFormStatus()
   const [openModal, setOpenModal] = useState<null>(null)
+  const [code, setCode] = useState<string>('') // 코드 에디터 상태
+  const [language, setLanguage] = useState<string>('javascript') // 코드 타입 상태
   const { data } = useReviewDetailQuery(Number(reviewId), isEditMode)
   const createReviewMutation = useCreateReviewQuery()
   const updateReviewMutation = useUpdateReviewQuery(Number(reviewId))
@@ -47,61 +59,88 @@ const ReviewForm = ({ reviewId }: { reviewId?: string }) => {
   useEffect(() => {
     if (data) {
       const deCompCodeContent = decompressGzip(data.codeContent)
+
       if (!deCompCodeContent) {
         throw new Error('코드 내용을 불러오는데 실패했습니다.')
       }
 
       setValue('title', data.title)
       setValue('content', data.content)
-      setValue('codeContent', data.codeContent)
+      setValue('codeContent', deCompCodeContent)
       setValue('codeType', data.codeType)
+
+      setCode(deCompCodeContent)
+      setLanguage(data.codeType)
     }
   }, [data, setValue])
 
-  const onSubmit = () => {
-    if (!getValues('codeContent')) {
-      openPopup('코드는 1~20000자 이내로 입력해 주세요.', '')
-      return
-    }
-
+  // 모달에서 전달받은 데이터 처리
+  //   const handleFinalSubmit = (users: string[]) => {
+  const handleFinalSubmit = () => {
     const compCodeContent = compressGzip(getValues('codeContent'))
 
-    if (!compCodeContent) {
-      openPopup('코드 압축에 실패했습니다. 코드 내용을 확인하세요.', '')
-      return
+    const reqData = {
+      title: getValues('title'),
+      content: getValues('content'),
+      codeContent: compCodeContent ? compCodeContent : '',
+      codeType: getValues('codeType'),
+      //   users,
     }
+    console.log('reqData===>', reqData)
 
+    // API 호출
     if (isEditMode) {
-      const updateReq: REVIEW.UpdateReviewReqDTO = {
-        reviewId: Number(reviewId),
-        title: getValues('title'),
-        content: getValues('content'),
-        codeContent: getValues('codeContent'),
-        codeType: getValues('codeType'),
-      }
-
-      updateReviewMutation.mutate(updateReq, {
-        onSuccess(response) {
-          // 수정 성공 시 수정한한 글 상세로 이동됨
-          router.push(`review/detail/${response.reviewId}`)
+      updateReviewMutation.mutate(
+        { ...reqData, reviewId: Number(reviewId) },
+        {
+          onSuccess: (response) => router.push(`detail/${response.reviewId}`),
+          onError: () => openPopup('수정 실패', ''),
         },
-      })
+      )
     } else {
-      const createReq: REVIEW.CreateReviewReqDTO = {
-        title: getValues('title'),
-        content: getValues('content'),
-        codeContent: getValues('codeContent'),
-        codeType: getValues('codeType'),
-      }
-
-      createReviewMutation.mutate(createReq, {
-        onSuccess: (response) => {
-          // 생성 성공 시 작성한 글 상세로 이동됨
-          router.push(`review/detail/${response.reviewId}`)
-        },
+      createReviewMutation.mutate(reqData, {
+        onSuccess: (response) => router.push(`detail/${response.reviewId}`),
+        onError: () => openPopup('등록 실패', ''),
       })
     }
   }
+
+  //   const onSubmit = () => {
+  //     // if (!getValues('codeContent')) {
+  //     if (!code) {
+  //       openPopup('코드는 1~20000자 이내로 입력해 주세요.', '')
+  //       return
+  //     }
+
+  //     const compCodeContent = compressGzip(code)
+
+  //     if (!compCodeContent) {
+  //       openPopup('코드 압축에 실패했습니다. 코드 내용을 확인하세요.', '')
+  //       return
+  //     }
+
+  //     const reqData = {
+  //         title: getValues('title'),
+  //         content: getValues('content'),
+  //         codeContent: compCodeContent,
+  //         codeType: getValues('codeType'),
+  //     }
+  //     // 에디트 모드가 맞으면 수정, 아니면 등록  API 태움
+  //     isEditMode
+  //         ? updateReviewMutation.mutate(reqData, {
+  //             onSuccess: (response) => {
+  //                 router.push(`/detail/${response.reviewId}`)
+  //             },
+  //         })
+  //         : createReviewMutation.mutate(reqData, {
+  //             onSuccess: (response) => {
+  //                 router.push(`/detail/${response.reviewId}`)
+  //             },
+  //         })
+
+  //     // setCompressedCode(compCodeContent); // 압축 코드 저장
+  //     setMetaModalOpen(true); // 모달 오픈
+  //   }
 
   return (
     <div className="min-h-screen px-6 py-10 bg-white dark:bg-black text-black dark:text-white">
@@ -148,48 +187,63 @@ const ReviewForm = ({ reviewId }: { reviewId?: string }) => {
               >
                 나가기
               </button>
-
-              {isEditMode ? (
-                <button
-                  type="submit"
-                  className="px-4 py-2 rounded-md bg-blue-500 text-white hover:bg-blue-600 text-sm"
-                  disabled={pending || updateReviewMutation.isPending}
-                >
-                  수정하기
-                </button>
-              ) : (
-                <button
-                  type="submit"
-                  className="px-4 py-2 rounded-md bg-blue-500 text-white hover:bg-blue-600 text-sm"
-                  disabled={pending || createReviewMutation.isPending}
-                >
-                  등록하기
-                </button>
-              )}
+              <button
+                type="button"
+                onClick={() => {
+                  setMetaModalOpen(true)
+                }}
+                className={`px-4 py-2 rounded-md ${isSubmitting ? 'bg-gray-400' : 'bg-blue-500 hover:bg-blue-600'} text-white text-sm`}
+                disabled={isSubmitting}
+              >
+                {isEditMode ? '수정하기' : '등록하기'}
+              </button>
             </div>
           </div>
 
           <div className="w-1/2 flex flex-col min-h-0">
-            <label className="block mb-2 text-sm font-medium">
-              코드 에디터
-            </label>
+            <div className="flex justify-between items-center mb-2">
+              <label className="block mb-2 text-sm font-medium">
+                코드 에디터
+              </label>
+              {/* 언어 선택 드롭다운 */}
+              <select
+                {...register('codeType')}
+                value={language}
+                onChange={(e) => {
+                  setLanguage(e.target.value)
+                  setValue('codeType', e.target.value) // React Hook Form에 값 설정
+                }}
+                className="px-4 py-2 border border-gray-300 rounded-md bg-white dark:bg-neutral-900 dark:border-gray-700 text-sm"
+              >
+                <option value="javascript">JavaScript</option>
+                <option value="python">Python</option>
+                <option value="java">Java</option>
+              </select>
+            </div>
             <div className="flex-1 border border-gray-300 dark:border-gray-700 rounded-md overflow-hidden">
-              {/* <CodeMirror
+              <CodeMirror
                 value={code}
-                onChange={(val) => setCode(val)}
-                extensions={[javascript()]}
+                extensions={[languageExtensions[language]]}
                 theme={theme === 'light' ? undefined : dracula}
-                className="w-full h-full"
-              /> */}
+                onChange={(value) => {
+                  setCode(value) // 상태 업데이트
+                  setValue('codeContent', value) // React Hook Form에 값 설정
+                }}
+                readOnly={false}
+                basicSetup={{ highlightActiveLine: false }}
+                className="my-8 border-gray-300 dark:border-gray-700"
+                style={{ minHeight: '100%', maxHeight: '100%', width: '100%' }}
+              />
             </div>
           </div>
         </div>
       </div>
-      {/* <ReviewMetaModal
+      <ReviewTargetModal
         open={metaModalOpen}
         onClose={() => setMetaModalOpen(false)}
-        isEdit={false}
-      /> */}
+        onSubmit={handleFinalSubmit}
+        isEdit={isEditMode}
+      />
     </div>
   )
 }

@@ -3,16 +3,16 @@ import { notFound } from 'next/navigation'
 import { FC } from 'react'
 
 interface ReviewEditPageProps {
-  params: Promise<{ reviewId: string }>
+  params: Promise<{ id: string }>
 }
 
 const ReviewEditPage: FC<ReviewEditPageProps> = async ({ params }) => {
-  const { reviewId } = await params
-  if (Number.isNaN(Number(reviewId))) {
+  const { id } = await params
+  if (Number.isNaN(Number(id))) {
     notFound()
   }
 
-  return <ReviewForm reviewId={reviewId} />
+  return <ReviewForm reviewId={id} />
 }
 
 export default ReviewEditPage
