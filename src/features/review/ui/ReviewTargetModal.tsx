@@ -6,15 +6,19 @@ import { useEffect, useState } from 'react'
 const dummyGroupList: string[] = []
 const dummyUserSearchResult = ['박종일', '임현우', '고영성']
 
-export default function ReviewMetaModal({
-  open,
-  onClose,
-  isEdit = false,
-}: {
+interface Props {
   open: boolean
   onClose: () => void
-  isEdit?: boolean
-}) {
+  onSubmit: (groups: string[]) => void
+  isEdit: boolean
+}
+
+export default function ReviewTargetModal({
+  open,
+  onClose,
+  onSubmit,
+  isEdit = false,
+}: Props) {
   const [nickname, setNickname] = useState('')
   const [addedUsers, setAddedUsers] = useState<string[]>([])
   const [activeGroups, setActiveGroups] = useState<string[]>([])
@@ -109,7 +113,7 @@ export default function ReviewMetaModal({
             취소
           </button>
           <button
-            onClick={onClose}
+            onClick={() => onSubmit(activeGroups)}
             className="px-4 py-2 rounded-md text-sm bg-blue-500 text-white hover:bg-blue-600"
           >
             {isEdit ? '수정하기' : '등록하기'}

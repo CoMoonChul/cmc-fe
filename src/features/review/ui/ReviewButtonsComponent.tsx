@@ -23,7 +23,7 @@ const ReviewButtonsComponent = ({
 
   // 수정 버튼 클릭 핸들러
   const handleEdit = () => {
-    router.push(`/review/edit/${reviewId}`) // 수정 페이지로 이동
+    router.push(`/review/form/${reviewId}`) // 수정 페이지로 이동
   }
 
   // 삭제 버튼 클릭
