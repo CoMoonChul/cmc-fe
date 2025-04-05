@@ -1,14 +1,13 @@
 'use client'
 
-import { useEffect, Suspense } from 'react'
+import { Suspense, useEffect } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
-import { updateLiveCoding, verifyLiveCoding } from '@/entities/livecoding/api'
+import { verifyLiveCoding } from '@/entities/livecoding/api'
 
 const LiveCodingJoinPage = () => {
   const router = useRouter()
   const searchParams = useSearchParams()
   const token = searchParams.get('token')
-
   useEffect(() => {
     if (!token) {
       alert('❌ 유효한 초대 링크가 아닙니다.')
@@ -20,16 +19,14 @@ const LiveCodingJoinPage = () => {
       try {
         const res = await verifyLiveCoding(token)
         const verifyRoomId = res?.roomId || ''
-        await updateLiveCoding(verifyRoomId, 7, 0)
         router.replace(`/livecoding/${verifyRoomId}`)
       } catch (e) {
+        console.log(e)
         router.push('/')
       }
     }
 
-    ;(async () => {
-      await checkRoomVerification()
-    })()
+    checkRoomVerification()
   }, [token, router])
 
   return <p>초대 링크 확인 중...</p>

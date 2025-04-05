@@ -79,7 +79,7 @@ export async function updateLiveCoding(
   manualErrorHandle = false,
 ): Promise<LIVECODING.UpdateLiveCodingResDTO> {
   const response = await apiClient(
-    api.selectLiveCoding.bind(api),
+    api.updateLiveCoding.bind(api),
     manualErrorHandle,
     roomId,
     userNum,
@@ -102,6 +102,47 @@ export async function verifyLiveCoding(
     api.verifyLiveCoding.bind(api),
     manualErrorHandle,
     token,
+  )
+  return response.data
+}
+
+export async function SelectLiveCodingSnippet(
+  hostId: string,
+  manualErrorHandle = false,
+): Promise<LIVECODING.SelectLiveCodingSnippetResDTO> {
+  const response = await apiClient(
+    api.selectLiveCodingSnippet.bind(api),
+    manualErrorHandle,
+    hostId,
+  )
+  return response.data
+}
+
+export async function UpdateLiveCodingSnippet(
+  roomId: string,
+  hostId: number,
+  diff: {
+    start: number
+    length: number
+    text: string
+  },
+  language: string,
+  cursorPos: {
+    line: number
+    ch: number
+  },
+  manualErrorHandle = false,
+): Promise<LIVECODING.UpdateLiveCodingSnippetResDTO> {
+  const response = await apiClient(
+    api.updateLiveCodingSnippet.bind(api),
+    manualErrorHandle,
+    {
+      roomId,
+      hostId,
+      diff,
+      language,
+      cursorPos,
+    },
   )
   return response.data
 }

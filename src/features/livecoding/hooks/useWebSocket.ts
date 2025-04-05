@@ -23,30 +23,29 @@ export default function useWebSocket(roomId: string | undefined) {
 
     ws.onmessage = (event) => {
       try {
-        console.log('#3333333333333333');
-        console.log(event.data);
         const data = JSON.parse(event.data)
         const { liveCodingChatType, action, msg, usernum } = data
 
-        console.log('liveCodingChatTypeE');
-        console.log('liveCodingChatTypeE');
-        console.log('liveCodingChatTypeE');
-        console.log(liveCodingChatType);
-
-
-
         let formattedMessage = ''
 
-        if (liveCodingChatType === 0) { // 입퇴장 메시지
+        if (liveCodingChatType === 2) {
+          console.log('코드 업데이트 ! ')
+          return
+        }
+
+        if (liveCodingChatType === 0) {
+          // 입퇴장 메시지
 
           if (action === 2) {
-            alert("호스트와 연결이 끊겼습니다.")
-            redirect("/")
+            alert('호스트와 연결이 끊겼습니다.')
+            redirect('/')
           }
-          formattedMessage = action === 0
-            ? `${usernum} 님이 입장하셨습니다.`
-            : `${usernum} 님이 퇴장하셨습니다.`
-        } else if (liveCodingChatType === 1) { // 채팅 메시지
+          formattedMessage =
+            action === 0
+              ? `${usernum} 님이 입장하셨습니다.`
+              : `${usernum} 님이 퇴장하셨습니다.`
+        } else if (liveCodingChatType === 1) {
+          // 채팅 메시지
           formattedMessage = `${usernum}: ${msg}`
         }
 
@@ -55,15 +54,13 @@ export default function useWebSocket(roomId: string | undefined) {
         }
       } catch (error) {
         console.error('❌ WebSocket Message Parsing Error:', error)
-        redirect("/")
-
+        redirect('/')
       }
     }
 
     ws.onerror = (error) => {
       console.error('❌ WebSocket Error:', error)
-      redirect("/")
-
+      redirect('/')
     }
 
     ws.onclose = () => {
