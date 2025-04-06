@@ -107,7 +107,7 @@ export async function verifyLiveCoding(
 }
 
 export async function selectLiveCodingSnippet(
-  hostId: string,
+  hostId: number,
   manualErrorHandle = false,
 ): Promise<LIVECODING.SelectLiveCodingSnippetResDTO> {
   const response = await apiClient(
