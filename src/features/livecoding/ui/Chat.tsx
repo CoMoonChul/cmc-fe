@@ -1,17 +1,23 @@
 import { useState, useRef } from 'react'
 import { LIVECODING } from '#/generate'
-import useWebSocket from '@/features/livecoding/hooks/useWebSocket'
 
-export default function Chat({ roomInfo }: { roomInfo: LIVECODING.SelectLiveCodingResDTO | null }) {
+export default function Chat({
+  roomInfo,
+  messages,
+  sendMessage,
+}: {
+  roomInfo: LIVECODING.SelectLiveCodingResDTO | null
+  messages: string[] // messages 타입을 string[]로 명시
+  sendMessage: (message: string) => void
+}) {
   const [input, setInput] = useState('')
   const inputRef = useRef<HTMLInputElement | null>(null)
   const chatBoxRef = useRef<HTMLDivElement | null>(null)
-  const { messages, sendMessage, isConnected } = useWebSocket(roomInfo?.roomId)
 
   const handleSendMessage = () => {
     if (input.trim() !== '') {
-      sendMessage(input)  // 웹소켓을 통해 메시지 전송
-      setInput('')  // 입력값 초기화
+      sendMessage(input) // 웹소켓을 통해 메시지 전송
+      setInput('') // 입력값 초기화
     }
   }
 
@@ -35,12 +41,12 @@ export default function Chat({ roomInfo }: { roomInfo: LIVECODING.SelectLiveCodi
         className="flex-grow h-72 overflow-y-auto p-2 border rounded-lg bg-white dark:bg-gray-900"
         onClick={() => inputRef.current?.focus()}
       >
-        {messages.map((msg, idx) => (
+        {messages.map((message, index) => (
           <div
-            key={idx}
+            key={index}
             className="px-2 py-1 rounded-lg bg-blue-100 dark:bg-blue-600 mb-1 text-sm text-gray-900 dark:text-gray-100"
           >
-            {msg}
+            {message}
           </div>
         ))}
         <div ref={chatBoxRef} />
