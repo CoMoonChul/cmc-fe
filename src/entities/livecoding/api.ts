@@ -106,7 +106,7 @@ export async function verifyLiveCoding(
   return response.data
 }
 
-export async function SelectLiveCodingSnippet(
+export async function selectLiveCodingSnippet(
   hostId: string,
   manualErrorHandle = false,
 ): Promise<LIVECODING.SelectLiveCodingSnippetResDTO> {
@@ -118,7 +118,7 @@ export async function SelectLiveCodingSnippet(
   return response.data
 }
 
-export async function UpdateLiveCodingSnippet(
+export async function updateLiveCodingSnippet(
   roomId: string,
   hostId: number,
   diff: {

@@ -4,9 +4,10 @@ import { useParams, useRouter } from 'next/navigation'
 import CodeEditor from '@/features/livecoding/ui/CodeEditor'
 import Chat from '@/features/livecoding/ui/Chat'
 import { selectLiveCoding } from '@/entities/livecoding/api'
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { SelectLiveCodingResDTO } from '#/generate/livecoding/api'
 import useUserStore from '@/shared/store/useUserStore'
+import useWebSocket from '@/features/livecoding/hooks/useWebSocket'
 
 export default function LiveCodingPage() {
   const router = useRouter()
@@ -15,6 +16,10 @@ export default function LiveCodingPage() {
   const { user } = useUserStore()
 
   const [roomInfo, setRoomInfo] = useState<SelectLiveCodingResDTO | null>(null)
+  const { messages, sendMessage, isConnected } = useWebSocket(roomId)
+
+  // 메모이제이션된 메시지 배열
+  const memoizedMessages = useMemo(() => messages, [messages])
 
   const checkInvite = useCallback(
     (roomInfoRes: SelectLiveCodingResDTO) => {
@@ -60,7 +65,11 @@ export default function LiveCodingPage() {
       <div className="flex-1">
         <CodeEditor roomInfo={roomInfo} />
       </div>
-      <Chat roomInfo={roomInfo} />
+      <Chat
+        roomInfo={roomInfo}
+        messages={memoizedMessages}
+        sendMessage={sendMessage}
+      />
     </div>
   )
 }
