@@ -106,8 +106,8 @@ export async function verifyLiveCoding(
   return response.data
 }
 
-export async function SelectLiveCodingSnippet(
-  hostId: string,
+export async function selectLiveCodingSnippet(
+  hostId: number,
   manualErrorHandle = false,
 ): Promise<LIVECODING.SelectLiveCodingSnippetResDTO> {
   const response = await apiClient(
@@ -118,12 +118,12 @@ export async function SelectLiveCodingSnippet(
   return response.data
 }
 
-export async function UpdateLiveCodingSnippet(
+export async function updateLiveCodingSnippet(
+  code: string,
   roomId: string,
   hostId: number,
   diff: {
-    start: number
-    length: number
+    op: number
     text: string
   },
   language: string,
@@ -137,6 +137,7 @@ export async function UpdateLiveCodingSnippet(
     api.updateLiveCodingSnippet.bind(api),
     manualErrorHandle,
     {
+      code,
       roomId,
       hostId,
       diff,
