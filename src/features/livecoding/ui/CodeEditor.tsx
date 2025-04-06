@@ -1,9 +1,11 @@
-import { useState } from 'react'
+import { useCallback, useState } from 'react'
 import { javascript } from '@codemirror/lang-javascript'
 import { java } from '@codemirror/lang-java'
 import { dracula } from '@uiw/codemirror-theme-dracula'
 import CodeMirror from '@uiw/react-codemirror'
 import { LIVECODING } from '#/generate'
+import { debounce } from 'lodash'
+import { updateLiveCodingSnippet } from '@/entities/livecoding/api'
 
 // CodeEditor 컴포넌트
 export default function CodeEditor({
@@ -42,6 +44,43 @@ export default function CodeEditor({
       setTimeout(() => setCopyButtonText('복사'), 1000)
     })
   }
+
+  const editCode = (value: string) => {
+    setCode(value)
+    debouncedUpdate(value) // 코드 변경 시 debounce된 함수 호출
+  }
+
+  const debouncedUpdate = useCallback(
+    debounce((newCode: string) => {
+      if (!roomInfo || !snippet) return
+
+      // 변경된 코드와 관련된 diff 계산 (예시로 새 코드 길이를 기준으로)
+      const diff = {
+        start: 0, // 실제 diff 시작 위치는 코드 비교 후 계산 필요
+        length: newCode.length, // 새 코드의 길이로 임시 설정
+        text: newCode,
+      }
+
+      const cursorPos = { line: 0, ch: 0 } // 실제 커서 위치 정보를 계산하여 넣어야 함
+
+      // updateLiveCodingSnippet API 호출
+      updateLiveCodingSnippet(
+        roomInfo.roomId,
+        roomInfo.hostId,
+        diff,
+        language,
+        cursorPos,
+      )
+        .then((res) => {
+          console.log('####################')
+          console.log('코드 업데이트 성공')
+          console.log(res)
+          console.log('####################')
+        })
+        .catch((err) => console.error('코드 업데이트 실패:', err))
+    }, 500), // 500ms 지연
+    [roomInfo, language, snippet], // 의존성 배열
+  )
 
   return (
     <div className="flex flex-col">
@@ -100,7 +139,7 @@ export default function CodeEditor({
             height="500px"
             theme={dracula}
             extensions={[language === 'javascript' ? javascript() : java()]}
-            onChange={(value) => setCode(value)}
+            onChange={(value) => editCode(value)}
           />
           {isHovered && (
             <button
