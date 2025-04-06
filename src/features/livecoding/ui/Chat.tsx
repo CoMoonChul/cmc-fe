@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useState, useRef } from 'react'
 import { LIVECODING } from '#/generate'
 
 export default function Chat({
@@ -7,7 +7,7 @@ export default function Chat({
   sendMessage,
 }: {
   roomInfo: LIVECODING.SelectLiveCodingResDTO | null
-  messages: string[]
+  messages: string[] // messages 타입을 string[]로 명시
   sendMessage: (message: string) => void
 }) {
   const [input, setInput] = useState('')
@@ -41,12 +41,12 @@ export default function Chat({
         className="flex-grow h-72 overflow-y-auto p-2 border rounded-lg bg-white dark:bg-gray-900"
         onClick={() => inputRef.current?.focus()}
       >
-        {messages.map((msg, idx) => (
+        {messages.map((message, index) => (
           <div
-            key={idx}
+            key={index}
             className="px-2 py-1 rounded-lg bg-blue-100 dark:bg-blue-600 mb-1 text-sm text-gray-900 dark:text-gray-100"
           >
-            {msg}
+            {message}
           </div>
         ))}
         <div ref={chatBoxRef} />
