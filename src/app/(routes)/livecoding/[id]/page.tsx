@@ -3,9 +3,15 @@
 import { useParams, useRouter } from 'next/navigation'
 import CodeEditor from '@/features/livecoding/ui/CodeEditor'
 import Chat from '@/features/livecoding/ui/Chat'
-import { selectLiveCoding } from '@/entities/livecoding/api'
+import {
+  selectLiveCoding,
+  selectLiveCodingSnippet,
+} from '@/entities/livecoding/api'
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { SelectLiveCodingResDTO } from '#/generate/livecoding/api'
+import {
+  SelectLiveCodingResDTO,
+  SelectLiveCodingSnippetResDTO,
+} from '#/generate/livecoding/api'
 import useUserStore from '@/shared/store/useUserStore'
 import useWebSocket from '@/features/livecoding/hooks/useWebSocket'
 
@@ -17,16 +23,24 @@ export default function LiveCodingPage() {
 
   const [roomInfo, setRoomInfo] = useState<SelectLiveCodingResDTO | null>(null)
   const { messages, sendMessage, isConnected } = useWebSocket(roomId)
+  const [snippet, setSnippet] = useState<SelectLiveCodingSnippetResDTO | null>(
+    null,
+  )
 
   // 메모이제이션된 메시지 배열
   const memoizedMessages = useMemo(() => messages, [messages])
 
-  const checkInvite = useCallback(
+  const checkValid = useCallback(
     (roomInfoRes: SelectLiveCodingResDTO) => {
+      console.log('checkValid checkValid checkValid')
       if (!user?.userNum) {
         alert('유효한 사용자가 아닙니다.')
         router.push('/')
         return
+      }
+
+      if (user.userNum === roomInfoRes.hostId) {
+        // return
       }
 
       const participants = roomInfoRes.participants
@@ -45,13 +59,16 @@ export default function LiveCodingPage() {
     try {
       const roomInfoRes = await selectLiveCoding(roomId)
       setRoomInfo(roomInfoRes)
-      checkInvite(roomInfoRes)
+      checkValid(roomInfoRes) // checkValid 호출
+
+      // selectLiveCodingSnippet() 호출 후 snippet 상태에 저장
+      const snippetData = await selectLiveCodingSnippet(roomInfoRes.hostId)
+      setSnippet(snippetData)
     } catch (e) {
       console.error('❌ 방 조회 실패:', e)
       router.push('/')
     }
-  }, [roomId, checkInvite, router])
-
+  }, [roomId, checkValid, router])
   useEffect(() => {
     if (!user?.userNum) {
       console.log('userNum이 없으므로 방 정보 조회를 기다립니다.')
@@ -63,7 +80,7 @@ export default function LiveCodingPage() {
   return (
     <div className="flex h-screen">
       <div className="flex-1">
-        <CodeEditor roomInfo={roomInfo} />
+        <CodeEditor roomInfo={roomInfo} snippet={snippet} />
       </div>
       <Chat
         roomInfo={roomInfo}
