@@ -11,5 +11,7 @@ export const useGetMyGroupList = () => {
   return useQuery<GROUP.GetMyGroupListResDTO>({
     queryKey: [QUERY_KEYS.GROUP.LIST],
     queryFn: () => getMyGroupList(),
+    staleTime: 1000 * 60 * 5, // 10 min
+    gcTime: 1000 * 60 * 30, // 30 min
   })
 }
