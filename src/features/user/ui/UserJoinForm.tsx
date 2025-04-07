@@ -41,9 +41,9 @@ const UserJoinForm = () => {
       newErrors.userId = '아이디는 4~15자로 입력해주세요.'
     }
 
-    if (!/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/.test(formData.password)) {
+    if (!/^(?=.*[A-Za-z])(?=.*\d)(?=.*[\W_]).{8,}$/.test(formData.password)) {
       newErrors.password =
-        '비밀번호는 최소 6자 이상 (알파벳, 숫자 필수) 입력해주세요.'
+        '비밀번호는 최소 8자 이상 (알파벳, 숫자, 특수문자 필수) 입력해주세요.'
     }
 
     if (formData.password !== formData.confirmPassword) {
