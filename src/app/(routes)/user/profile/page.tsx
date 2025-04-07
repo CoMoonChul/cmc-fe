@@ -1,9 +1,9 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useWithdrawMutation } from '@/features/user/hooks/useWithdrawMutation'
+import { withdrawNext } from '@/entities/user/api'
 import { useUpdateUserMutation } from '@/features/user/hooks/useUpdateUserMutation'
-import { useLogout } from '@/features/user/hooks/useLogout'
+import { useLogoutMutation } from '@/features/user/hooks/useLogoutMutation'
 import { useGetMyInfoQuery } from '@/features/user/hooks/useGetMyInfoQuery'
 import { GROUP, USER } from '#/generate'
 import { useRouter } from 'next/navigation'
@@ -18,9 +18,8 @@ import GroupManageArea from '@/features/group/ui/GroupManageArea'
 
 const UserProfilePage = () => {
   const router = useRouter()
-  const withdrawMutation = useWithdrawMutation()
   const updateMutation = useUpdateUserMutation()
-  const logoutMutation = useLogout()
+  const logoutMutation = useLogoutMutation()
   const { data } = useGetMyInfoQuery()
   const { openPopup } = usePopupStore.getState()
   const [showWithdrawPopup, setShowWithdrawPopup] = useState(false)
@@ -60,16 +59,17 @@ const UserProfilePage = () => {
     })
   }
 
-  const withDraw = (password: string) => {
-    // 회원 탈퇴 시 브라우저에 존재하는 토큰을 지워야 하는 이슈가 남아있음
-    const req: USER.WithdrawReqDTO = {
-      password: password,
+  const withDraw = async (password: string) => {
+    const resWithdraw = await withdrawNext(password)
+    if (resWithdraw?.status === 200) {
+      router.replace('/')
+    } else {
+      if (resWithdraw?.message && typeof resWithdraw?.message === 'string') {
+        console.error('resWithdraw', resWithdraw)
+      } else {
+        console.error('resWithdraw', resWithdraw)
+      }
     }
-    withdrawMutation.mutate(req, {
-      onSuccess: () => {
-        router.push('/')
-      },
-    })
   }
 
   const onClickWithdraw = () => {
@@ -119,7 +119,7 @@ const UserProfilePage = () => {
               onClick={() => setShowImageSelector(true)}
               className="text-sm text-blue-500 hover:text-blue-700"
             >
-              이미지 업로드
+              이미지 선택
             </button>
             <button
               onClick={() => {
@@ -149,8 +149,10 @@ const UserProfilePage = () => {
               )}
               <button
                 onClick={() => {
-                  setEditMode({ ...editMode, nickname: !editMode.nickname })
-                  updateUser(nickname, email, selectedImage)
+                  if (editMode.nickname) {
+                    updateUser(nickname, email, selectedImage)
+                  }
+                  setEditMode((prev) => ({ ...prev, nickname: !prev.nickname }))
                 }}
                 className="text-sm text-blue-500 hover:text-blue-700"
               >
@@ -175,8 +177,10 @@ const UserProfilePage = () => {
               )}
               <button
                 onClick={() => {
-                  setEditMode({ ...editMode, email: !editMode.email })
-                  updateUser(nickname, email, selectedImage)
+                  if (editMode.email) {
+                    updateUser(nickname, email, selectedImage)
+                  }
+                  setEditMode((prev) => ({ ...prev, email: !prev.email }))
                 }}
                 className="text-sm text-blue-500 hover:text-blue-700"
               >

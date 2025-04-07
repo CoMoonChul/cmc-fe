@@ -35,7 +35,6 @@ const UserLoginForm = () => {
     }
 
     const resLogin = await loginNext(formData.userId, formData.password)
-
     if (resLogin?.status === 200) {
       setUser({
         userNum: resLogin?.userNum,

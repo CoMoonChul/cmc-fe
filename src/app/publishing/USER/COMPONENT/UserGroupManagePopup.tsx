@@ -41,10 +41,8 @@ const UserGroupManagePopup = () => {
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black/50">
       <div className="w-[500px] bg-white dark:bg-[#1E1E1E] p-6 rounded-lg shadow-lg">
-        {/* 그룹 정보 */}
         <h2 className="text-xl font-semibold text-center mb-4">그룹 정보</h2>
 
-        {/* 멤버 리스트 */}
         <div className="space-y-3 border-t border-gray-300 dark:border-gray-600 pt-4">
           {members.map((member) => (
             <div
@@ -52,11 +50,9 @@ const UserGroupManagePopup = () => {
               className="flex items-center justify-between bg-gray-100 dark:bg-gray-800 p-3 rounded-md"
             >
               <div className="flex items-center gap-4">
-                {/* 멤버 이미지 */}
                 <div className="w-10 h-10 bg-gray-300 dark:bg-gray-700 rounded-full flex items-center justify-center text-sm">
                   {member.nickname.charAt(0).toUpperCase()}
                 </div>
-                {/* 멤버 정보 */}
                 <div>
                   <p className="font-medium">{member.nickname}</p>
                   <p className="text-xs text-gray-500 dark:text-gray-400">
@@ -64,7 +60,6 @@ const UserGroupManagePopup = () => {
                   </p>
                 </div>
               </div>
-              {/* 멤버 내보내기 버튼 */}
               <button
                 onClick={() => handleRemoveMember(member.id, member.nickname)}
                 className="text-red-500 hover:text-red-700 dark:hover:text-red-400 transition"
@@ -75,7 +70,6 @@ const UserGroupManagePopup = () => {
           ))}
         </div>
 
-        {/* 초대 기능 (5명 이상이면 숨김) */}
         {members.length < 5 && (
           <div className="mt-6 flex items-center gap-2">
             <input
@@ -94,7 +88,6 @@ const UserGroupManagePopup = () => {
           </div>
         )}
 
-        {/* 닫기 버튼 */}
         <div className="mt-4 text-right">
           <button className="px-4 py-2 bg-gray-300 dark:bg-gray-700 rounded-md hover:bg-gray-400 dark:hover:bg-gray-600 transition">
             닫기
@@ -102,7 +95,6 @@ const UserGroupManagePopup = () => {
         </div>
       </div>
 
-      {/* 멤버 내보내기 확인 팝업 */}
       {showConfirm && (
         <div className="fixed inset-0 flex items-center justify-center bg-black/50">
           <div className="bg-white dark:bg-[#1E1E1E] p-6 rounded-lg shadow-lg">

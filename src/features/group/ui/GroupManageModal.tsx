@@ -96,21 +96,25 @@ const GroupManageModal = ({ groupId, onClose }: GroupManageModalProps) => {
           )}
         </div>
 
-        <div className="mt-6 space-y-4">
-          <input
-            type="text"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            className="w-full p-3 border rounded-md dark:bg-gray-800 dark:border-gray-600 focus:ring-2 focus:ring-blue-500 border-gray-300"
-            placeholder="초대할 사용자의 닉네임을 입력하세요"
-            onKeyDown={(e) => {
-              if (e.key === 'Enter') {
-                e.preventDefault()
-                handleInvite()
-              }
-            }}
-          />
-        </div>
+        {memberData.members.length < 5 ? (
+          <div className="mt-6 space-y-4">
+            <input
+              type="text"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              className="w-full p-3 border rounded-md dark:bg-gray-800 dark:border-gray-600 focus:ring-2 focus:ring-blue-500 border-gray-300"
+              placeholder="초대할 사용자의 닉네임을 입력하세요"
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  e.preventDefault()
+                  handleInvite()
+                }
+              }}
+            />
+          </div>
+        ) : (
+          <></>
+        )}
 
         <div className="mt-4 flex justify-center">
           <button
@@ -119,12 +123,16 @@ const GroupManageModal = ({ groupId, onClose }: GroupManageModalProps) => {
           >
             취소
           </button>
-          <button
-            className="bg-blue-500 hover:bg-blue-700 text-white px-4 py-2 rounded"
-            onClick={handleInvite}
-          >
-            초대하기
-          </button>
+          {memberData.members.length < 5 ? (
+            <button
+              className="bg-blue-500 hover:bg-blue-700 text-white px-4 py-2 rounded"
+              onClick={handleInvite}
+            >
+              초대하기
+            </button>
+          ) : (
+            <></>
+          )}
         </div>
       </div>
     </div>

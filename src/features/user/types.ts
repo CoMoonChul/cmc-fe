@@ -6,6 +6,7 @@ export const API_PATH = {
   LOGOUT: '/user/logout',
   REFRESH: '/user/refresh',
   FINDACCOUNT: '/user/findAccount',
+  WITHDRAW: '/user/withdraw',
 }
 
 export const API_ENDPOINTS = {
@@ -14,6 +15,7 @@ export const API_ENDPOINTS = {
   LOGOUT: `${BACKEND_URL + API_PATH.LOGOUT}`,
   REFRESH: `${BACKEND_URL + API_PATH.REFRESH}`,
   FINDACCOUNT: `${BACKEND_URL + API_PATH.FINDACCOUNT}`,
+  WITHDRAW: `${BACKEND_URL + API_PATH.WITHDRAW}`,
 }
 
 export const QUERY_KEYS = {
