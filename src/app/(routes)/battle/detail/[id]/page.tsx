@@ -50,7 +50,6 @@ const BattleDetailPage: FC<BattleDetailPageProps> = async ({ params }) => {
     <div className="min-h-screen p-6 bg-white text-black dark:bg-black dark:text-white">
       <div className="flex justify-between items-start mb-4">
         <h1 className="text-2xl font-bold">{title}</h1>
-        <BattleControlArea battleId={battleId} auditerNum={userNum} />
       </div>
 
       <div className="flex items-center justify-between space-x-4 mb-4">
@@ -64,7 +63,6 @@ const BattleDetailPage: FC<BattleDetailPageProps> = async ({ params }) => {
               className="object-cover"
             />
           </div>
-
           <div className="flex flex-col justify-center">
             <p className="text-sm font-medium">{username}</p>
             <p className="text-xs text-gray-500 dark:text-gray-400">
@@ -73,9 +71,12 @@ const BattleDetailPage: FC<BattleDetailPageProps> = async ({ params }) => {
           </div>
         </div>
 
-        <p className="text-sm text-gray-600 dark:text-gray-400">
-          조회수: {viewCount ?? 1}회
-        </p>
+        <div className="flex items-center space-x-4 text-sm">
+          <div className="flex items-center space-x-1">
+            <span>조회수 : {viewCount ?? 1}회</span>
+          </div>
+          <BattleControlArea battleId={battleId} auditerNum={userNum} />
+        </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-[1fr_auto_1fr] gap-4 items-center">

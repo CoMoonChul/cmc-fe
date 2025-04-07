@@ -8,6 +8,7 @@ import CommentSection from '@/features/comment/ui/CommentSection'
 import { COMMENT_TARGET } from '@/features/comment/types'
 import ReviewButtonsComponent from '@/features/review/ui/ReviewButtonsComponent'
 import Link from 'next/link'
+import Image from 'next/image'
 
 interface ReviewDetailPageProps {
   params: Promise<{ id: string }>
@@ -24,32 +25,33 @@ const ReviewDetailPage: FC<ReviewDetailPageProps> = async ({ params }) => {
     title,
     username,
     userNum,
+    userImg,
     content,
     codeContent,
     codeType,
     viewCount,
-    likeCount,
     createdAt,
-    updatedAt,
   } = await selectReview(Number(id))
 
   if (!reviewId) {
-    throw new Error('리뷰 조회에 실패했습니다!!')
+    throw new Error('리뷰 조회에 실패했습니다.')
   }
 
   return (
     <div className="min-h-screen p-6 bg-white text-black dark:bg-black dark:text-white">
-      {/* 리뷰 제목 */}
       <h1 className="text-2xl font-bold mb-4">{title}</h1>
-
-      {/* 작성 정보 & 부가 정보 */}
       <div className="flex justify-between text-sm text-gray-600 dark:text-gray-400 mb-4">
         <div className="flex items-center space-x-2">
-          <img
-            src="/profile-placeholder.png"
-            alt="작성자"
-            className="w-8 h-8 rounded-full"
-          />
+          {userImg && (
+            <div className="w-6 h-6 relative rounded-full overflow-hidden">
+              <Image
+                src={userImg}
+                alt={`${username}의 프로필 이미지`}
+                fill
+                className="object-cover"
+              />
+            </div>
+          )}
           <span className="font-medium">{username}</span>
           <span>|</span>
           <span>{createdAt && getFormattedCreatedAt(createdAt)}</span>
@@ -63,7 +65,6 @@ const ReviewDetailPage: FC<ReviewDetailPageProps> = async ({ params }) => {
           <ReviewButtonsComponent reviewId={reviewId} userNum={userNum} />
         </div>
       </div>
-
       <div className="bg-gray-100 dark:bg-gray-900 p-4 rounded-lg text-gray-700 dark:text-gray-300 mb-4">
         {content}
       </div>

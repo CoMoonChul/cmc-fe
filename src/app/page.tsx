@@ -4,7 +4,6 @@ import ReviewListCard from '@/features/review/ui/ReviewListCard'
 import { useEffect, useState, useMemo } from 'react'
 import { useInView } from 'react-intersection-observer'
 import { useRouter } from 'next/navigation'
-import { filter } from 'lodash'
 import ReviewListDropDown from '@/features/review/ui/ReviewListDropDown'
 import { useAuth } from '@/shared/hook/useAuth'
 import { usePopupStore } from '@/shared/store/usePopupStore'
@@ -30,6 +29,7 @@ const ReviewListPage = () => {
   const checkAuth = useAuth()
   const { openPopup } = usePopupStore.getState()
   const [selectedFilter, setSelectedFilter] = useState<FilterType>('최신')
+  const [dropdownOpen, setDropdownOpen] = useState(false)
 
   const searchCondition = useMemo(
     () => SEARCH_CONDITIONS[selectedFilter],
@@ -62,9 +62,6 @@ const ReviewListPage = () => {
     }
   }, [inView, hasNextPage, fetchNextPage])
 
-  const [myFilter, setMyFilter] = useState<string | null>(null)
-  const [showMyDropdown, setShowMyDropdown] = useState(false)
-
   return (
     <div className="min-h-screen p-6 bg-white text-black dark:bg-black dark:text-white">
       <div className="flex justify-between items-center mb-4">
@@ -74,30 +71,32 @@ const ReviewListPage = () => {
         >
           리뷰 작성하기
         </button>
-        <div className="flex items-center gap-2 border border-gray-300 rounded-lg dark:border-gray-600 overflow-visible">
-          {/* 최신순, 인기순 */}
+        <div className="flex items-center border border-gray-300 dark:border-gray-600 rounded-lg overflow-visible">
           {FILTERS.slice(0, 2).map((filter) => (
             <button
               key={filter}
-              onClick={() => setSelectedFilter(filter)}
-              className={`px-4 py-2 ${
+              onClick={() => {
+                setSelectedFilter(filter)
+                setDropdownOpen(false)
+              }}
+              className={`px-4 py-2 text-sm font-medium transition-colors ${
                 selectedFilter === filter
-                  ? 'bg-gray-200 dark:hover:bg-gray-700'
-                  : 'hover:bg-gray-200 dark:hover:bg-gray-700'
+                  ? 'bg-gray-200 dark:bg-gray-700 text-black dark:text-white'
+                  : 'hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-300'
               }`}
             >
               {filter}
             </button>
           ))}
-          {/* My 드롭다운 */}
           <ReviewListDropDown
             selectedFilter={selectedFilter}
             setSelectedFilter={setSelectedFilter}
+            dropdownOpen={dropdownOpen}
+            setDropdownOpen={setDropdownOpen}
           />
         </div>
       </div>
 
-      {/* 리뷰 리스트 */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {data?.pages.map((page) =>
           page.reviewList?.map((review, index) => (
