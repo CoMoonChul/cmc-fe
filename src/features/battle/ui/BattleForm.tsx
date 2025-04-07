@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useForm, Controller } from 'react-hook-form'
 import { useBattleDetailQuery } from '@/features/battle/hooks/useBattleDetailQuery'
-import { useCreateBattleQuery } from '@/features/battle/hooks/useCreateBattleQuery'
+import { useCreateBattleMutation } from '@/features/battle/hooks/useCreateBattleMutation'
 import { useUpdateBattleQuery } from '@/features/battle/hooks/useUpdateBattleQuery'
 import { useFormStatus } from 'react-dom'
 import CodeEditorModal from '@/features/battle/ui/CodeEditorModal'
@@ -39,7 +39,7 @@ const BattleForm = ({ id }: { id?: string }) => {
   const { pending } = useFormStatus()
   const [openModal, setOpenModal] = useState<'left' | 'right' | null>(null)
   const { data } = useBattleDetailQuery(Number(id), isEditMode)
-  const createBattleMutation = useCreateBattleQuery()
+  const createBattleMutation = useCreateBattleMutation()
   const updateBattleMutation = useUpdateBattleQuery(Number(id))
 
   useEffect(() => {

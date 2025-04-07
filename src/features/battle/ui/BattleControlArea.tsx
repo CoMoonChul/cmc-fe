@@ -33,19 +33,13 @@ const BattleControlArea = ({
   }
 
   return (
-    <div className="flex gap-2">
-      <Link
-        href={`/battle/form/${battleId}`}
-        className="px-4 py-2 bg-gray-200 text-sm rounded-md hover:bg-gray-300 dark:bg-gray-700 dark:text-white dark:hover:bg-gray-600 transition"
-      >
-        수정하기
+    <div className="flex space-x-4">
+      <Link href={`/battle/form/${battleId}`} className="text-green-500">
+        ✏ 수정하기
       </Link>
-      <div
-        onClick={onClickDeleteBtn}
-        className="px-4 py-2 bg-gray-200 text-sm rounded-md hover:bg-gray-300 dark:bg-gray-700 dark:text-white dark:hover:bg-gray-600 transition"
-      >
-        삭제하기
-      </div>
+      <button onClick={onClickDeleteBtn} className="text-red-500">
+        ❌ 삭제하기
+      </button>
     </div>
   )
 }

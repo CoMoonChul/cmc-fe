@@ -1,19 +1,20 @@
 import { useRouter } from 'next/navigation'
-import { formatNumberWithCommas } from '@/shared/lib/number'
 import { getFormattedCreatedAt } from '@/shared/lib/date'
+import Image from 'next/image'
 
 const ReviewListCard = ({
   reviewId,
   username,
+  userImg,
   title,
   content,
   viewCount,
   likeCount,
   createdAt,
-  updatedAt,
 }: {
   reviewId: number
   username: string
+  userImg: string
   title: string
   content: string
   viewCount?: number
@@ -45,13 +46,19 @@ const ReviewListCard = ({
           </span>
         </div>
       </div>
-      {/* 내용 */}
       <p className="text-gray-700 dark:text-gray-300 mt-2 line-clamp-2">
         {content}
       </p>
 
-      {/* 작성자 & 작성일 */}
       <div className="flex justify-between items-center mt-4 text-sm text-gray-600 dark:text-gray-400">
+        <Image
+          src={userImg}
+          alt="프로필"
+          width={24}
+          height={24}
+          sizes="24px"
+          className="object-cover"
+        />
         <span>@{username}</span>
         <span>{createdAt && `${getFormattedCreatedAt(createdAt)}`}</span>
       </div>
