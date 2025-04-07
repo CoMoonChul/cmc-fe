@@ -35,7 +35,6 @@ const ConfirmWithdrawalPopup = ({
           확인을 누르시면 탈퇴가 진행됩니다.
         </p>
 
-        {/* 비밀번호 입력 */}
         <input
           type="password"
           value={password}
@@ -44,7 +43,6 @@ const ConfirmWithdrawalPopup = ({
           className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-md mb-4 bg-white dark:bg-gray-800 text-black dark:text-white"
         />
 
-        {/* 버튼 영역 */}
         <div className="flex justify-center gap-3 mt-4">
           <button
             onClick={onCancel}

@@ -55,11 +55,9 @@ const CodeEditorModal = ({
         className="bg-white dark:bg-gray-900 p-6 rounded-lg w-[90vw] h-[85vh] max-w-5xl shadow-lg flex flex-col"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* 상단 바 - 제목 & 언어 선택 */}
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-lg font-bold">코드 수정</h2>
 
-          {/* 언어 선택 드롭다운 */}
           <select
             value={language}
             onChange={(e) =>
@@ -73,7 +71,6 @@ const CodeEditorModal = ({
           </select>
         </div>
 
-        {/* 코드 편집 영역 */}
         <div className="flex-1 overflow-auto border border-gray-300 dark:border-gray-700 rounded-md">
           <CodeMirror
             value={code}
@@ -86,7 +83,6 @@ const CodeEditorModal = ({
           />
         </div>
 
-        {/* 하단 버튼 */}
         <div className="mt-4 flex justify-end">
           <button
             className="bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded mr-2"

@@ -49,12 +49,32 @@ export async function loginNext(userId: string, password: string) {
 export async function logoutNext() {
   const response = await fetch('/api/auth/logout', {
     method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
     credentials: 'include',
   })
 
   if (!response.ok) {
     throw new Error('로그아웃 실패')
   }
+}
+
+/**
+ * 회원탈퇴 - 넥스트 회원탈퇴 라우터를 통한 처리
+ * @returns 회원탈퇴 결과
+ */
+export async function withdrawNext(password: string) {
+  const response = await fetch('/api/auth/withdraw', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ password }),
+    credentials: 'include',
+  })
+
+  if (!response.ok) {
+    throw new Error('회원탈퇴 실패')
+  }
+
+  return await response.json()
 }
 
 /**

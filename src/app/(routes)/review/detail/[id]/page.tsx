@@ -64,19 +64,16 @@ const ReviewDetailPage: FC<ReviewDetailPageProps> = async ({ params }) => {
         </div>
       </div>
 
-      {/* 리뷰 내용 */}
       <div className="bg-gray-100 dark:bg-gray-900 p-4 rounded-lg text-gray-700 dark:text-gray-300 mb-4">
         {content}
       </div>
 
-      {/* 코드 에디터 */}
       <ReviewCodeArea
         reviewId={reviewId}
         code={codeContent}
         language={codeType}
       />
       <hr className="my-8 border-gray-300 dark:border-gray-700" />
-      {/* 댓글 영역 */}
       <div className="mt-6 bg-gray-100 dark:bg-gray-900 p-4 rounded-lg">
         <CommentSection id={reviewId} commentTarget={COMMENT_TARGET.REVIEW} />
       </div>

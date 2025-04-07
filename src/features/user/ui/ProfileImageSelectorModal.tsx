@@ -32,7 +32,7 @@ const ProfileImageSelectorModal = ({
       onClick={onClose}
     >
       <div
-        className="bg-white dark:bg-gray-900 p-6 rounded-lg w-[90vw] max-w-4xl shadow-lg flex flex-col"
+        className="bg-white dark:bg-gray-900 p-6 rounded-lg w-[90vw] max-w-lg shadow-lg flex flex-col"
         onClick={(e) => e.stopPropagation()}
       >
         <h2 className="text-lg font-bold text-center mb-4 text-gray-800 dark:text-white">
@@ -40,8 +40,8 @@ const ProfileImageSelectorModal = ({
         </h2>
 
         <div
-          className="flex-1 overflow-y-auto grid grid-cols-3 gap-4 pr-2"
-          style={{ maxHeight: '60vh' }}
+          className="flex-1 overflow-y-auto grid grid-cols-3 gap-4"
+          style={{ maxHeight: '50vh' }}
         >
           {profileImageUrls.map((url, idx) => (
             <button
@@ -50,25 +50,27 @@ const ProfileImageSelectorModal = ({
                 onSelect(url)
                 onClose()
               }}
-              className="rounded-full overflow-hidden border border-gray-300 dark:border-gray-700 hover:ring-2 hover:ring-blue-500 transition w-20 h-20 mx-auto"
+              className="rounded-full overflow-hidden border border-gray-300 dark:border-gray-700 hover:ring-2 hover:ring-blue-500 transition w-24 h-24 mx-auto"
             >
               <Image
                 src={url}
                 alt={`프로필 ${idx + 1}`}
-                width={80}
-                height={80}
+                width={96}
+                height={96}
                 className="object-cover rounded-full"
               />
             </button>
           ))}
         </div>
 
-        <button
-          className="mt-4 bg-gray-500 hover:bg-gray-600 text-white px-4 py-2 rounded self-end"
-          onClick={onClose}
-        >
-          닫기
-        </button>
+        <div className="flex justify-center mt-4">
+          <button
+            className="bg-gray-500 hover:bg-gray-600 text-white px-6 py-2 rounded"
+            onClick={onClose}
+          >
+            닫기
+          </button>
+        </div>
       </div>
     </div>
   )
