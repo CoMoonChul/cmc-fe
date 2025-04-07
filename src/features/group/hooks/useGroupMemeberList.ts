@@ -11,7 +11,7 @@ export const useGetGroupMemberList = (
   options?: Partial<UseQueryOptions<GROUP.GetGroupMemberListResDTO, Error>>,
 ) => {
   return useQuery<GROUP.GetGroupMemberListResDTO, Error>({
-    queryKey: [QUERY_KEYS.GROUP.DETAIL],
+    queryKey: [QUERY_KEYS.GROUP.DETAIL, groupId],
     queryFn: () => getGroupMemberList(groupId),
     ...options,
   })
