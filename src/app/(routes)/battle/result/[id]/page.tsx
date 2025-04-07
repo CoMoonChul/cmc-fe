@@ -9,6 +9,7 @@ import BattleResultBar from '@/features/battle/ui/BattleResultBar'
 import CommentSection from '@/features/comment/ui/CommentSection'
 import { decompressGzip } from '@/features/editor/helper'
 import { usePopupStore } from '@/shared/store/usePopupStore'
+import Image from 'next/image'
 
 const BattleResultPage = () => {
   const { id: queryBattleId } = useParams()
@@ -58,14 +59,27 @@ const BattleResultPage = () => {
       <h1 className="text-2xl font-bold mb-4">{data.title}</h1>
 
       <div className="flex items-center justify-between space-x-4 mb-4">
-        <div>
-          <p className="text-sm font-medium">{data.username}</p>
-          <p className="text-xs text-gray-500 dark:text-gray-400">
-            {data.createdAt ? getFormattedCreatedAt(data.createdAt) : ''}
-          </p>
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-full overflow-hidden bg-gray-300 dark:bg-gray-700 relative">
+            <Image
+              src={data.userImg}
+              alt="프로필 이미지"
+              fill
+              sizes="24px"
+              className="object-cover"
+            />
+          </div>
+
+          <div className="flex flex-col justify-center">
+            <p className="text-sm font-medium">{data.username}</p>
+            <p className="text-xs text-gray-500 dark:text-gray-400">
+              {data.createdAt && getFormattedCreatedAt(data.createdAt)}
+            </p>
+          </div>
         </div>
+
         <p className="text-sm text-gray-600 dark:text-gray-400">
-          조회수: {data.viewCount}회
+          조회수: {data.viewCount ?? 1}회
         </p>
       </div>
 

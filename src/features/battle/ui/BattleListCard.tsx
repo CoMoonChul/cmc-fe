@@ -1,17 +1,17 @@
 import { useRouter } from 'next/navigation'
 import { formatNumberWithCommas } from '@/shared/lib/number'
 import { getFormattedCreatedAt } from '@/shared/lib/date'
+import Image from 'next/image'
 
 const BattleListCard = ({
   battleId,
   title,
   content,
-  endTime,
   leftVote,
   rightVote,
   createdAt,
-  updatedAt,
   username,
+  userImg,
 }: {
   battleId: number
   title: string
@@ -22,6 +22,7 @@ const BattleListCard = ({
   createdAt?: string
   updatedAt?: string
   username: string
+  userImg: string
 }) => {
   const isVoted = leftVote + rightVote > 0
   const leftVotePercentage = isVoted
@@ -79,16 +80,33 @@ const BattleListCard = ({
               총 {formatNumberWithCommas(leftVote + rightVote)}명이
               투표했습니다.
             </p>
-            <div className="flex justify-between mt-3">
+            <div className="flex items-center justify-between mt-3">
               <button
                 onClick={onClickGoResult}
-                className="px-3 py-1 text-sm bg-blue-500 text-white rounded-md hover:bg-blue-600 transition"
+                className="px-3 py-1 text-sm bg-blue-500 text-white rounded-md hover:bg-blue-600 transition flex-shrink-0"
               >
                 결과 보기
               </button>
-              <div className="px-3 py-1 text-sm text-gray-500 dark:text-gray-400">
-                {username}
-                {createdAt && `, ${getFormattedCreatedAt(createdAt)}`}
+
+              <div className="flex items-center gap-2 px-3 py-1 text-sm text-gray-500 dark:text-gray-400 overflow-hidden">
+                <div className="w-6 h-6 rounded-full overflow-hidden bg-gray-300 dark:bg-gray-700 relative flex-shrink-0">
+                  <Image
+                    src={userImg}
+                    alt="프로필"
+                    width={24}
+                    height={24}
+                    sizes="24px"
+                    className="object-cover"
+                  />
+                </div>
+                <div className="truncate text-end">
+                  <span className="block">{username}</span>
+                  {createdAt && (
+                    <span className="block text-xs text-gray-400 dark:text-gray-500">
+                      {getFormattedCreatedAt(createdAt)}
+                    </span>
+                  )}
+                </div>
               </div>
             </div>
           </div>

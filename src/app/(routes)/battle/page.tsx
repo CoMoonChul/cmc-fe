@@ -1,4 +1,5 @@
 'use client'
+
 import { useBattleListInfiniteQuery } from '@/features/battle/hooks/useBattleListInfiniteQuery'
 import BattleListDropDown from '@/features/battle/ui/BattleListDropDown'
 import BattleListCard from '@/features/battle/ui/BattleListCard'
@@ -21,6 +22,7 @@ const BattleListPage = () => {
   const router = useRouter()
   const checkAuth = useAuth()
   const [selectedFilter, setSelectedFilter] = useState<FilterType>('최신')
+  const [dropdownOpen, setDropdownOpen] = useState(false)
 
   const { openPopup } = usePopupStore.getState()
   const searchCondition = useMemo(
@@ -63,23 +65,30 @@ const BattleListPage = () => {
         >
           배틀 작성하기
         </button>
-        <div className="flex items-center gap-2 border border-gray-300 rounded-lg dark:border-gray-600 overflow-visible">
+
+        <div className="flex items-center border border-gray-300 dark:border-gray-600 rounded-lg overflow-visible">
           {FILTERS.slice(0, 2).map((filter) => (
             <button
               key={filter}
-              onClick={() => setSelectedFilter(filter)}
-              className={`px-4 py-2 ${
+              onClick={() => {
+                setSelectedFilter(filter)
+                setDropdownOpen(false)
+              }}
+              className={`px-4 py-2 text-sm font-medium transition-colors ${
                 selectedFilter === filter
-                  ? 'bg-gray-300 dark:bg-gray-700 font-bold'
-                  : 'hover:bg-gray-200 dark:hover:bg-gray-700'
+                  ? 'bg-gray-200 dark:bg-gray-700 text-black dark:text-white'
+                  : 'hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-300'
               }`}
             >
               {filter}
             </button>
           ))}
+
           <BattleListDropDown
             selectedFilter={selectedFilter}
             setSelectedFilter={setSelectedFilter}
+            dropdownOpen={dropdownOpen}
+            setDropdownOpen={setDropdownOpen}
           />
         </div>
       </div>
