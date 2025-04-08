@@ -35,28 +35,38 @@ export default function CodeEditor({
   useEffect(() => {
     useWebSocketStore.setState({
       applyDiff: (diff) => {
-        if (!editorRef.current?.view) return;
+        if (!editorRef.current?.view) return
 
-        const parsedDiff = typeof diff === 'string' ? JSON.parse(JSON.parse(diff)) : diff;
-        const dmp = new DiffMatchPatch();
-        const currentText = editorRef.current.view.state.doc.toString();
-        const patches = dmp.patch_make(currentText, parsedDiff.map((d: { op: any; text: any }) => [d.op, d.text]));
-        const [newText] = dmp.patch_apply(patches, currentText);
+        // ✅ 2중 JSON 파싱 (WebSocket 특성상)
+        const parsed = typeof diff === 'string' ? JSON.parse(JSON.parse(diff)) : diff
+        const diffArray = parsed.diff
+        const baseText = parsed.base
 
-        isRemoteUpdateRef.current = true; // ✨ remote update 시작
+        const dmp = new DiffMatchPatch()
+        const patches = dmp.patch_make(
+          baseText,
+          diffArray.map((d: { op: any; text: any }) => [d.op, d.text]),
+        )
+
+        const [newText] = dmp.patch_apply(patches, baseText)
+
+        isRemoteUpdateRef.current = true
         editorRef.current.view.dispatch({
           changes: {
             from: 0,
-            to: currentText.length,
+            to: editorRef.current.view.state.doc.length,
             insert: newText,
           },
-        });
-        setCode(newText);
-        console.log('✅ diff 적용 완료');
-      },
-    });
+        })
+        setCode(newText)
+        isRemoteUpdateRef.current = false
 
+        console.log('✅ diff + base 적용 완료')
+      },
+    })
   }, [])
+
+
 
 
 
@@ -92,11 +102,12 @@ export default function CodeEditor({
     debounce((newCode: string) => {
       if (!roomInfo || !snippet) return
       const dmp = new DiffMatchPatch()
-      const diffs = dmp.diff_main(snippet.livecode || '', newCode)
+      const base = snippet.livecode || ''
+      const diffs = dmp.diff_main(base, newCode)
       dmp.diff_cleanupSemantic(diffs)
 
       const diff = diffs.map(([op, text]: [number, string]) => ({ op, text }))
-      const cursorPos = { line: 0, ch: 0 } // TODO: 실제 커서 위치 계산 가능하면 대체
+      const cursorPos = { line: 0, ch: 0 }
 
       updateLiveCodingSnippet(
         roomInfo.roomId,
@@ -105,11 +116,10 @@ export default function CodeEditor({
         language,
         cursorPos,
       )
-        .then((res) => console.log('✅ 코드 업데이트 성공', res))
-        .catch((err) => console.error('❌ 코드 업데이트 실패:', err))
     }, 500),
     [roomInfo, language, snippet],
   )
+
 
   return (
     <div className="flex flex-col">
