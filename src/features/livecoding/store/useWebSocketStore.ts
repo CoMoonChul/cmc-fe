@@ -19,7 +19,7 @@ const useWebSocketStore = create<WebSocketStore>((set, get) => ({
 
     socket.onopen = () => {
       console.log('✅ WebSocket Connected')
-      set({ isConnected: true, socket })
+      set({ isConnected: true, socket, messages: [] }) // ✅ 메시지 초기화
     }
 
     socket.onclose = () => {
@@ -91,5 +91,6 @@ const useWebSocketStore = create<WebSocketStore>((set, get) => ({
     }
   },
 }))
+
 
 export default useWebSocketStore
