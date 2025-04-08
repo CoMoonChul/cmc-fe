@@ -6,6 +6,7 @@ import CodeMirror from '@uiw/react-codemirror'
 import { LIVECODING } from '#/generate'
 import { debounce } from 'lodash'
 import { updateLiveCodingSnippet } from '@/entities/livecoding/api'
+const DiffMatchPatch = require('diff-match-patch');
 
 // CodeEditor 컴포넌트
 export default function CodeEditor({
@@ -54,12 +55,18 @@ export default function CodeEditor({
     debounce((newCode: string) => {
       if (!roomInfo || !snippet) return
 
-      // 변경된 코드와 관련된 diff 계산 (예시로 새 코드 길이를 기준으로)
-      const diff = {
-        start: 0, // 실제 diff 시작 위치는 코드 비교 후 계산 필요
-        length: newCode.length, // 새 코드의 길이로 임시 설정
-        text: newCode,
-      }
+      // diff-match-patch 인스턴스 생성
+      const dmp = new DiffMatchPatch()
+
+      // 기존 코드와 새 코드의 diff 계산
+      const diffs = dmp.diff_main(snippet?.livecode || '', newCode)
+      dmp.diff_cleanupSemantic(diffs) // 불필요한 공백 제거
+
+      // @ts-ignore
+      const diff = diffs.map(([op, text]) => ({
+        op,
+        text,
+      }))
 
       const cursorPos = { line: 0, ch: 0 } // 실제 커서 위치 정보를 계산하여 넣어야 함
 

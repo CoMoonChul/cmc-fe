@@ -8,6 +8,7 @@ interface WebSocketStore {
   connect: (roomId: string) => void
   sendMessage: (message: string) => void
   disconnect: () => void
+  applyDiff: (diff: any) => void // diff 적용 함수 추가
 }
 
 const useWebSocketStore = create<WebSocketStore>((set, get) => ({
@@ -35,30 +36,32 @@ const useWebSocketStore = create<WebSocketStore>((set, get) => ({
     socket.onmessage = (event) => {
       try {
         const data = JSON.parse(event.data)
-        const { liveCodingChatType, action, msg, usernum } = data
+        const { liveCodingChatType, action, msg, usernum, diff } = data
 
-        let formattedMessage = ''
+        // diff가 있을 경우 applyDiff 호출
+        if (diff) {
+          get().applyDiff(diff)
+        }
 
-        // 코드 업데이트 메시지 (무시)
+        // 기타 메시지 처리
         if (liveCodingChatType === 2) {
           console.log('코드 업데이트 !')
           return
         }
 
+        let formattedMessage = ''
+
         if (liveCodingChatType === 0) {
-          // 호스트 연결 종료 처리
           if (action === 2) {
             alert('호스트와 연결이 끊겼습니다.')
             redirect('/')
             return
           }
-
           formattedMessage =
             action === 0
               ? `${usernum} 님이 입장하셨습니다.`
               : `${usernum} 님이 퇴장하셨습니다.`
         } else if (liveCodingChatType === 1) {
-          // 채팅 메시지
           formattedMessage = `${usernum}: ${msg}`
         }
 
@@ -90,7 +93,14 @@ const useWebSocketStore = create<WebSocketStore>((set, get) => ({
       set({ socket: null, isConnected: false })
     }
   },
-}))
 
+  // diff를 적용하는 함수 추가
+  applyDiff: (diff) => {
+    const { socket } = get()
+    // 여기에 diff를 CodeMirror에 적용하는 로직을 추가하세요.
+    console.log('받은 diff:', diff)
+    // diff를 바탕으로 CodeMirror 내용 업데이트
+  },
+}))
 
 export default useWebSocketStore

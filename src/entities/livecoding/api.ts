@@ -122,8 +122,7 @@ export async function updateLiveCodingSnippet(
   roomId: string,
   hostId: number,
   diff: {
-    start: number
-    length: number
+    op: number
     text: string
   },
   language: string,
