@@ -1,10 +1,7 @@
 'use client'
 
+import { useGetMyGroupList } from '@/features/group/hooks/useMyGroupList'
 import { useEffect, useState } from 'react'
-
-// const dummyGroupList = ['FE 개발자', 'BE 마스터', '리액트 장인', '코드 리뷰어']
-const dummyGroupList: string[] = []
-const dummyUserSearchResult = ['박종일', '임현우', '고영성']
 
 interface Props {
   open: boolean
@@ -19,26 +16,8 @@ export default function ReviewTargetModal({
   onSubmit,
   isEdit = false,
 }: Props) {
-  const [nickname, setNickname] = useState('')
-  const [addedUsers, setAddedUsers] = useState<string[]>([])
   const [activeGroups, setActiveGroups] = useState<string[]>([])
-  const [nicknameError, setNicknameError] = useState('')
-
-  const handleAddUser = () => {
-    if (!dummyUserSearchResult.includes(nickname)) {
-      setNicknameError('존재하지 않는 닉네임이에요')
-      return
-    }
-    if (!addedUsers.includes(nickname)) {
-      setAddedUsers([...addedUsers, nickname])
-      setNickname('')
-      setNicknameError('')
-    }
-  }
-
-  const handleRemoveUser = (user: string) => {
-    setAddedUsers(addedUsers.filter((u) => u !== user))
-  }
+  const { data: groupData } = useGetMyGroupList()
 
   const toggleGroup = (group: string) => {
     setActiveGroups((prev) =>
@@ -85,23 +64,21 @@ export default function ReviewTargetModal({
         <div className="mb-6">
           <span className="text-sm font-medium mb-1 block">그룹 선택</span>
           <div className="flex flex-wrap gap-2">
-            {dummyGroupList.length > 0 ? (
-              dummyGroupList.map((group) => (
-                <button
-                  key={group}
-                  onClick={() => toggleGroup(group)}
-                  className={`px-3 py-1 rounded-full text-sm border transition ${
-                    activeGroups.includes(group)
-                      ? 'bg-blue-500 text-white border-blue-500'
-                      : 'bg-gray-100 dark:bg-neutral-800 text-gray-700 dark:text-gray-300 border-gray-300 dark:border-gray-600'
-                  }`}
-                >
-                  {group}
-                </button>
-              ))
-            ) : (
-              <div>없음</div>
-            )}
+            {!groupData?.groups?.length && <div>등록된 그룹이 없습니다.</div>}
+
+            {groupData?.groups.map((group) => (
+              <button
+                key={group.groupId}
+                onClick={() => toggleGroup(group.groupName)}
+                className={`px-3 py-1 rounded-full text-sm border transition ${
+                  activeGroups.includes(group.groupName)
+                    ? 'bg-blue-500 text-white border-blue-500'
+                    : 'bg-gray-100 dark:bg-neutral-800 text-gray-700 dark:text-gray-300 border-gray-300 dark:border-gray-600'
+                }`}
+              >
+                {group.groupName}
+              </button>
+            ))}
           </div>
         </div>
 
