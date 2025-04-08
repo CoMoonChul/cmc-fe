@@ -9,6 +9,7 @@ import { COMMENT_TARGET } from '@/features/comment/types'
 import ReviewButtonsComponent from '@/features/review/ui/ReviewButtonsComponent'
 import Link from 'next/link'
 import Image from 'next/image'
+import { decompressGzip } from '@/features/editor/helper'
 
 interface ReviewDetailPageProps {
   params: Promise<{ id: string }>
@@ -35,6 +36,12 @@ const ReviewDetailPage: FC<ReviewDetailPageProps> = async ({ params }) => {
 
   if (!reviewId) {
     throw new Error('리뷰 조회에 실패했습니다.')
+  }
+
+  const decompressedCode = decompressGzip(codeContent)
+
+  if (!decompressedCode) {
+    throw new Error('코드 내용을 불러오는데 실패했습니다.')
   }
 
   return (
@@ -71,7 +78,7 @@ const ReviewDetailPage: FC<ReviewDetailPageProps> = async ({ params }) => {
 
       <ReviewCodeArea
         reviewId={reviewId}
-        code={codeContent}
+        code={decompressedCode}
         language={codeType}
       />
       <hr className="my-8 border-gray-300 dark:border-gray-700" />
