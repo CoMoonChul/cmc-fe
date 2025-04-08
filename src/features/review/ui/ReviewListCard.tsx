@@ -48,14 +48,14 @@ const ReviewListCard = ({
       <div className="border-t border-gray-200 dark:border-gray-700 my-4" />
 
       {/* 프로필 + 작성일자 + 조회수/좋아요 */}
-      <div className="flex justify-between items-start">
+      <div className="flex justify-between items-start mt-2">
         <div className="flex items-center gap-3">
           <div className="relative w-7 h-7 rounded-full overflow-hidden">
             <Image
               src={userImg}
               alt="프로필 이미지"
-              fill
-              sizes="28px"
+              width={28}
+              height={28}
               className="object-cover"
             />
           </div>
