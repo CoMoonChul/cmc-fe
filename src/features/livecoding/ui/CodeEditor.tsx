@@ -1,21 +1,24 @@
-import { useCallback, useState } from 'react'
+'use client'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { javascript } from '@codemirror/lang-javascript'
 import { java } from '@codemirror/lang-java'
 import { dracula } from '@uiw/codemirror-theme-dracula'
-import CodeMirror from '@uiw/react-codemirror'
+import CodeMirror, { ReactCodeMirrorRef } from '@uiw/react-codemirror'
 import { LIVECODING } from '#/generate'
 import { debounce } from 'lodash'
 import { updateLiveCodingSnippet } from '@/entities/livecoding/api'
-const DiffMatchPatch = require('diff-match-patch');
+import useWebSocketStore from '@/features/livecoding/store/useWebSocketStore'
+const DiffMatchPatch = require('diff-match-patch')
 
-// CodeEditor 컴포넌트
 export default function CodeEditor({
-  roomInfo,
-  snippet,
-}: {
+                                     roomInfo,
+                                     snippet,
+                                   }: {
   roomInfo: LIVECODING.SelectLiveCodingResDTO | null
   snippet: LIVECODING.SelectLiveCodingSnippetResDTO | null
 }) {
+  const isRemoteUpdateRef = useRef(false)
+  const editorRef = useRef<ReactCodeMirrorRef>(null)
   const [code, setCode] = useState<string>(
     snippet?.livecode || "console.log('CMC')",
   )
@@ -26,10 +29,39 @@ export default function CodeEditor({
   const [inviteButtonText, setInviteButtonText] = useState('초대링크 복사')
   const [isHovered, setIsHovered] = useState(false)
 
+  const { applyDiff: storeApplyDiff } = useWebSocketStore()
+
+  // 🔁 WebSocket에서 diff 수신 시 에디터에 적용하는 함수
+  useEffect(() => {
+    useWebSocketStore.setState({
+      applyDiff: (diff) => {
+        if (!editorRef.current?.view) return;
+
+        const parsedDiff = typeof diff === 'string' ? JSON.parse(JSON.parse(diff)) : diff;
+        const dmp = new DiffMatchPatch();
+        const currentText = editorRef.current.view.state.doc.toString();
+        const patches = dmp.patch_make(currentText, parsedDiff.map((d: { op: any; text: any }) => [d.op, d.text]));
+        const [newText] = dmp.patch_apply(patches, currentText);
+
+        isRemoteUpdateRef.current = true; // ✨ remote update 시작
+        editorRef.current.view.dispatch({
+          changes: {
+            from: 0,
+            to: currentText.length,
+            insert: newText,
+          },
+        });
+        setCode(newText);
+        console.log('✅ diff 적용 완료');
+      },
+    });
+
+  }, [])
+
+
+
   const copyInviteLink = () => {
-    if (!roomInfo?.link) {
-      return
-    }
+    if (!roomInfo?.link) return
     navigator.clipboard
       .writeText(roomInfo.link)
       .then(() => {
@@ -48,29 +80,24 @@ export default function CodeEditor({
 
   const editCode = (value: string) => {
     setCode(value)
-    debouncedUpdate(value) // 코드 변경 시 debounce된 함수 호출
+    if (isRemoteUpdateRef.current) {
+      // ✋ 서버에서 온 diff 적용 중이면 skip
+      isRemoteUpdateRef.current = false;
+      return;
+    }
+    debouncedUpdate(value)
   }
 
   const debouncedUpdate = useCallback(
     debounce((newCode: string) => {
       if (!roomInfo || !snippet) return
-
-      // diff-match-patch 인스턴스 생성
       const dmp = new DiffMatchPatch()
+      const diffs = dmp.diff_main(snippet.livecode || '', newCode)
+      dmp.diff_cleanupSemantic(diffs)
 
-      // 기존 코드와 새 코드의 diff 계산
-      const diffs = dmp.diff_main(snippet?.livecode || '', newCode)
-      dmp.diff_cleanupSemantic(diffs) // 불필요한 공백 제거
+      const diff = diffs.map(([op, text]: [number, string]) => ({ op, text }))
+      const cursorPos = { line: 0, ch: 0 } // TODO: 실제 커서 위치 계산 가능하면 대체
 
-      // @ts-ignore
-      const diff = diffs.map(([op, text]) => ({
-        op,
-        text,
-      }))
-
-      const cursorPos = { line: 0, ch: 0 } // 실제 커서 위치 정보를 계산하여 넣어야 함
-
-      // updateLiveCodingSnippet API 호출
       updateLiveCodingSnippet(
         roomInfo.roomId,
         roomInfo.hostId,
@@ -78,20 +105,14 @@ export default function CodeEditor({
         language,
         cursorPos,
       )
-        .then((res) => {
-          console.log('####################')
-          console.log('코드 업데이트 성공')
-          console.log(res)
-          console.log('####################')
-        })
-        .catch((err) => console.error('코드 업데이트 실패:', err))
-    }, 500), // 500ms 지연
-    [roomInfo, language, snippet], // 의존성 배열
+        .then((res) => console.log('✅ 코드 업데이트 성공', res))
+        .catch((err) => console.error('❌ 코드 업데이트 실패:', err))
+    }, 500),
+    [roomInfo, language, snippet],
   )
 
   return (
     <div className="flex flex-col">
-      {/* 방정보 영역 */}
       <div className="flex items-center justify-between mb-4 p-4 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-lg shadow-lg">
         <div className="flex space-x-4">
           <button
@@ -134,14 +155,14 @@ export default function CodeEditor({
         </div>
       </div>
 
-      {/* 코드 에디터 영역 */}
       <div className="relative flex-grow border rounded-lg shadow-lg bg-white dark:bg-gray-800 p-4">
         <div
           className="relative"
-          onMouseEnter={() => setIsHovered(true)} // 마우스 오버 시 상태 변경
-          onMouseLeave={() => setIsHovered(false)} // 마우스 떠나면 상태 변경
+          onMouseEnter={() => setIsHovered(true)}
+          onMouseLeave={() => setIsHovered(false)}
         >
           <CodeMirror
+            ref={editorRef}
             value={code}
             height="500px"
             theme={dracula}

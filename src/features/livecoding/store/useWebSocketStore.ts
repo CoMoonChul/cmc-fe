@@ -1,5 +1,6 @@
 import { create } from 'zustand'
 import { redirect } from 'next/navigation'
+import useUserStore from '@/shared/store/useUserStore'
 
 interface WebSocketStore {
   isConnected: boolean
@@ -10,6 +11,8 @@ interface WebSocketStore {
   disconnect: () => void
   applyDiff: (diff: any) => void // diff 적용 함수 추가
 }
+
+
 
 const useWebSocketStore = create<WebSocketStore>((set, get) => ({
   isConnected: false,
@@ -34,18 +37,25 @@ const useWebSocketStore = create<WebSocketStore>((set, get) => ({
     }
 
     socket.onmessage = (event) => {
+
+
       try {
         const data = JSON.parse(event.data)
         const { liveCodingChatType, action, msg, usernum, diff } = data
-
-        // diff가 있을 경우 applyDiff 호출
-        if (diff) {
+        const user = useUserStore.getState().user
+        // 코드 업데이트 메시지 (liveCodingChatType === 2)
+        if (liveCodingChatType === 2 && diff) {
+          console.log('############');
+          console.log('보낸사람');
+          console.log(usernum);
+          console.log('현재로그인' );
+          console.log(user.userNum);
+          console.log(user.userNum===usernum);
+          console.log('############');
           get().applyDiff(diff)
-        }
 
-        // 기타 메시지 처리
-        if (liveCodingChatType === 2) {
-          console.log('코드 업데이트 !')
+          console.log('코드 업데이트!')
+          console.log(data)
           return
         }
 
