@@ -125,6 +125,7 @@ export async function updateLiveCodingSnippet(
     op: number
     text: string
   },
+  code: string,
   language: string,
   cursorPos: {
     line: number
@@ -139,6 +140,7 @@ export async function updateLiveCodingSnippet(
       roomId,
       hostId,
       diff,
+      code,
       language,
       cursorPos,
     },
