@@ -8,6 +8,7 @@ import { useEffect, useState, useMemo } from 'react'
 import { useRouter } from 'next/navigation'
 import { usePopupStore } from '@/shared/store/usePopupStore'
 import { useAuth } from '@/shared/hook/useAuth'
+import { AxiosError } from 'axios'
 
 const FILTERS = ['최신', '인기', '내가 작성한', '내가 참여한'] as const
 type FilterType = (typeof FILTERS)[number]
@@ -30,8 +31,14 @@ const BattleListPage = () => {
     [selectedFilter],
   )
   const { ref, inView } = useInView()
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
-    useBattleListInfiniteQuery(searchCondition, 9, true)
+  const {
+    data,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    isError,
+    error,
+  } = useBattleListInfiniteQuery(searchCondition, 9, true)
 
   const goBattleForm = () => {
     router.push('/battle/form')
@@ -55,6 +62,17 @@ const BattleListPage = () => {
       fetchNextPage()
     }
   }, [inView, hasNextPage, fetchNextPage])
+
+  useEffect(() => {
+    if (isError && error && error instanceof AxiosError) {
+      if (error.response?.data.errorCode === 'BATTLE011') {
+        openPopup('', '로그인 후에 가능합니다. 로그인하시겠습니까?', () =>
+          router.push('/user/login?redirect=/battle'),
+        )
+        setSelectedFilter('최신')
+      }
+    }
+  }, [isError, error, openPopup, router])
 
   return (
     <div className="min-h-screen p-6 bg-white text-black dark:bg-black dark:text-white">

@@ -32,5 +32,6 @@ export const useReviewListInfiniteQuery = (
       const currentPage = lastPage.pageNumber ?? 0
       return totalPages - 1 > currentPage ? currentPage + 1 : undefined
     },
+    retry: false,
   })
 }

@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation'
 import ReviewListDropDown from '@/features/review/ui/ReviewListDropDown'
 import { useAuth } from '@/shared/hook/useAuth'
 import { usePopupStore } from '@/shared/store/usePopupStore'
+import { AxiosError } from 'axios'
 
 const FILTERS = [
   '최신',
@@ -36,8 +37,14 @@ const ReviewListPage = () => {
     [selectedFilter],
   )
   const { ref, inView } = useInView()
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
-    useReviewListInfiniteQuery(searchCondition, 5, true)
+  const {
+    data,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    isError,
+    error,
+  } = useReviewListInfiniteQuery(searchCondition, 5, true)
 
   const goReviewForm = () => {
     router.push('/review/form')
@@ -61,6 +68,17 @@ const ReviewListPage = () => {
       fetchNextPage()
     }
   }, [inView, hasNextPage, fetchNextPage])
+
+  useEffect(() => {
+    if (isError && error && error instanceof AxiosError) {
+      if (error.response?.data.errorCode === 'REVIEW010') {
+        openPopup('', '로그인 후에 가능합니다. 로그인하시겠습니까?', () =>
+          router.push('/user/login?redirect=/'),
+        )
+        setSelectedFilter('최신')
+      }
+    }
+  }, [isError, error, openPopup, router])
 
   return (
     <div className="min-h-screen p-6 bg-white text-black dark:bg-black dark:text-white">
