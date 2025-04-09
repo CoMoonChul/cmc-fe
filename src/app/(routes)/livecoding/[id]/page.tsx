@@ -1,5 +1,5 @@
 'use client'
-import { useEffect, useState, useCallback, useMemo } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import { useRouter, useParams } from 'next/navigation'
 import CodeEditor from '@/features/livecoding/ui/CodeEditor'
 import Chat from '@/features/livecoding/ui/Chat'
@@ -20,13 +20,11 @@ export default function LiveCodingPage() {
   const roomId = typeof params.id === 'string' ? params.id : ''
   const { user } = useUserStore()
 
-  const { connect, disconnect, messages, sendMessage, isConnected } =
-    useWebSocketStore()
+  const { connect, disconnect, messages, sendMessage } = useWebSocketStore()
 
   const [roomInfo, setRoomInfo] = useState<SelectLiveCodingResDTO | null>(null)
   const [snippet, setSnippet] = useState<SelectLiveCodingSnippetResDTO | null>(null)
-
-  const memoizedMessages = useMemo(() => messages, [messages])
+  const [ready, setReady] = useState(false)
 
   const checkValid = useCallback(
     (roomInfoRes: SelectLiveCodingResDTO) => {
@@ -50,7 +48,7 @@ export default function LiveCodingPage() {
     [user?.userNum, router],
   )
 
-  const selectRoom = async () => {
+  const selectRoom = useCallback(async () => {
     try {
       const roomInfoRes = await selectLiveCoding(roomId)
       setRoomInfo(roomInfoRes)
@@ -58,11 +56,12 @@ export default function LiveCodingPage() {
 
       const snippetData = await selectLiveCodingSnippet(roomInfoRes.hostId)
       setSnippet(snippetData)
+      setReady(true)
     } catch (e) {
       console.error('❌ 방 조회 실패:', e)
       router.push('/')
     }
-  }
+  }, [roomId, checkValid, router])
 
   useEffect(() => {
     if (roomId) {
@@ -72,10 +71,19 @@ export default function LiveCodingPage() {
   }, [roomId, connect, disconnect])
 
   useEffect(() => {
-    if (user?.userNum) {
+    if (user?.userNum && roomId) {
       selectRoom()
     }
-  }, [roomId, user?.userNum])
+  }, [roomId, user?.userNum, selectRoom])
+
+  if (!roomInfo || !snippet) {
+    return <div className="p-4">로딩 중...</div>
+  }
+
+
+  if (!ready) {
+    return <div className="p-4">로딩 중...</div>
+  }
 
   return (
     <div className="flex h-screen">
@@ -84,7 +92,7 @@ export default function LiveCodingPage() {
       </div>
       <Chat
         roomInfo={roomInfo}
-        messages={memoizedMessages}
+        messages={messages}
         sendMessage={sendMessage}
       />
     </div>

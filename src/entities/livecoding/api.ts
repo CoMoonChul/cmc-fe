@@ -119,13 +119,13 @@ export async function selectLiveCodingSnippet(
 }
 
 export async function updateLiveCodingSnippet(
+  code: string,
   roomId: string,
   hostId: number,
   diff: {
     op: number
     text: string
   },
-  code: string,
   language: string,
   cursorPos: {
     line: number
@@ -137,10 +137,10 @@ export async function updateLiveCodingSnippet(
     api.updateLiveCodingSnippet.bind(api),
     manualErrorHandle,
     {
+      code,
       roomId,
       hostId,
       diff,
-      code,
       language,
       cursorPos,
     },

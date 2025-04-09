@@ -53,17 +53,19 @@ export default function CodeEditor({
         })
 
         setCode(newText)
-        lastSyncedCodeRef.current = newText // ✅ 최신 코드 반영
+        lastSyncedCodeRef.current = newText
       },
     })
   }, [])
 
   const copyInviteLink = () => {
     if (!roomInfo?.link) return
-    navigator.clipboard.writeText(roomInfo.link).then(() => {
-      setInviteButtonText('초대링크 복사됨!')
-      setTimeout(() => setInviteButtonText('초대링크 복사'), 2000)
-    })
+    navigator.clipboard.writeText(roomInfo.link)
+      .then(() => {
+        setInviteButtonText('초대링크 복사됨!')
+        setTimeout(() => setInviteButtonText('초대링크 복사'), 2000)
+      })
+      .catch(() => alert('클립보드 복사에 실패했습니다.'))
   }
 
   const copyCodeToClipboard = () => {
@@ -72,6 +74,8 @@ export default function CodeEditor({
       setTimeout(() => setCopyButtonText('복사'), 1000)
     })
   }
+
+
 
   const editCode = (value: string) => {
     setCode(value)
@@ -93,6 +97,7 @@ export default function CodeEditor({
       const cursorPos = { line: 0, ch: 0 }
 
       updateLiveCodingSnippet(
+        newCode,
         roomInfo.roomId,
         roomInfo.hostId,
         diff,
