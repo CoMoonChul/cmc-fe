@@ -76,7 +76,16 @@ const ReviewForm = ({ reviewId }: { reviewId?: string }) => {
 
   // 모달에서 전달받은 데이터 처리
   const handleFinalSubmit = () => {
+    if (!getValues('codeContent')) {
+      openPopup('코드는 1~20000자 이내로 입력해 주세요.', '')
+      return
+    }
     const compCodeContent = compressGzip(getValues('codeContent'))
+
+    if (!compCodeContent) {
+      openPopup('코드 압축에 실패했어요. 코드 내용을 확인해 주세요.', '')
+      return
+    }
 
     const reqData = {
       title: getValues('title'),
@@ -85,7 +94,6 @@ const ReviewForm = ({ reviewId }: { reviewId?: string }) => {
       codeType: getValues('codeType'),
       //   users,
     }
-    console.log('reqData===>', reqData)
 
     // API 호출
     if (isEditMode) {
@@ -105,43 +113,6 @@ const ReviewForm = ({ reviewId }: { reviewId?: string }) => {
       })
     }
   }
-
-  //   const onSubmit = () => {
-  //     // if (!getValues('codeContent')) {
-  //     if (!code) {
-  //       openPopup('코드는 1~20000자 이내로 입력해 주세요.', '')
-  //       return
-  //     }
-
-  //     const compCodeContent = compressGzip(code)
-
-  //     if (!compCodeContent) {
-  //       openPopup('코드 압축에 실패했습니다. 코드 내용을 확인하세요.', '')
-  //       return
-  //     }
-
-  //     const reqData = {
-  //         title: getValues('title'),
-  //         content: getValues('content'),
-  //         codeContent: compCodeContent,
-  //         codeType: getValues('codeType'),
-  //     }
-  //     // 에디트 모드가 맞으면 수정, 아니면 등록  API 태움
-  //     isEditMode
-  //         ? updateReviewMutation.mutate(reqData, {
-  //             onSuccess: (response) => {
-  //                 router.push(`/detail/${response.reviewId}`)
-  //             },
-  //         })
-  //         : createReviewMutation.mutate(reqData, {
-  //             onSuccess: (response) => {
-  //                 router.push(`/detail/${response.reviewId}`)
-  //             },
-  //         })
-
-  //     // setCompressedCode(compCodeContent); // 압축 코드 저장
-  //     setMetaModalOpen(true); // 모달 오픈
-  //   }
 
   return (
     <div className="min-h-screen px-6 py-10 bg-white dark:bg-black text-black dark:text-white">
@@ -232,8 +203,10 @@ const ReviewForm = ({ reviewId }: { reviewId?: string }) => {
                 }}
                 readOnly={false}
                 basicSetup={{ highlightActiveLine: false }}
-                className="my-8 border-gray-300 dark:border-gray-700"
-                style={{ minHeight: '100%', maxHeight: '100%', width: '100%' }}
+                // className="my-8 border-gray-300 dark:border-gray-700"
+                className="flex-1 border border-gray-300 dark:border-gray-700 rounded-md"
+                style={{ height: '100%', width: '100%', overflowY: 'auto' }} //
+                // style={{ minHeight: '100%', maxHeight: '100%', width: '100%', overflowY: 'auto'}}
               />
             </div>
           </div>
