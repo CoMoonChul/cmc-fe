@@ -30,7 +30,7 @@ export default function LiveCodingPage() {
     (roomInfoRes: SelectLiveCodingResDTO) => {
       if (!user?.userNum) {
         alert('유효한 사용자가 아닙니다.')
-        router.push('/')
+        router.replace('/')
         return
       }
 
@@ -39,10 +39,10 @@ export default function LiveCodingPage() {
       const participants = roomInfoRes.participants
       if (participants.length >= 3) {
         alert('참여인원 초과')
-        router.push('/')
+        router.replace('/')
       } else if (!participants.includes(user.userNum)) {
         alert('초대되지 않은 사용자입니다.')
-        router.push('/')
+        router.replace('/')
       }
     },
     [user?.userNum, router],
@@ -59,7 +59,7 @@ export default function LiveCodingPage() {
       setReady(true)
     } catch (e) {
       console.error('❌ 방 조회 실패:', e)
-      router.push('/')
+      router.replace('/')
     }
   }, [roomId, checkValid, router])
 
@@ -75,10 +75,6 @@ export default function LiveCodingPage() {
       selectRoom()
     }
   }, [roomId, user?.userNum, selectRoom])
-
-  if (!roomInfo || !snippet) {
-    return <div className="p-4">로딩 중...</div>
-  }
 
 
   if (!ready) {
