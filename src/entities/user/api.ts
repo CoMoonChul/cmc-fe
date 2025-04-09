@@ -96,6 +96,24 @@ export async function join(
 }
 
 /**
+ * 구글 회원가입
+ * @param data JoinGoogleReqDTO
+ * @param manualErrorHandle 에러 핸들링 여부 (기본값: false)
+ * @returns 회원가입 결과
+ */
+export async function joinGoogle(
+  data: USER.JoinGoogleReqDTO,
+  manualErrorHandle = false,
+): Promise<USER.JoinGoogleResDTO> {
+  const response = await apiClient(
+    joinApi.joinGoogle.bind(joinApi),
+    manualErrorHandle,
+    data,
+  )
+  return response.data
+}
+
+/**
  * ID 중복 체크
  * @param userId 확인할 사용자 ID
  * @param manualErrorHandle 에러 핸들링 여부 (기본값: false)
@@ -108,7 +126,7 @@ export async function checkUserId(
   const response = await apiClient(
     joinApi.checkUserId.bind(joinApi),
     manualErrorHandle,
-    { userId },
+    userId,
   )
   return response.data
 }

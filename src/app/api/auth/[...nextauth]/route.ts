@@ -1,6 +1,6 @@
-// /app/api/auth/[...nextauth]/route.ts
 import NextAuth from 'next-auth'
 import GoogleProvider from 'next-auth/providers/google'
+import { checkUserId } from '@/entities/user/api'
 
 const handler = NextAuth({
   providers: [
@@ -10,16 +10,21 @@ const handler = NextAuth({
     }),
   ],
   callbacks: {
-    async jwt({ token, account, profile }) {
-      console.log('google customer info :: ', profile)
-      if (account) {
-        token.accessToken = account.access_token
+    async signIn({ user, account }) {
+      const email = user.email
+      if (!email) {
+        console.error('구글 회원 정보 로드에 실패했습니다.')
+        return false
       }
-      return token
-    },
-    async session({ session, token }) {
-      session.accessToken = token.accessToken
-      return session
+      const googleUserId = `google_${email.split('@')[0]}`
+      const res = await checkUserId(googleUserId)
+      const idToken = account?.id_token
+      console.log('구글 id_token', idToken)
+
+      if (res.resultMessage?.includes('USER007')) {
+        return true
+      }
+      return false
     },
   },
 })
