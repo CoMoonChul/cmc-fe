@@ -5,6 +5,7 @@ import { useJoinMutations } from '@/features/user/hooks/useJoinMutations'
 import { USER } from '#/generate'
 import Image from 'next/image'
 import GoogleIcon from '#/public/google-icon.svg'
+import { signIn } from 'next-auth/react'
 
 const UserJoinForm = () => {
   const router = useRouter()
@@ -79,9 +80,20 @@ const UserJoinForm = () => {
     }
   }
 
+  const googleJoin = async () => {
+    try {
+      await signIn('google', { callbackUrl: '/user/join/callback' })
+    } catch (err) {
+      console.error('구글 회원가입 실패', err)
+    }
+  }
+
   return (
     <div className="w-full max-w-md">
-      <button className="w-full max-w-md flex items-center justify-center gap-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 p-3 rounded-md shadow hover:bg-gray-100 dark:hover:bg-gray-700 transition active:opacity-80">
+      <button
+        onClick={googleJoin}
+        className="w-full max-w-md flex items-center justify-center gap-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 p-3 rounded-md shadow hover:bg-gray-100 dark:hover:bg-gray-700 transition active:opacity-80"
+      >
         <Image src={GoogleIcon} alt="Google" />
         <span className="text-sm font-medium">구글 간편 회원가입</span>
       </button>
