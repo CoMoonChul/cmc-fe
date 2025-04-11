@@ -6,6 +6,7 @@ import BattleCodeArea from '@/features/battle/ui/BattleCodeArea'
 import Link from 'next/link'
 import { decompressGzip } from '@/features/editor/helper'
 import BattleControlArea from '@/features/battle/ui/BattleControlArea'
+import Image from 'next/image'
 
 interface BattleDetailPageProps {
   params: Promise<{ id: string }>
@@ -30,6 +31,7 @@ const BattleDetailPage: FC<BattleDetailPageProps> = async ({ params }) => {
     viewCount,
     username,
     userNum,
+    userImg,
     createdAt,
   } = await selectBattle(Number(id))
 
@@ -48,19 +50,33 @@ const BattleDetailPage: FC<BattleDetailPageProps> = async ({ params }) => {
     <div className="min-h-screen p-6 bg-white text-black dark:bg-black dark:text-white">
       <div className="flex justify-between items-start mb-4">
         <h1 className="text-2xl font-bold">{title}</h1>
-        <BattleControlArea battleId={battleId} auditerNum={userNum} />
       </div>
 
       <div className="flex items-center justify-between space-x-4 mb-4">
-        <div>
-          <p className="text-sm font-medium">{username}</p>
-          <p className="text-xs text-gray-500 dark:text-gray-400">
-            {createdAt && getFormattedCreatedAt(createdAt)}
-          </p>
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-full overflow-hidden bg-gray-300 dark:bg-gray-700 relative">
+            <Image
+              src={userImg}
+              alt="프로필 이미지"
+              fill
+              sizes="24px"
+              className="object-cover"
+            />
+          </div>
+          <div className="flex flex-col justify-center">
+            <p className="text-sm font-medium">{username}</p>
+            <p className="text-xs text-gray-500 dark:text-gray-400">
+              {createdAt && getFormattedCreatedAt(createdAt)}
+            </p>
+          </div>
         </div>
-        <p className="text-sm text-gray-600 dark:text-gray-400">
-          조회수: {viewCount ?? 1}회
-        </p>
+
+        <div className="flex items-center space-x-4 text-sm">
+          <div className="flex items-center space-x-1">
+            <span>조회수 : {viewCount ?? 1}회</span>
+          </div>
+          <BattleControlArea battleId={battleId} auditerNum={userNum} />
+        </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-[1fr_auto_1fr] gap-4 items-center">
@@ -75,11 +91,9 @@ const BattleDetailPage: FC<BattleDetailPageProps> = async ({ params }) => {
           resultMode={false}
         />
       </div>
-
       <div className="mt-4 text-center text-gray-700 dark:text-gray-300">
         코드를 클릭해 투표하세요
       </div>
-
       <div className="mt-6 bg-gray-100 dark:bg-gray-900 p-4 rounded-lg">
         <p className="text-gray-700 dark:text-gray-300">{content}</p>
       </div>

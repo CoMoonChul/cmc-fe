@@ -22,7 +22,6 @@ const BattleResultBar = ({
         투표 결과
       </h2>
 
-      {/* 투표 수 & 퍼센트 표시 */}
       <div className="flex justify-center items-center space-x-4 mt-2">
         <p className="text-sm font-medium text-blue-500">
           {leftVote}표 ({leftVotePercentage}%)
@@ -35,7 +34,6 @@ const BattleResultBar = ({
         </p>
       </div>
 
-      {/* 투표 진행 바 */}
       <div className="relative mt-3 w-full max-w-lg mx-auto h-6 bg-gray-300 dark:bg-gray-700 rounded-full overflow-hidden">
         <motion.div
           className="absolute left-0 top-0 h-full bg-blue-500"

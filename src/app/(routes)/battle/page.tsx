@@ -1,4 +1,5 @@
 'use client'
+
 import { useBattleListInfiniteQuery } from '@/features/battle/hooks/useBattleListInfiniteQuery'
 import BattleListDropDown from '@/features/battle/ui/BattleListDropDown'
 import BattleListCard from '@/features/battle/ui/BattleListCard'
@@ -7,6 +8,7 @@ import { useEffect, useState, useMemo } from 'react'
 import { useRouter } from 'next/navigation'
 import { usePopupStore } from '@/shared/store/usePopupStore'
 import { useAuth } from '@/shared/hook/useAuth'
+import { AxiosError } from 'axios'
 
 const FILTERS = ['최신', '인기', '내가 작성한', '내가 참여한'] as const
 type FilterType = (typeof FILTERS)[number]
@@ -21,6 +23,7 @@ const BattleListPage = () => {
   const router = useRouter()
   const checkAuth = useAuth()
   const [selectedFilter, setSelectedFilter] = useState<FilterType>('최신')
+  const [dropdownOpen, setDropdownOpen] = useState(false)
 
   const { openPopup } = usePopupStore.getState()
   const searchCondition = useMemo(
@@ -28,8 +31,14 @@ const BattleListPage = () => {
     [selectedFilter],
   )
   const { ref, inView } = useInView()
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
-    useBattleListInfiniteQuery(searchCondition, 9, true)
+  const {
+    data,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    isError,
+    error,
+  } = useBattleListInfiniteQuery(searchCondition, 9, true)
 
   const goBattleForm = () => {
     router.push('/battle/form')
@@ -54,6 +63,17 @@ const BattleListPage = () => {
     }
   }, [inView, hasNextPage, fetchNextPage])
 
+  useEffect(() => {
+    if (isError && error && error instanceof AxiosError) {
+      if (error.response?.data.errorCode === 'BATTLE011') {
+        openPopup('', '로그인 후에 가능합니다. 로그인하시겠습니까?', () =>
+          router.push('/user/login?redirect=/battle'),
+        )
+        setSelectedFilter('최신')
+      }
+    }
+  }, [isError, error, openPopup, router])
+
   return (
     <div className="min-h-screen p-6 bg-white text-black dark:bg-black dark:text-white">
       <div className="flex justify-between items-center mb-4">
@@ -63,23 +83,30 @@ const BattleListPage = () => {
         >
           배틀 작성하기
         </button>
-        <div className="flex items-center gap-2 border border-gray-300 rounded-lg dark:border-gray-600 overflow-visible">
+
+        <div className="flex items-center border border-gray-300 dark:border-gray-600 rounded-lg overflow-visible">
           {FILTERS.slice(0, 2).map((filter) => (
             <button
               key={filter}
-              onClick={() => setSelectedFilter(filter)}
-              className={`px-4 py-2 ${
+              onClick={() => {
+                setSelectedFilter(filter)
+                setDropdownOpen(false)
+              }}
+              className={`px-4 py-2 text-sm font-medium transition-colors ${
                 selectedFilter === filter
-                  ? 'bg-gray-300 dark:bg-gray-700 font-bold'
-                  : 'hover:bg-gray-200 dark:hover:bg-gray-700'
+                  ? 'bg-gray-200 dark:bg-gray-700 text-black dark:text-white'
+                  : 'hover:bg-gray-100 dark:hover:bg-gray-800 text-gray-700 dark:text-gray-300'
               }`}
             >
               {filter}
             </button>
           ))}
+
           <BattleListDropDown
             selectedFilter={selectedFilter}
             setSelectedFilter={setSelectedFilter}
+            dropdownOpen={dropdownOpen}
+            setDropdownOpen={setDropdownOpen}
           />
         </div>
       </div>

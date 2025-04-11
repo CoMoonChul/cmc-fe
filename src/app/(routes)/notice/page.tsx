@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import NoticeCard from '@/features/notice/ui/NoticeCard'
 import { useRouter } from 'next/navigation'
 import { useInView } from 'react-intersection-observer'
@@ -27,25 +27,22 @@ const NoticePage = () => {
    * @param id
    */
   const handleDelete = (id: number | undefined) => {
-    console.log('알림 삭제 요청', id)
     deleteNotice({ notiId: id }) // 요청 실행
   }
 
   const handleAccept = (id: number | undefined, link: string = '') => {
-    console.log('컴포넌트 수락 클릭', link)
     router.push(link)
     handleDelete(id)
   }
 
   const handleDeleteAll = () => {
-    console.log('알림 전체 삭제')
     deleteNoticeAll()
   }
 
   return (
     <div className="min-h-screen p-6 bg-white text-black dark:bg-black dark:text-white">
-      <h1 className="text-2xl font-bold mb-4">알림함</h1>
-      <div className="flex justify-between mb-4">
+      <div className="flex justify-between items-center mb-4">
+        <h1 className="text-2xl font-bold">알림함</h1>
         {(data?.pages?.[0]?.totalElements ?? 0) > 0 && (
           <button
             onClick={handleDeleteAll}

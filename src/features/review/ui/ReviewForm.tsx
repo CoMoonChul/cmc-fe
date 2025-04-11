@@ -75,7 +75,6 @@ const ReviewForm = ({ reviewId }: { reviewId?: string }) => {
   }, [data, setValue])
 
   // 모달에서 전달받은 데이터 처리
-  //   const handleFinalSubmit = (users: string[]) => {
   const handleFinalSubmit = () => {
     const compCodeContent = compressGzip(getValues('codeContent'))
 
@@ -93,13 +92,15 @@ const ReviewForm = ({ reviewId }: { reviewId?: string }) => {
       updateReviewMutation.mutate(
         { ...reqData, reviewId: Number(reviewId) },
         {
-          onSuccess: (response) => router.push(`detail/${response.reviewId}`),
+          onSuccess: (response) =>
+            router.push(`/review/detail/${response.reviewId}`),
           onError: () => openPopup('수정 실패', ''),
         },
       )
     } else {
       createReviewMutation.mutate(reqData, {
-        onSuccess: (response) => router.push(`detail/${response.reviewId}`),
+        onSuccess: (response) =>
+          router.push(`/review/detail/${response.reviewId}`),
         onError: () => openPopup('등록 실패', ''),
       })
     }

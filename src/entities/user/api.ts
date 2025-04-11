@@ -49,12 +49,32 @@ export async function loginNext(userId: string, password: string) {
 export async function logoutNext() {
   const response = await fetch('/api/auth/logout', {
     method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
     credentials: 'include',
   })
 
   if (!response.ok) {
     throw new Error('로그아웃 실패')
   }
+}
+
+/**
+ * 회원탈퇴 - 넥스트 회원탈퇴 라우터를 통한 처리
+ * @returns 회원탈퇴 결과
+ */
+export async function withdrawNext(password: string) {
+  const response = await fetch('/api/auth/withdraw', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ password }),
+    credentials: 'include',
+  })
+
+  if (!response.ok) {
+    throw new Error('회원탈퇴 실패')
+  }
+
+  return await response.json()
 }
 
 /**
@@ -76,6 +96,24 @@ export async function join(
 }
 
 /**
+ * 구글 회원가입
+ * @param data JoinGoogleReqDTO
+ * @param manualErrorHandle 에러 핸들링 여부 (기본값: false)
+ * @returns 회원가입 결과
+ */
+export async function joinGoogle(
+  data: USER.JoinGoogleReqDTO,
+  manualErrorHandle = false,
+): Promise<USER.JoinGoogleResDTO> {
+  const response = await apiClient(
+    joinApi.joinGoogle.bind(joinApi),
+    manualErrorHandle,
+    data,
+  )
+  return response.data
+}
+
+/**
  * ID 중복 체크
  * @param userId 확인할 사용자 ID
  * @param manualErrorHandle 에러 핸들링 여부 (기본값: false)
@@ -88,7 +126,7 @@ export async function checkUserId(
   const response = await apiClient(
     joinApi.checkUserId.bind(joinApi),
     manualErrorHandle,
-    { userId },
+    userId,
   )
   return response.data
 }

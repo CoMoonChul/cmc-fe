@@ -71,7 +71,7 @@ export async function invite(
  * @param manualErrorHandle 에러 핸들링 여부 (기본값: false)
  * @returns 그룹 삭제 결과
  */
-export async function _delete(
+export async function deleteGroup(
   data: GROUP.DeleteReqDTO,
   manualErrorHandle = false,
 ): Promise<GROUP.DeleteResDTO> {

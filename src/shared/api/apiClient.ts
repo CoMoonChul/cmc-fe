@@ -1,7 +1,7 @@
 /* tslint:disable */
 /* eslint-disable */
 import { getErrorMessage } from '@/shared/lib/messages'
-import { usePopupStore } from '../store/usePopupStore'
+import { usePopupStore } from '@/shared/store/usePopupStore'
 // import { refreshAccessToken } from '@/shared/lib/token'
 const BACKEND_URL = process.env.BACKEND_URL || 'http://localhost:8080'
 const REFRESH_TOKEN_URL = `${BACKEND_URL}/user/tempRefresh`

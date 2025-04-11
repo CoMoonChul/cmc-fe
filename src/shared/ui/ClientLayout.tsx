@@ -6,6 +6,7 @@ import CommonPopup from '@/shared/ui/CommonPopup'
 import QueryProvider from '@/app/provider'
 import { usePathname } from 'next/navigation'
 import { useEffect, useState } from 'react'
+import { SessionProvider } from 'next-auth/react'
 
 export default function ClientLayout({
   children,
@@ -24,9 +25,11 @@ export default function ClientLayout({
 
   return (
     <body className={theme}>
-      {showHeader && <Header />}
-      <QueryProvider>{children}</QueryProvider>
-      <CommonPopup />
+      <SessionProvider>
+        {showHeader && <Header />}
+        <QueryProvider>{children}</QueryProvider>
+        <CommonPopup />
+      </SessionProvider>
     </body>
   )
 }

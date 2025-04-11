@@ -9,7 +9,6 @@ interface GroupCreateModalProps {
 
 const GroupCreateModal = ({ onClose, onSave }: GroupCreateModalProps) => {
   const [groupName, setGroupName] = useState('')
-  const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -28,7 +27,6 @@ const GroupCreateModal = ({ onClose, onSave }: GroupCreateModalProps) => {
         className="bg-white dark:bg-gray-900 p-6 rounded-lg w-[80vw] h-[10vh] shadow-lg flex flex-col"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* 그룹 만들기 */}
         <div className="flex justify-center items-center mb-4">
           <h2 className="text-lg font-bold">그룹 만들기</h2>
         </div>
@@ -38,10 +36,15 @@ const GroupCreateModal = ({ onClose, onSave }: GroupCreateModalProps) => {
             type="text"
             value={groupName}
             onChange={(e) => setGroupName(e.target.value)}
-            className={`w-full p-3 border rounded-md dark:bg-gray-800 dark:border-gray-600 focus:ring-2 focus:ring-blue-500 ${
-              error ? 'border-red-500' : 'border-gray-300'
-            }`}
+            className="w-full p-3 border rounded-md dark:bg-gray-800 dark:border-gray-600 focus:ring-2 focus:ring-blue-500 border-gray-300"
             placeholder="그룹명은 최대 10자까지 작성해주세요"
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                e.preventDefault()
+                onSave(groupName)
+                onClose()
+              }
+            }}
           />
         </div>
 

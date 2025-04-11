@@ -1,9 +1,9 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useWithdrawMutation } from '@/features/user/hooks/useWithdrawMutation'
+import { withdrawNext } from '@/entities/user/api'
 import { useUpdateUserMutation } from '@/features/user/hooks/useUpdateUserMutation'
-import { useLogout } from '@/features/user/hooks/useLogout'
+import { useLogoutMutation } from '@/features/user/hooks/useLogoutMutation'
 import { useGetMyInfoQuery } from '@/features/user/hooks/useGetMyInfoQuery'
 import { GROUP, USER } from '#/generate'
 import { useRouter } from 'next/navigation'
@@ -13,15 +13,13 @@ import ProfileImageSelectorModal from '@/features/user/ui/ProfileImageSelectorMo
 import Image from 'next/image'
 import { useCreateGroup } from '@/features/group/hooks/useCreateGroup'
 import GroupCreateModal from '@/features/group/ui/GroupCreateModal'
-import { useGetMyGroupList } from '@/features/group/hooks/useMyGroupList'
 import GroupManageModal from '@/features/group/ui/GroupManageModal'
-import { useGetGroupMemberList } from '@/features/group/hooks/useGroupMemeberList'
+import GroupManageArea from '@/features/group/ui/GroupManageArea'
 
 const UserProfilePage = () => {
   const router = useRouter()
-  const withdrawMutation = useWithdrawMutation()
   const updateMutation = useUpdateUserMutation()
-  const logoutMutation = useLogout()
+  const logoutMutation = useLogoutMutation()
   const { data } = useGetMyInfoQuery()
   const { openPopup } = usePopupStore.getState()
   const [showWithdrawPopup, setShowWithdrawPopup] = useState(false)
@@ -33,14 +31,11 @@ const UserProfilePage = () => {
   })
   const [showImageSelector, setShowImageSelector] = useState(false)
   const [selectedImage, setSelectedImage] = useState('')
-
-  // (성수)
-  const [openCreateModal, setOpenCreateModal] = useState<'group' | null>(null)
-  const [openManageModal, setOpenManageModal] = useState<'group' | null>(null)
+  const [openCreateModal, setOpenCreateModal] = useState(false)
+  const [openManageModal, setOpenManageModal] = useState(false)
 
   const [groupId, setGroupId] = useState<number | null>(null)
   const createGroupMutation = useCreateGroup()
-  const { data: groupData } = useGetMyGroupList()
 
   const onClickLogout = () => {
     logoutMutation.mutate(undefined, {
@@ -64,16 +59,17 @@ const UserProfilePage = () => {
     })
   }
 
-  const withDraw = (password: string) => {
-    // 회원 탈퇴 시 브라우저에 존재하는 토큰을 지워야 하는 이슈가 남아있음
-    const req: USER.WithdrawReqDTO = {
-      password: password,
+  const withDraw = async (password: string) => {
+    const resWithdraw = await withdrawNext(password)
+    if (resWithdraw?.status === 200) {
+      router.replace('/')
+    } else {
+      if (resWithdraw?.message && typeof resWithdraw?.message === 'string') {
+        console.error('resWithdraw', resWithdraw)
+      } else {
+        console.error('resWithdraw', resWithdraw)
+      }
     }
-    withdrawMutation.mutate(req, {
-      onSuccess: () => {
-        router.push('/')
-      },
-    })
   }
 
   const onClickWithdraw = () => {
@@ -88,13 +84,7 @@ const UserProfilePage = () => {
     const CreateReq: GROUP.CreateReqDTO = {
       groupName,
     }
-
-    createGroupMutation.mutate(CreateReq, {
-      onSuccess: (res) => {
-        console.log('res: ', res)
-        alert(res.resultMessage)
-      },
-    })
+    createGroupMutation.mutate(CreateReq)
   }
 
   useEffect(() => {
@@ -103,34 +93,31 @@ const UserProfilePage = () => {
       setEmail(data.email)
       setSelectedImage(data.profileImg ?? '')
     }
-    if (groupData) {
-      console.log('?@@@@@@@', groupData)
-    }
-  }, [data, groupData])
+  }, [data])
 
   return (
-    <div className="min-h-screen flex flex-col items-start justify-start bg-white dark:bg-black text-black dark:text-white p-6">
-      <div className="grid grid-cols-[1fr_2fr] gap-10 w-full max-w-4xl mx-auto">
-        <div className="flex flex-col items-start">
+    <div className="min-h-screen bg-white dark:bg-black text-black dark:text-white p-6">
+      <div className="max-w-3xl mx-auto w-full flex flex-col items-center">
+        <div className="flex flex-col items-center mb-10">
           {selectedImage ? (
-            <div className="w-32 h-32 rounded-full overflow-hidden mb-4 relative border-2 border-gray-300 dark:border-gray-600">
+            <div className="w-28 h-28 rounded-full overflow-hidden relative border">
               <Image
                 src={selectedImage}
                 alt="선택한 프로필"
                 fill
                 className="object-cover"
-                sizes="128px"
+                sizes="112px"
               />
             </div>
           ) : (
-            <div className="w-32 h-32 bg-gray-300 dark:bg-gray-700 rounded-full mb-4 flex items-center justify-center text-xl text-white">
+            <div className="w-28 h-28 bg-gray-300 dark:bg-gray-700 rounded-full flex items-center justify-center text-xl text-white">
               프로필
             </div>
           )}
-          <div className="flex gap-4">
+          <div className="flex gap-3 mt-3">
             <button
-              className="text-blue-500 hover:text-blue-700 dark:hover:text-blue-400 transition"
               onClick={() => setShowImageSelector(true)}
+              className="text-sm text-blue-500 hover:text-blue-700"
             >
               이미지 선택
             </button>
@@ -139,145 +126,121 @@ const UserProfilePage = () => {
                 setSelectedImage('')
                 updateUser(nickname, email, '')
               }}
-              className="text-red-500 hover:text-red-700 dark:hover:text-red-400 transition"
+              className="text-sm text-red-500 hover:text-red-700"
             >
               이미지 제거
             </button>
           </div>
-
-          <div className="mt-6 w-full">
-            <p className="font-medium">나의 그룹</p>
-            <p className="text-sm text-gray-600 dark:text-gray-400">
-              그룹을 만들어 회의에 초대하거나 게시물을 공유해보세요.
-            </p>
-            <ul className="space-y-4">
-              {groupData?.groups?.map((group) => (
-                <li
-                  key={group.groupId}
-                  onClick={() => {
-                    setGroupId(group.groupId ?? 0)
-                    setOpenManageModal('group')
-                  }}
-                  className="p-4 border-b border-gray-300"
-                >
-                  <p className="font-semibold">그룹명: {group.groupName}</p>
-                  <p className="text-sm text-gray-500">
-                    역할: {group.groupRole}
-                  </p>
-                </li>
-              ))}
-            </ul>
-            {(groupData?.groups?.length ?? 0) < 123 && (
-              <button
-                onClick={() => setOpenCreateModal('group')}
-                className="mt-2 px-4 py-2 rounded-md bg-blue-500 text-white hover:bg-blue-700 transition"
-              >
-                그룹 만들기
-              </button>
-            )}
-          </div>
         </div>
-
-        <div className="flex flex-col w-full">
-          <div className="mb-6">
-            <p className="text-lg font-medium">닉네임</p>
-            <div className="flex items-center gap-4">
+        <div className="w-full space-y-6">
+          <div className="flex justify-between items-center border-b pb-4">
+            <p className="text-sm font-medium">닉네임</p>
+            <div className="flex items-center gap-3">
               {editMode.nickname ? (
                 <input
-                  type="text"
                   value={nickname}
                   onChange={(e) => setNickname(e.target.value)}
-                  className="w-48 p-2 border rounded-md bg-white dark:bg-gray-900 dark:border-gray-600 border-gray-300 text-black dark:text-white"
+                  className="border rounded-md p-2 text-sm w-48 dark:bg-gray-900 dark:border-gray-600"
                 />
               ) : (
-                <p className="text-gray-600 dark:text-gray-400">{nickname}</p>
+                <p className="text-sm text-gray-600 dark:text-gray-400">
+                  {nickname}
+                </p>
               )}
               <button
                 onClick={() => {
-                  setEditMode({ ...editMode, nickname: !editMode.nickname })
-                  updateUser(nickname, email, selectedImage)
+                  if (editMode.nickname) {
+                    updateUser(nickname, email, selectedImage)
+                  }
+                  setEditMode((prev) => ({ ...prev, nickname: !prev.nickname }))
                 }}
-                className="text-blue-500 hover:text-blue-700 dark:hover:text-blue-400 transition"
+                className="text-sm text-blue-500 hover:text-blue-700"
               >
                 {editMode.nickname ? '저장' : '수정'}
               </button>
             </div>
           </div>
 
-          <div className="mb-6">
-            <p className="text-lg font-medium">이메일</p>
-            <div className="flex items-center gap-4">
+          <div className="flex justify-between items-center border-b pb-4">
+            <p className="text-sm font-medium">이메일</p>
+            <div className="flex items-center gap-3">
               {editMode.email ? (
                 <input
-                  type="text"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-48 p-2 border rounded-md bg-white dark:bg-gray-900 dark:border-gray-600 border-gray-300 text-black dark:text-white"
+                  className="border rounded-md p-2 text-sm w-48 dark:bg-gray-900 dark:border-gray-600"
                 />
               ) : (
-                <p className="text-gray-600 dark:text-gray-400">{email}</p>
+                <p className="text-sm text-gray-600 dark:text-gray-400">
+                  {email}
+                </p>
               )}
               <button
                 onClick={() => {
-                  setEditMode({ ...editMode, email: !editMode.email })
-                  updateUser(nickname, email, selectedImage)
+                  if (editMode.email) {
+                    updateUser(nickname, email, selectedImage)
+                  }
+                  setEditMode((prev) => ({ ...prev, email: !prev.email }))
                 }}
-                className="text-blue-500 hover:text-blue-700 dark:hover:text-blue-400 transition"
+                className="text-sm text-blue-500 hover:text-blue-700"
               >
-                {editMode.nickname ? '저장' : '수정'}
+                {editMode.email ? '저장' : '수정'}
               </button>
             </div>
           </div>
         </div>
+        {/* 그룹 관리 영역 */}
+        <GroupManageArea
+          setOpenCreateModal={setOpenCreateModal}
+          setOpenManageModal={setOpenManageModal}
+          setGroupId={setGroupId}
+        />
+        <div className="w-full flex flex-col items-center mt-10 gap-2">
+          <button
+            onClick={onClickLogout}
+            className="w-32 p-2 rounded-md border text-red-500 border-red-500 hover:bg-red-100 dark:hover:bg-red-900 text-sm"
+          >
+            로그아웃
+          </button>
+          <button
+            onClick={onClickWithdraw}
+            className="text-red-500 hover:underline text-sm"
+          >
+            회원 탈퇴
+          </button>
+        </div>
+        {showWithdrawPopup && (
+          <ConfirmWithdrawalPopup
+            onCancel={() => setShowWithdrawPopup(false)}
+            onConfirm={(password) => {
+              withDraw(password)
+              setShowWithdrawPopup(false)
+            }}
+          />
+        )}
+        {showImageSelector && (
+          <ProfileImageSelectorModal
+            onClose={() => setShowImageSelector(false)}
+            onSelect={(url) => {
+              setSelectedImage(url)
+              setShowImageSelector(false)
+              updateUser(nickname, email, url)
+            }}
+          />
+        )}
+        {openCreateModal && (
+          <GroupCreateModal
+            onClose={() => setOpenCreateModal(false)}
+            onSave={handleCreateGroup}
+          />
+        )}
+        {openManageModal && (
+          <GroupManageModal
+            groupId={groupId}
+            onClose={() => setOpenManageModal(false)}
+          />
+        )}
       </div>
-
-      <div className="mt-12 w-full max-w-4xl mx-auto flex flex-col items-start gap-2">
-        <button
-          onClick={onClickLogout}
-          className="w-32 p-2 rounded-md text-red-600 dark:text-red-400 border border-red-400 dark:border-red-600 hover:bg-red-100 dark:hover:bg-red-900 transition active:opacity-80 text-sm"
-        >
-          로그아웃
-        </button>
-
-        <button
-          onClick={onClickWithdraw}
-          className="text-red-600 dark:text-red-400 underline hover:text-red-700 dark:hover:text-red-300 transition text-sm"
-        >
-          회원 탈퇴
-        </button>
-      </div>
-      {showWithdrawPopup && (
-        <ConfirmWithdrawalPopup
-          onCancel={() => setShowWithdrawPopup(false)}
-          onConfirm={(password) => {
-            withDraw(password)
-            setShowWithdrawPopup(false)
-          }}
-        />
-      )}
-      {showImageSelector && (
-        <ProfileImageSelectorModal
-          onClose={() => setShowImageSelector(false)}
-          onSelect={(url) => {
-            setSelectedImage(url)
-            setShowImageSelector(false)
-            updateUser(nickname, email, url)
-          }}
-        />
-      )}
-      {openCreateModal && (
-        <GroupCreateModal
-          onClose={() => setOpenCreateModal(null)}
-          onSave={handleCreateGroup}
-        />
-      )}
-      {openManageModal && (
-        <GroupManageModal
-          groupId={groupId} // 선택된 그룹 ID 전달
-          onClose={() => setOpenManageModal(null)}
-          onSave={() => null}
-        />
-      )}
     </div>
   )
 }

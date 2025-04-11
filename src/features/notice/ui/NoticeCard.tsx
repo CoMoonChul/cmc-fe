@@ -1,110 +1,78 @@
-const formatDate = (date?: string) => {
-  if (!date) return '날짜 없음' // 기본값 처리
-  console.log('dddd : ', date)
+'use client'
 
-  const date2 = new Date(date.replace(' ', 'T'))
-  const now = new Date()
-  const diffMs = now.getTime() - date2.getTime()
-  const diffHours = Math.floor(diffMs / (1000 * 60 * 60))
+import { getFormattedCreatedAt } from '@/shared/lib/date'
+import { FC } from 'react'
 
-  if (diffHours < 24) return `${diffHours}시간 전`
-  return date2.toLocaleDateString('ko-KR', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  })
-}
-
-const NoticeCard = ({
-  notiId,
-  userNum,
-  notiTemplateId,
-  sendAt,
-  sendState,
-  linkUrl,
-  createdAt,
-  reasonNoti,
-  notiTitle,
-  notiType,
-  onDelete,
-  onAccept,
-}: {
+interface NoticeCardProps {
   notiId: number
-  userNum: number
-  notiTemplateId: number
-  sendAt?: string
-  sendState?: string
-  linkUrl?: string
-  createdAt: string
-  reasonNoti: string
   notiTitle: string
+  reasonNoti: string
+  createdAt: string
   notiType: string
+  linkUrl?: string
   onDelete: (id: number | undefined) => void
   onAccept: (id: number | undefined, link: string | undefined) => void
+}
+
+const NoticeCard: FC<NoticeCardProps> = ({
+  notiId,
+  notiTitle,
+  reasonNoti,
+  createdAt,
+  notiType,
+  linkUrl,
+  onDelete,
+  onAccept,
 }) => {
   return (
-    <div className="bg-gray-100 dark:bg-gray-800 p-4 rounded-lg shadow-md flex flex-col gap-2 relative">
-      {/* 삭제 버튼 */}
+    <div className="relative w-full p-4 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl shadow-sm hover:shadow-md transition-all duration-200 ease-in-out">
       <button
-        className="absolute top-2 right-2 text-gray-500 hover:text-red-500 transition"
+        style={{ top: '8px', right: '12px' }}
+        className="absolute text-gray-400 hover:text-gray-600 text-sm"
         onClick={() => onDelete(notiId)}
       >
-        X
+        ✕
       </button>
 
-      {/* 생성 날짜 */}
-      <p className="text-xs text-gray-500 dark:text-gray-400">
-        {formatDate(createdAt)}
-      </p>
+      <div className="flex flex-col gap-3">
+        <p className="text-xs text-gray-400">
+          {getFormattedCreatedAt(createdAt)}
+        </p>
 
-      {/* 알림 제목 */}
-      <h3 className="font-semibold">{notiTitle}</h3>
+        <h3 className="text-base font-semibold text-gray-800 dark:text-white">
+          {notiTitle}
+        </h3>
 
-      {/* 알림 내용 */}
-      {notiType === 'LINK' ? (
-        <a
-          // href={link_url}
-          onClick={(e) => {
-            e.preventDefault()
-            onAccept(notiId, linkUrl ?? '')
-          }}
-          className="text-blue-500 hover:underline"
-        >
+        <p className="text-sm text-gray-600 dark:text-gray-300 break-words">
           {reasonNoti}
-        </a>
-      ) : (
-        <p className="text-gray-700 dark:text-gray-300">{reasonNoti}</p>
-      )}
+        </p>
 
-      {/* 버튼 영역 */}
-      {notiType === 'LINK' && (
-        <a
-          // href={link_url}
-          onClick={(e) => {
-            e.preventDefault()
-            onAccept(notiId, linkUrl ?? '')
-          }}
-          className="mt-2 px-4 py-2 bg-blue-500 text-white text-sm rounded-md hover:bg-blue-600 transition"
-        >
-          이동
-        </a>
-      )}
-      {notiType === 'JOIN' && (
-        <div className="flex gap-2 mt-2">
+        {notiType === 'LINK' && (
           <button
-            className="flex-1 px-4 py-2 bg-green-500 text-white text-sm rounded-md hover:bg-green-600 transition"
             onClick={() => onAccept(notiId, linkUrl ?? '')}
+            className="self-start mt-2 px-4 py-2 text-sm bg-blue-500 hover:bg-blue-600 text-white rounded-md transition"
           >
-            수락
+            이동
           </button>
-          <button
-            onClick={() => onDelete(notiId)}
-            className="flex-1 px-4 py-2 bg-red-500 text-white text-sm rounded-md hover:bg-red-600 transition"
-          >
-            거절
-          </button>
-        </div>
-      )}
+        )}
+
+        {notiType === 'JOIN' && (
+          <div className="flex gap-2 mt-2">
+            <button
+              onClick={() => onAccept(notiId, linkUrl ?? '')}
+              className="flex-1 px-4 py-2 text-sm bg-blue-500 hover:bg-blue-600 text-white rounded-md transition"
+            >
+              수락
+            </button>
+            <button
+              onClick={() => onDelete(notiId)}
+              className="flex-1 px-4 py-2 text-sm border border-blue-500 text-blue-500 bg-white hover:bg-blue-50 dark:hover:bg-gray-700 rounded-md transition"
+            >
+              거절
+            </button>
+          </div>
+        )}
+      </div>
     </div>
   )
 }

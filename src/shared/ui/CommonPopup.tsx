@@ -1,10 +1,8 @@
 'use client'
-
 import { usePopupStore } from '@/shared/store/usePopupStore'
 import { motion } from 'framer-motion'
 import dynamic from 'next/dynamic'
 
-// Next.js의 dynamic import 사용 → 클라이언트 전용 컴포넌트로 변환
 const CommonPopup = () => {
   const { popups, closePopup } = usePopupStore()
 
@@ -25,17 +23,14 @@ const CommonPopup = () => {
             className="bg-white dark:bg-gray-900 p-6 rounded-2xl shadow-xl w-[90%] max-w-md text-center relative"
             onClick={(e) => e.stopPropagation()} // 배경 클릭 시 닫힘 방지
           >
-            {/* 타이틀 */}
             <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">
               {popup.title}
             </h2>
 
-            {/* 메시지 */}
             <p className="text-sm text-gray-600 dark:text-gray-300 mb-5">
               {popup.message}
             </p>
 
-            {/* 버튼 영역 */}
             <div className="flex justify-center gap-3 mt-4">
               {popup.onConfirm ? (
                 <>
