@@ -1,11 +1,17 @@
 'use client'
-
-import { useParams, useRouter } from 'next/navigation'
+import { useEffect, useState, useCallback } from 'react'
+import { useRouter, useParams } from 'next/navigation'
 import CodeEditor from '@/features/livecoding/ui/CodeEditor'
 import Chat from '@/features/livecoding/ui/Chat'
-import { selectLiveCoding } from '@/entities/livecoding/api'
-import { useCallback, useEffect, useState } from 'react'
-import { SelectLiveCodingResDTO } from '#/generate/livecoding/api'
+import {
+  selectLiveCoding,
+  selectLiveCodingSnippet,
+} from '@/entities/livecoding/api'
+import useWebSocketStore from '@/features/livecoding/store/useWebSocketStore'
+import {
+  SelectLiveCodingResDTO,
+  SelectLiveCodingSnippetResDTO,
+} from '#/generate/livecoding/api'
 import useUserStore from '@/shared/store/useUserStore'
 
 export default function LiveCodingPage() {
@@ -14,23 +20,32 @@ export default function LiveCodingPage() {
   const roomId = typeof params.id === 'string' ? params.id : ''
   const { user } = useUserStore()
 
-  const [roomInfo, setRoomInfo] = useState<SelectLiveCodingResDTO | null>(null)
+  const { connect, disconnect, messages, sendMessage } = useWebSocketStore()
 
-  const checkInvite = useCallback(
+  const [roomInfo, setRoomInfo] = useState<SelectLiveCodingResDTO | null>(null)
+  const [snippet, setSnippet] = useState<SelectLiveCodingSnippetResDTO | null>(null)
+  const [ready, setReady] = useState(false)
+
+  const checkValid = useCallback(
     (roomInfoRes: SelectLiveCodingResDTO) => {
       if (!user?.userNum) {
         alert('유효한 사용자가 아닙니다.')
-        router.push('/')
+        disconnect() 
+        router.replace('/')
         return
       }
+
+      if (user.userNum === roomInfoRes.hostId) return
 
       const participants = roomInfoRes.participants
       if (participants.length >= 3) {
         alert('참여인원 초과')
-        router.push('/')
+        disconnect() 
+        router.replace('/')
       } else if (!participants.includes(user.userNum)) {
         alert('초대되지 않은 사용자입니다.')
-        router.push('/')
+        disconnect() 
+        router.replace('/')
       }
     },
     [user?.userNum, router],
@@ -40,27 +55,46 @@ export default function LiveCodingPage() {
     try {
       const roomInfoRes = await selectLiveCoding(roomId)
       setRoomInfo(roomInfoRes)
-      checkInvite(roomInfoRes)
+      checkValid(roomInfoRes)
+
+      const snippetData = await selectLiveCodingSnippet(roomInfoRes.hostId)
+      setSnippet(snippetData)
+      setReady(true)
     } catch (e) {
       console.error('❌ 방 조회 실패:', e)
-      router.push('/')
+      disconnect() 
+      router.replace('/')
     }
-  }, [roomId, checkInvite, router])
+  }, [roomId, checkValid, router])
 
   useEffect(() => {
-    if (!user?.userNum) {
-      console.log('userNum이 없으므로 방 정보 조회를 기다립니다.')
-      return
+    if (roomId) {
+      connect(roomId)
+      return () => disconnect()
     }
-    selectRoom()
-  }, [user?.userNum, selectRoom])
+  }, [roomId, connect, disconnect])
+
+  useEffect(() => {
+    if (user?.userNum && roomId) {
+      selectRoom()
+    }
+  }, [roomId, user?.userNum, selectRoom])
+
+
+  if (!ready) {
+    return <div className="p-4">로딩 중...</div>
+  }
 
   return (
     <div className="flex h-screen">
       <div className="flex-1">
-        <CodeEditor roomInfo={roomInfo} />
+        <CodeEditor roomInfo={roomInfo} snippet={snippet} />
       </div>
-      <Chat roomInfo={roomInfo} />
+      <Chat
+        roomInfo={roomInfo}
+        messages={messages}
+        sendMessage={sendMessage}
+      />
     </div>
   )
 }
