@@ -22,6 +22,27 @@ const loginApi = new USER.LoginControllerApi(
 )
 
 /**
+ * 구글 로그인 - 넥스트 로그인 라우터를 통한 처리
+ * @param data LoginGoogleReqDTO
+ * @param manualErrorHandle 에러 핸들링 여부 (기본값: false)
+ * @returns 로그인 결과
+ */
+export async function loginGoogleNext(idToken: string) {
+  const response = await fetch('/api/auth/login/google', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ idToken }),
+    credentials: 'include',
+  })
+
+  if (!response.ok) {
+    throw new Error('로그인 실패')
+  }
+
+  return await response.json()
+}
+
+/**
  * 로그인 - 넥스트 로그인 라우터를 통한 처리
  * @param userId 아이디
  * @param password 비밀번호
@@ -161,6 +182,24 @@ export async function tempLogin(
 ): Promise<USER.TempLoginResDTO> {
   const response = await apiClient(
     loginApi.tempLogin.bind(loginApi),
+    manualErrorHandle,
+    data,
+  )
+  return response.data
+}
+
+/**
+ * 구글 로그인
+ * @param data LoginGoogleReqDTO
+ * @param manualErrorHandle 에러 핸들링 여부 (기본값: false)
+ * @returns 로그인 결과
+ */
+export async function loginGoogle(
+  data: USER.LoginGoogleReqDTO,
+  manualErrorHandle = false,
+): Promise<USER.LoginGoogleResDTO> {
+  const response = await apiClient(
+    loginApi.loginGoogle.bind(loginApi),
     manualErrorHandle,
     data,
   )
