@@ -1,6 +1,7 @@
 import NextAuth from 'next-auth'
 import GoogleProvider from 'next-auth/providers/google'
 import { checkUserId } from '@/entities/user/api'
+import { JWT } from 'next-auth/jwt'
 
 const handler = NextAuth({
   providers: [
@@ -10,7 +11,8 @@ const handler = NextAuth({
     }),
   ],
   callbacks: {
-    async signIn({ user, account }) {
+    // 가입 여부 확인
+    async signIn({ user }) {
       const email = user.email
       if (!email) {
         console.error('구글 회원 정보 로드에 실패했습니다.')
@@ -18,13 +20,28 @@ const handler = NextAuth({
       }
       const googleUserId = `google_${email.split('@')[0]}`
       const res = await checkUserId(googleUserId)
-      const idToken = account?.id_token
-      console.log('구글 id_token', idToken)
-
       if (res.resultMessage?.includes('USER007')) {
         return true
       }
       return false
+    },
+    // id_token 저장
+    async jwt({ token, account }) {
+      if (account) {
+        token.idToken = account.id_token
+      }
+      return token
+    },
+    // id_token 세션에 저장
+    async session({ session, token }) {
+      const typedToken = token as JWT
+      if (typeof typedToken.idToken === 'string') {
+        session.idToken = typedToken.idToken
+      } else {
+        session.idToken = undefined
+      }
+
+      return session
     },
   },
 })

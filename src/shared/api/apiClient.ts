@@ -88,7 +88,6 @@ async function refreshAccessToken(
     })
     if (!res.ok) return null
     const { accessToken } = await res.json()
-    console.log('[apiClient][refreshAccessToken] success')
     return accessToken
   } catch (e) {
     console.error('[apiClient][refreshAccessToken] Failed:', e)
