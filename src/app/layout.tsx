@@ -8,7 +8,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko">
-      <ClientLayout>{children}</ClientLayout>
+      <head>
+        <link rel="icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" href="/favicon.png" />
+        <link rel="apple-touch-icon" href="/favicon.png" />
+      </head>
+      <body>
+        <ClientLayout>{children}</ClientLayout>
+      </body>
     </html>
   )
 }
