@@ -48,7 +48,6 @@ const ReviewForm = ({ reviewId }: { reviewId?: string }) => {
   })
 
   const { pending } = useFormStatus()
-  const [openModal, setOpenModal] = useState<null>(null)
   const [code, setCode] = useState<string>('') // 코드 에디터 상태
   const [language, setLanguage] = useState<string>('javascript') // 코드 타입 상태
   const { data } = useReviewDetailQuery(Number(reviewId), isEditMode)
@@ -68,14 +67,13 @@ const ReviewForm = ({ reviewId }: { reviewId?: string }) => {
       setValue('content', data.content)
       setValue('codeContent', deCompCodeContent)
       setValue('codeType', data.codeType)
-
       setCode(deCompCodeContent)
       setLanguage(data.codeType)
     }
   }, [data, setValue])
 
   // 모달에서 전달받은 데이터 처리
-  const handleFinalSubmit = () => {
+  const handleFinalSubmit = (activeGroups: number[]) => {
     const compCodeContent = compressGzip(getValues('codeContent'))
 
     const reqData = {
@@ -83,11 +81,8 @@ const ReviewForm = ({ reviewId }: { reviewId?: string }) => {
       content: getValues('content'),
       codeContent: compCodeContent ? compCodeContent : '',
       codeType: getValues('codeType'),
-      //   users,
     }
-    console.log('reqData===>', reqData)
 
-    // API 호출
     if (isEditMode) {
       updateReviewMutation.mutate(
         { ...reqData, reviewId: Number(reviewId) },
@@ -98,50 +93,17 @@ const ReviewForm = ({ reviewId }: { reviewId?: string }) => {
         },
       )
     } else {
-      createReviewMutation.mutate(reqData, {
+      const createReq: REVIEW.CreateReviewReqDTO = {
+        ...reqData,
+        groups: activeGroups,
+      }
+      createReviewMutation.mutate(createReq, {
         onSuccess: (response) =>
           router.push(`/review/detail/${response.reviewId}`),
         onError: () => openPopup('등록 실패', ''),
       })
     }
   }
-
-  //   const onSubmit = () => {
-  //     // if (!getValues('codeContent')) {
-  //     if (!code) {
-  //       openPopup('코드는 1~20000자 이내로 입력해 주세요.', '')
-  //       return
-  //     }
-
-  //     const compCodeContent = compressGzip(code)
-
-  //     if (!compCodeContent) {
-  //       openPopup('코드 압축에 실패했습니다. 코드 내용을 확인하세요.', '')
-  //       return
-  //     }
-
-  //     const reqData = {
-  //         title: getValues('title'),
-  //         content: getValues('content'),
-  //         codeContent: compCodeContent,
-  //         codeType: getValues('codeType'),
-  //     }
-  //     // 에디트 모드가 맞으면 수정, 아니면 등록  API 태움
-  //     isEditMode
-  //         ? updateReviewMutation.mutate(reqData, {
-  //             onSuccess: (response) => {
-  //                 router.push(`/detail/${response.reviewId}`)
-  //             },
-  //         })
-  //         : createReviewMutation.mutate(reqData, {
-  //             onSuccess: (response) => {
-  //                 router.push(`/detail/${response.reviewId}`)
-  //             },
-  //         })
-
-  //     // setCompressedCode(compCodeContent); // 압축 코드 저장
-  //     setMetaModalOpen(true); // 모달 오픈
-  //   }
 
   return (
     <div className="min-h-screen px-6 py-10 bg-white dark:bg-black text-black dark:text-white">
@@ -227,7 +189,7 @@ const ReviewForm = ({ reviewId }: { reviewId?: string }) => {
                 extensions={[languageExtensions[language]]}
                 theme={theme === 'light' ? undefined : dracula}
                 onChange={(value) => {
-                  setCode(value) // 상태 업데이트
+                  setCode(value)
                   setValue('codeContent', value) // React Hook Form에 값 설정
                 }}
                 readOnly={false}
