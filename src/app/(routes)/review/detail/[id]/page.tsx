@@ -54,7 +54,8 @@ const ReviewDetailPage: FC<ReviewDetailPageProps> = async ({ params }) => {
               <Image
                 src={userImg}
                 alt={`${username}의 프로필 이미지`}
-                fill
+                width={30}
+                height={30}
                 className="object-cover"
               />
             </div>
