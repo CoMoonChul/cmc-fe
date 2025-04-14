@@ -70,7 +70,12 @@ const ReviewDetailPage: FC<ReviewDetailPageProps> = async ({ params }) => {
           </div>
           <LikeComponent reviewId={reviewId} />
           <button className="text-blue-500">🔗 공유</button>
-          <ReviewButtonsComponent reviewId={reviewId} userNum={userNum} />
+          <ReviewButtonsComponent
+            reviewId={reviewId}
+            userNum={userNum}
+            code={decompressedCode}
+            language={codeType}
+          />
         </div>
       </div>
       <div className="bg-gray-100 dark:bg-gray-900 p-4 rounded-lg text-gray-700 dark:text-gray-300 mb-4">
