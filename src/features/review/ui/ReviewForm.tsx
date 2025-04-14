@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from 'react'
 import CodeMirror from '@uiw/react-codemirror'
-import { javascript } from '@codemirror/lang-javascript'
 import { dracula } from '@uiw/codemirror-theme-dracula'
 import { usePopupStore } from '@/shared/store/usePopupStore'
 import { useForm, useFormState } from 'react-hook-form'
@@ -13,7 +12,6 @@ import { compressGzip, decompressGzip } from '@/features/editor/helper'
 import { REVIEW } from '#/generate'
 import { useFormStatus } from 'react-dom'
 import { useRouter } from 'next/navigation'
-import ReviewCodeArea from './ReviewCodeArea'
 import { languageExtensions } from '@/entities/editor/types'
 import { useThemeStore } from '@/shared/store/useThemeStore'
 import ReviewTargetModal from './ReviewTargetModal'
@@ -74,7 +72,16 @@ const ReviewForm = ({ reviewId }: { reviewId?: string }) => {
 
   // 모달에서 전달받은 데이터 처리
   const handleFinalSubmit = (activeGroups: number[]) => {
+    if (!getValues('codeContent')) {
+      openPopup('코드는 1~20000자 이내로 입력해 주세요.', '')
+      return
+    }
     const compCodeContent = compressGzip(getValues('codeContent'))
+
+    if (!compCodeContent) {
+      openPopup('코드 압축에 실패했어요. 코드 내용을 확인해 주세요.', '')
+      return
+    }
 
     const reqData = {
       title: getValues('title'),
@@ -194,8 +201,8 @@ const ReviewForm = ({ reviewId }: { reviewId?: string }) => {
                 }}
                 readOnly={false}
                 basicSetup={{ highlightActiveLine: false }}
-                className="my-8 border-gray-300 dark:border-gray-700"
-                style={{ minHeight: '100%', maxHeight: '100%', width: '100%' }}
+                className="flex-1 border border-gray-300 dark:border-gray-700 rounded-md"
+                style={{ height: '100%', width: '100%', overflowY: 'auto' }}
               />
             </div>
           </div>
