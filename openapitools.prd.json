@@ -1,0 +1,75 @@
+{
+  "$schema": "./node_modules/@openapitools/openapi-generator-cli/config.schema.json",
+  "spaces": 2,
+  "generator-cli": {
+    "version": "6.5.0",
+    "generators": {
+      "battle": {
+        "generatorName": "typescript-axios",
+        "templateDir": "#{cwd}/generate/template",
+        "output": "#{cwd}/generate/battle",
+        "inputSpec": "https://cmc-public-bucket.s3.ap-northeast-2.amazonaws.com/oag/battle.yaml"
+      },
+      "comment": {
+        "generatorName": "typescript-axios",
+        "templateDir": "#{cwd}/generate/template",
+        "output": "#{cwd}/generate/comment",
+        "inputSpec": "https://cmc-public-bucket.s3.ap-northeast-2.amazonaws.com/oag/comment.yaml"
+      },
+      "editor": {
+        "generatorName": "typescript-axios",
+        "templateDir": "#{cwd}/generate/template",
+        "output": "#{cwd}/generate/editor",
+        "inputSpec": "https://cmc-public-bucket.s3.ap-northeast-2.amazonaws.com/oag/editor.yaml"
+      },
+      "like": {
+        "generatorName": "typescript-axios",
+        "templateDir": "#{cwd}/generate/template",
+        "output": "#{cwd}/generate/like",
+        "inputSpec": "https://cmc-public-bucket.s3.ap-northeast-2.amazonaws.com/oag/like.yaml"
+      },
+      "livecoding": {
+        "generatorName": "typescript-axios",
+        "templateDir": "#{cwd}/generate/template",
+        "output": "#{cwd}/generate/livecoding",
+        "inputSpec": "https://cmc-public-bucket.s3.ap-northeast-2.amazonaws.com/oag/livecoding.yaml"
+      },
+      "notice": {
+        "generatorName": "typescript-axios",
+        "templateDir": "#{cwd}/generate/template",
+        "output": "#{cwd}/generate/notice",
+        "inputSpec": "https://cmc-public-bucket.s3.ap-northeast-2.amazonaws.com/oag/notice.yaml"
+      },
+      "redis": {
+        "generatorName": "typescript-axios",
+        "templateDir": "#{cwd}/generate/template",
+        "output": "#{cwd}/generate/redis",
+        "inputSpec": "https://cmc-public-bucket.s3.ap-northeast-2.amazonaws.com/oag/redis.yaml"
+      },
+      "review": {
+        "generatorName": "typescript-axios",
+        "templateDir": "#{cwd}/generate/template",
+        "output": "#{cwd}/generate/review",
+        "inputSpec": "https://cmc-public-bucket.s3.ap-northeast-2.amazonaws.com/oag/review.yaml"
+      },
+      "user": {
+        "generatorName": "typescript-axios",
+        "templateDir": "#{cwd}/generate/template",
+        "output": "#{cwd}/generate/user",
+        "inputSpec": "https://cmc-public-bucket.s3.ap-northeast-2.amazonaws.com/oag/user.yaml"
+      },
+      "view": {
+        "generatorName": "typescript-axios",
+        "templateDir": "#{cwd}/generate/template",
+        "output": "#{cwd}/generate/view",
+        "inputSpec": "https://cmc-public-bucket.s3.ap-northeast-2.amazonaws.com/oag/view.yaml"
+      },
+      "group": {
+        "generatorName": "typescript-axios",
+        "templateDir": "#{cwd}/generate/template",
+        "output": "#{cwd}/generate/group",
+        "inputSpec": "https://cmc-public-bucket.s3.ap-northeast-2.amazonaws.com/oag/group.yaml"
+      }
+    }
+  }
+}

@@ -33,7 +33,7 @@ const ReviewListDropDown = ({
   const toggleDropdown = async () => {
     const isLogin = await checkAuth()
     if (!isLogin) {
-      openPopup('로그인 후에 My 필터를 사용 할 수 있습니다.', '', goToLogin)
+      openPopup('로그인 후에 가능합니다.', '', goToLogin)
       return
     }
     setDropdownOpen((prev) => !prev)

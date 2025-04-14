@@ -48,7 +48,6 @@ const ReviewForm = ({ reviewId }: { reviewId?: string }) => {
   })
 
   const { pending } = useFormStatus()
-  const [openModal, setOpenModal] = useState<null>(null)
   const [code, setCode] = useState<string>('') // 코드 에디터 상태
   const [language, setLanguage] = useState<string>('javascript') // 코드 타입 상태
   const { data } = useReviewDetailQuery(Number(reviewId), isEditMode)
@@ -68,7 +67,6 @@ const ReviewForm = ({ reviewId }: { reviewId?: string }) => {
       setValue('content', data.content)
       setValue('codeContent', deCompCodeContent)
       setValue('codeType', data.codeType)
-
       setCode(deCompCodeContent)
       setLanguage(data.codeType)
     }
@@ -80,6 +78,9 @@ const ReviewForm = ({ reviewId }: { reviewId?: string }) => {
       openPopup('코드는 1~20000자 이내로 입력해 주세요.', '')
       return
     }
+
+  const handleFinalSubmit = (activeGroups: number[]) => {
+
     const compCodeContent = compressGzip(getValues('codeContent'))
 
     if (!compCodeContent) {
@@ -92,10 +93,8 @@ const ReviewForm = ({ reviewId }: { reviewId?: string }) => {
       content: getValues('content'),
       codeContent: compCodeContent ? compCodeContent : '',
       codeType: getValues('codeType'),
-      //   users,
     }
 
-    // API 호출
     if (isEditMode) {
       updateReviewMutation.mutate(
         { ...reqData, reviewId: Number(reviewId) },
@@ -106,7 +105,11 @@ const ReviewForm = ({ reviewId }: { reviewId?: string }) => {
         },
       )
     } else {
-      createReviewMutation.mutate(reqData, {
+      const createReq: REVIEW.CreateReviewReqDTO = {
+        ...reqData,
+        groups: activeGroups,
+      }
+      createReviewMutation.mutate(createReq, {
         onSuccess: (response) =>
           router.push(`/review/detail/${response.reviewId}`),
         onError: () => openPopup('등록 실패', ''),
@@ -198,7 +201,7 @@ const ReviewForm = ({ reviewId }: { reviewId?: string }) => {
                 extensions={[languageExtensions[language]]}
                 theme={theme === 'light' ? undefined : dracula}
                 onChange={(value) => {
-                  setCode(value) // 상태 업데이트
+                  setCode(value)
                   setValue('codeContent', value) // React Hook Form에 값 설정
                 }}
                 readOnly={false}

@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react'
 interface Props {
   open: boolean
   onClose: () => void
-  onSubmit: (groups: string[]) => void
+  onSubmit: (groups: number[]) => void
   isEdit: boolean
 }
 
@@ -16,10 +16,12 @@ export default function ReviewTargetModal({
   onSubmit,
   isEdit = false,
 }: Props) {
-  const [activeGroups, setActiveGroups] = useState<string[]>([])
+  const [activeGroups, setActiveGroups] = useState<number[]>([])
   const { data: groupData } = useGetMyGroupList()
 
-  const toggleGroup = (group: string) => {
+  console.log('groupData', groupData)
+
+  const toggleGroup = (group: number) => {
     setActiveGroups((prev) =>
       prev.includes(group) ? prev.filter((g) => g !== group) : [...prev, group],
     )
@@ -69,9 +71,9 @@ export default function ReviewTargetModal({
             {groupData?.groups.map((group) => (
               <button
                 key={group.groupId}
-                onClick={() => toggleGroup(group.groupName)}
+                onClick={() => toggleGroup(group.groupId)}
                 className={`px-3 py-1 rounded-full text-sm border transition ${
-                  activeGroups.includes(group.groupName)
+                  activeGroups.includes(group.groupId)
                     ? 'bg-blue-500 text-white border-blue-500'
                     : 'bg-gray-100 dark:bg-neutral-800 text-gray-700 dark:text-gray-300 border-gray-300 dark:border-gray-600'
                 }`}

@@ -120,7 +120,6 @@ async function refreshAccessToken(
     }
 
     const { accessToken } = await response.json()
-    console.log('[route.ts][refreshAccessToken] success')
     return accessToken
   } catch (error) {
     console.error('[apiClient][refreshAccessToken] Failed:', error)
