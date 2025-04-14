@@ -2,6 +2,7 @@ import { LIVECODING } from '#/generate' // OpenAPI로 생성된 LIVECODING API
 import { apiClient } from '@/shared/api/apiClient' // 공통 API 클라이언트
 import { getApiConfig } from '@/shared/config/apiConfig'
 import { axiosInstance } from '@/shared/config/axiosInstance'
+import { diff } from './types'
 
 const config = getApiConfig()
 const api = new LIVECODING.LiveCodingControllerApi(
@@ -122,10 +123,7 @@ export async function updateLiveCodingSnippet(
   code: string,
   roomId: string,
   hostId: number,
-  diff: {
-    op: number
-    text: string
-  },
+  diff: diff[],
   language: string,
   cursorPos: {
     line: number

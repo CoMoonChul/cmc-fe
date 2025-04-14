@@ -1,5 +1,5 @@
 'use client'
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState, useMemo } from 'react'
 import { javascript } from '@codemirror/lang-javascript'
 import { java } from '@codemirror/lang-java'
 import { dracula } from '@uiw/codemirror-theme-dracula'
@@ -8,12 +8,12 @@ import { LIVECODING } from '#/generate'
 import { debounce } from 'lodash'
 import { updateLiveCodingSnippet } from '@/entities/livecoding/api'
 import useWebSocketStore from '@/features/livecoding/store/useWebSocketStore'
-const DiffMatchPatch = require('diff-match-patch')
+import DiffMatchPatch from 'diff-match-patch'
 
 export default function CodeEditor({
-                                     roomInfo,
-                                     snippet,
-                                   }: {
+  roomInfo,
+  snippet,
+}: {
   roomInfo: LIVECODING.SelectLiveCodingResDTO | null
   snippet: LIVECODING.SelectLiveCodingSnippetResDTO | null
 }) {
@@ -25,7 +25,7 @@ export default function CodeEditor({
   const [inviteButtonText, setInviteButtonText] = useState('초대링크 복사')
   const [isHovered, setIsHovered] = useState(false)
 
-  // ✅ 최신 코드 기준을 저장하는 ref
+  // 최신 코드 기준을 저장하는 ref
   const lastSyncedCodeRef = useRef(snippet?.livecode || "console.log('CMC')")
 
   // diff 수신 후 에디터에 적용
@@ -34,7 +34,8 @@ export default function CodeEditor({
       applyDiff: (diff) => {
         if (!editorRef.current?.view) return
 
-        const parsedDiff = typeof diff === 'string' ? JSON.parse(JSON.parse(diff)) : diff
+        const parsedDiff =
+          typeof diff === 'string' ? JSON.parse(JSON.parse(diff)) : diff
         const dmp = new DiffMatchPatch()
         const currentText = editorRef.current.view.state.doc.toString()
         const patches = dmp.patch_make(
@@ -60,7 +61,8 @@ export default function CodeEditor({
 
   const copyInviteLink = () => {
     if (!roomInfo?.link) return
-    navigator.clipboard.writeText(roomInfo.link)
+    navigator.clipboard
+      .writeText(roomInfo.link)
       .then(() => {
         setInviteButtonText('초대링크 복사됨!')
         setTimeout(() => setInviteButtonText('초대링크 복사'), 2000)
@@ -75,8 +77,6 @@ export default function CodeEditor({
     })
   }
 
-
-
   const editCode = (value: string) => {
     setCode(value)
     if (isRemoteUpdateRef.current) {
@@ -86,8 +86,8 @@ export default function CodeEditor({
     debouncedUpdate(value)
   }
 
-  const debouncedUpdate = useCallback(
-    debounce((newCode: string) => {
+  const updateCode = useCallback(
+    (newCode: string) => {
       if (!roomInfo || !snippet) return
       const dmp = new DiffMatchPatch()
       const diffs = dmp.diff_main(lastSyncedCodeRef.current, newCode)
@@ -96,6 +96,7 @@ export default function CodeEditor({
       const diff = diffs.map(([op, text]: [number, string]) => ({ op, text }))
       const cursorPos = { line: 0, ch: 0 }
 
+      console.log('diff', diff)
       updateLiveCodingSnippet(
         newCode,
         roomInfo.roomId,
@@ -105,16 +106,21 @@ export default function CodeEditor({
         cursorPos,
       )
 
-      lastSyncedCodeRef.current = newCode // ✅ 최신 코드 기준 갱신
-    }, 500),
-    [roomInfo, language, snippet],
+      lastSyncedCodeRef.current = newCode
+    },
+    [roomInfo, snippet, language],
   )
+
+  const debouncedUpdate = useMemo(() => debounce(updateCode, 500), [updateCode])
 
   return (
     <div className="flex flex-col">
       <div className="flex items-center justify-between mb-4 p-4 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-lg shadow-lg">
         <div className="flex space-x-4">
-          <button onClick={copyInviteLink} className="px-4 py-2 text-sm rounded-lg bg-gray-200 text-gray-800 hover:bg-blue-400 hover:text-white transition">
+          <button
+            onClick={copyInviteLink}
+            className="px-4 py-2 text-sm rounded-lg bg-gray-200 text-gray-800 hover:bg-blue-400 hover:text-white transition"
+          >
             {inviteButtonText}
           </button>
           <button className="px-4 py-2 text-sm rounded-lg bg-gray-200 text-gray-800 hover:bg-red-400 hover:text-white transition">
