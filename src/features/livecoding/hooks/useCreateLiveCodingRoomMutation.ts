@@ -35,7 +35,7 @@ export const useCreateLiveCodingRoomMutation = (
           code, // 코드
           createResponse.roomId,
           hostId,
-          { op: 0, text: '' }, // 기본 diff 값 (현재 BE에서 requeied 되어 있어 임시 적용)
+          [{ op: 0, text: '' }], // 기본 diff 값 (현재 BE에서 requeied 되어 있어 임시 적용)
           language, // 언어
           { line: 0, ch: 0 }, // 기본 커서 위치 (현재 BE에서 requeied 되어 있어 임시 적용)
         )

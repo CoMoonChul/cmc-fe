@@ -1,3 +1,5 @@
+'use client'
+
 import { useState, useRef, useEffect } from 'react'
 import { LIVECODING } from '#/generate'
 
@@ -7,17 +9,18 @@ export default function Chat({
   sendMessage,
 }: {
   roomInfo: LIVECODING.SelectLiveCodingResDTO | null
-  messages: string[] // messages 타입을 string[]로 명시
+  messages: string[]
   sendMessage: (message: string) => void
 }) {
   const [input, setInput] = useState('')
   const inputRef = useRef<HTMLInputElement | null>(null)
   const chatBoxRef = useRef<HTMLDivElement | null>(null)
+  const bottomRef = useRef<HTMLDivElement | null>(null)
 
   const handleSendMessage = () => {
     if (input.trim() !== '') {
-      sendMessage(input) // 웹소켓을 통해 메시지 전송
-      setInput('') // 입력값 초기화
+      sendMessage(input)
+      setInput('')
     }
   }
 
@@ -29,9 +32,7 @@ export default function Chat({
   }
 
   useEffect(() => {
-    if (chatBoxRef.current) {
-      chatBoxRef.current.scrollTop = chatBoxRef.current.scrollHeight
-    }
+    bottomRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [messages])
 
   return (
@@ -44,6 +45,7 @@ export default function Chat({
 
       {/* 채팅 메시지 영역 */}
       <div
+        ref={chatBoxRef}
         className="flex-grow h-72 overflow-y-auto p-2 border rounded-lg bg-white dark:bg-gray-900"
         onClick={() => inputRef.current?.focus()}
       >
@@ -55,7 +57,7 @@ export default function Chat({
             {message}
           </div>
         ))}
-        <div ref={chatBoxRef} />
+        <div ref={bottomRef} />
       </div>
 
       {/* 채팅 입력 영역 */}

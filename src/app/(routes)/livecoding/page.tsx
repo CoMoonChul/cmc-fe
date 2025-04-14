@@ -3,14 +3,19 @@
 import useUserStore from '@/shared/store/useUserStore'
 import { useState } from 'react'
 import { LIVECODING } from '#/generate'
-import { createLiveCoding, selectLiveCoding, deleteLiveCoding } from '@/entities/livecoding/api'
+import {
+  createLiveCoding,
+  selectLiveCoding,
+  deleteLiveCoding,
+} from '@/entities/livecoding/api'
 import { useRouter } from 'next/navigation'
 
 export default function LiveCodingTestPage() {
   const [roomId, setRoomId] = useState<string | null>(null)
-  const [roomInfo, setRoomInfo] = useState<LIVECODING.SelectLiveCodingResDTO | null>(null)
+  const [roomInfo, setRoomInfo] =
+    useState<LIVECODING.SelectLiveCodingResDTO | null>(null)
   const { user } = useUserStore()
-  const router = useRouter() // next/router의 useRouter 훅 사용
+  const router = useRouter()
 
   const createRoom = async () => {
     try {
@@ -19,13 +24,12 @@ export default function LiveCodingTestPage() {
       }
       const response = await createLiveCoding(req)
       setRoomId(response.roomId)
-      console.log('✅ 생성된 방 ID:', response.roomId)
 
       // 방 생성 후 해당 roomId로 URL 변경
       router.push(`/livecoding/${response.roomId}`)
     } catch (error) {
       alert('방 ID 오류.')
-      console.error('❌ 방 생성 실패:', error)
+      console.error('방 생성 실패:', error)
     }
   }
 
@@ -73,7 +77,6 @@ export default function LiveCodingTestPage() {
     <div className="flex flex-col items-center justify-center min-h-screen p-4">
       <h1 className="text-2xl font-bold mb-4">LiveCoding 테스트</h1>
 
-      {/* 방 생성 버튼 */}
       <button
         onClick={createRoom}
         className="px-4 py-2 bg-blue-500 text-white rounded mb-2"
@@ -84,7 +87,6 @@ export default function LiveCodingTestPage() {
         <p className="mt-2 text-green-600">✅ 생성된 방 ID: {roomId}</p>
       )}
 
-      {/* 방 조회 버튼 */}
       <button
         onClick={selectRoom}
         className="px-4 py-2 bg-green-500 text-white rounded mt-4"
@@ -100,7 +102,6 @@ export default function LiveCodingTestPage() {
         </div>
       )}
 
-      {/* 방 삭제 버튼 */}
       <button
         onClick={deleteRoom}
         className="px-4 py-2 bg-red-500 text-white rounded mt-4"

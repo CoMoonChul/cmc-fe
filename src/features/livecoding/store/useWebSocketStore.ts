@@ -1,6 +1,7 @@
 import { create } from 'zustand'
 import { redirect } from 'next/navigation'
 import useUserStore from '@/shared/store/useUserStore'
+import { diff } from '@/entities/livecoding/types'
 
 interface WebSocketStore {
   isConnected: boolean
@@ -9,7 +10,7 @@ interface WebSocketStore {
   connect: (roomId: string) => void
   sendMessage: (message: string) => void
   disconnect: () => void
-  applyDiff: (diff: any) => void
+  applyDiff: (diff: diff) => void
 }
 
 const useWebSocketStore = create<WebSocketStore>((set, get) => ({
@@ -18,7 +19,7 @@ const useWebSocketStore = create<WebSocketStore>((set, get) => ({
   socket: null,
 
   connect: (roomId) => {
-    if (get().isConnected) return // ✅ 중복 연결 방지
+    if (get().isConnected) return
 
     const socket = new WebSocket(`ws://localhost:8080/ws/livecoding/${roomId}`)
 
@@ -27,7 +28,6 @@ const useWebSocketStore = create<WebSocketStore>((set, get) => ({
         const data = JSON.parse(event.data)
         const { liveCodingChatType, action, msg, usernum, diff } = data
         const user = useUserStore.getState().user
-
 
         // 코드 diff 수신 처리
         if (liveCodingChatType === 2 && diff) {
@@ -87,7 +87,7 @@ const useWebSocketStore = create<WebSocketStore>((set, get) => ({
     if (socket && socket.readyState === WebSocket.OPEN) {
       socket.send(message)
     } else {
-      console.error('⚠️ WebSocket 연결이 되어 있지 않습니다.')
+      console.error('WebSocket 연결이 되어 있지 않습니다.')
     }
   },
 

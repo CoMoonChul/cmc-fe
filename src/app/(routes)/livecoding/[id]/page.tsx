@@ -23,14 +23,16 @@ export default function LiveCodingPage() {
   const { connect, disconnect, messages, sendMessage } = useWebSocketStore()
 
   const [roomInfo, setRoomInfo] = useState<SelectLiveCodingResDTO | null>(null)
-  const [snippet, setSnippet] = useState<SelectLiveCodingSnippetResDTO | null>(null)
+  const [snippet, setSnippet] = useState<SelectLiveCodingSnippetResDTO | null>(
+    null,
+  )
   const [ready, setReady] = useState(false)
 
   const checkValid = useCallback(
     (roomInfoRes: SelectLiveCodingResDTO) => {
       if (!user?.userNum) {
         alert('유효한 사용자가 아닙니다.')
-        disconnect() 
+        disconnect()
         router.replace('/')
         return
       }
@@ -40,15 +42,15 @@ export default function LiveCodingPage() {
       const participants = roomInfoRes.participants
       if (participants.length >= 3) {
         alert('참여인원 초과')
-        disconnect() 
+        disconnect()
         router.replace('/')
       } else if (!participants.includes(user.userNum)) {
         alert('초대되지 않은 사용자입니다.')
-        disconnect() 
+        disconnect()
         router.replace('/')
       }
     },
-    [user?.userNum, router],
+    [user.userNum, disconnect, router],
   )
 
   const selectRoom = useCallback(async () => {
@@ -62,10 +64,10 @@ export default function LiveCodingPage() {
       setReady(true)
     } catch (e) {
       console.error('❌ 방 조회 실패:', e)
-      disconnect() 
+      disconnect()
       router.replace('/')
     }
-  }, [roomId, checkValid, router])
+  }, [roomId, checkValid, disconnect, router])
 
   useEffect(() => {
     if (roomId) {
@@ -80,7 +82,6 @@ export default function LiveCodingPage() {
     }
   }, [roomId, user?.userNum, selectRoom])
 
-
   if (!ready) {
     return <div className="p-4">로딩 중...</div>
   }
@@ -90,11 +91,7 @@ export default function LiveCodingPage() {
       <div className="flex-1">
         <CodeEditor roomInfo={roomInfo} snippet={snippet} />
       </div>
-      <Chat
-        roomInfo={roomInfo}
-        messages={messages}
-        sendMessage={sendMessage}
-      />
+      <Chat roomInfo={roomInfo} messages={messages} sendMessage={sendMessage} />
     </div>
   )
 }
