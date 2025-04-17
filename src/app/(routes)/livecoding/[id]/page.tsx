@@ -82,7 +82,7 @@ export default function LiveCodingPage() {
     }
   }, [roomId, user?.userNum, selectRoom])
 
-  if (!ready) {
+  if (!ready || !user) {
     return <div className="p-4">로딩 중...</div>
   }
 
