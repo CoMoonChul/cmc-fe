@@ -26,7 +26,8 @@ const useWebSocketStore = create<WebSocketStore>((set, get) => ({
     const handleMessage = (event: MessageEvent) => {
       try {
         const data = JSON.parse(event.data)
-        const { liveCodingChatType, action, msg, usernum, diff } = data
+        const { liveCodingChatType, action, msg, usernum, username, diff } =
+          data
         const user = useUserStore.getState().user
 
         // 코드 diff 수신 처리
@@ -47,10 +48,10 @@ const useWebSocketStore = create<WebSocketStore>((set, get) => ({
           }
           formattedMessage =
             action === 0
-              ? `${usernum} 님이 입장하셨습니다.`
-              : `${usernum} 님이 퇴장하셨습니다.`
+              ? `${username} 님이 입장하셨습니다.`
+              : `${username} 님이 퇴장하셨습니다.`
         } else if (liveCodingChatType === 1) {
-          formattedMessage = `${usernum}: ${msg}`
+          formattedMessage = `${username}: ${msg}`
         }
 
         if (formattedMessage) {
