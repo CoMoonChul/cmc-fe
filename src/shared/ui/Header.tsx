@@ -5,6 +5,9 @@ import { useThemeStore } from '@/shared/store/useThemeStore'
 import { motion } from 'framer-motion'
 import { useAuth } from '@/shared/hook/useAuth'
 import { useState, useEffect } from 'react'
+import IconNotification from '@/shared/ui/IconNotification'
+import IconTheme from './IconTheme'
+import StartLiveButton from '@/features/livecoding/ui/StartLiveButton'
 
 export default function Header() {
   const router = useRouter()
@@ -41,12 +44,13 @@ export default function Header() {
       </div>
 
       <div className="flex items-center gap-3">
+        <StartLiveButton />
         <motion.button
           whileHover={{ scale: 1.1 }}
           onClick={() => router.push('/notice')}
           className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition text-xl"
         >
-          🔔
+          <IconNotification className="text-gray-900 dark:text-white" />
         </motion.button>
 
         <motion.button
@@ -54,7 +58,7 @@ export default function Header() {
           onClick={toggleTheme}
           className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition"
         >
-          🌙
+          <IconTheme className="text-gray-900 dark:text-white" />
         </motion.button>
 
         {isAuthed === null ? null : isAuthed ? (
