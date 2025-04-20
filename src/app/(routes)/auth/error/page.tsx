@@ -1,11 +1,10 @@
-'use client'
+import Link from 'next/link'
 
-import { useSearchParams, useRouter } from 'next/navigation'
+type SearchParams = Promise<{ [key: string]: string | undefined }>
 
-export default function AuthErrorPage() {
-  const searchParams = useSearchParams()
-  const error = searchParams.get('error')
-  const router = useRouter()
+const AuthErrorPage = async (props: { searchParams: SearchParams }) => {
+  const searchParams = await props.searchParams
+  const error = searchParams.error
 
   const getErrorMessage = () => {
     if (error === 'AccessDenied') {
@@ -25,20 +24,22 @@ export default function AuthErrorPage() {
         </p>
 
         <div className="flex flex-col gap-3">
-          <button
-            onClick={() => router.replace('/user/login')}
-            className="w-full p-3 rounded-md bg-blue-600 hover:bg-blue-700 text-white font-medium transition active:opacity-80"
+          <Link
+            href="/user/login"
+            className="w-full block text-center p-3 rounded-md bg-blue-600 hover:bg-blue-700 text-white font-medium transition active:opacity-80"
           >
             다시 로그인하러 가기
-          </button>
-          <button
-            onClick={() => router.replace('/user/join')}
-            className="w-full p-3 rounded-md border border-blue-600 text-blue-600 font-medium transition hover:bg-blue-50 dark:hover:bg-gray-800 active:opacity-80"
+          </Link>
+          <Link
+            href="/user/join"
+            className="w-full block text-center p-3 rounded-md border border-blue-600 text-blue-600 font-medium transition hover:bg-blue-50 dark:hover:bg-gray-800 active:opacity-80"
           >
             회원가입 하러 가기
-          </button>
+          </Link>
         </div>
       </div>
     </div>
   )
 }
+
+export default AuthErrorPage
