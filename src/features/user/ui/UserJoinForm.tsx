@@ -80,18 +80,13 @@ const UserJoinForm = () => {
     }
   }
 
-  const googleJoin = async () => {
-    try {
-      await signIn('google', { callbackUrl: '/user/join/callback' })
-    } catch (err) {
-      console.error('구글 회원가입 실패', err)
-    }
-  }
+  const handleGoogleSignup = () =>
+    signIn('google', { callbackUrl: '/auth/callback?flow=signup' })
 
   return (
     <div className="w-full max-w-md">
       <button
-        onClick={googleJoin}
+        onClick={handleGoogleSignup}
         className="w-full max-w-md flex items-center justify-center gap-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 p-3 rounded-md shadow hover:bg-gray-100 dark:hover:bg-gray-700 transition active:opacity-80"
       >
         <Image src={GoogleIcon} alt="Google" />
