@@ -12,15 +12,8 @@ const handler = NextAuth({
   ],
   callbacks: {
     // 가입 여부 확인
-    async signIn({ user }) {
-      const email = user.email
-      if (!email) {
-        console.error('구글 회원 정보 로드에 실패했습니다.')
-        return false
-      }
-      const googleUserId = `google_${email.split('@')[0]}`
-      const res = await checkUserId(googleUserId)
-      if (res.resultMessage?.includes('USER007')) {
+    async signIn({ account }) {
+      if (account?.provider === 'google') {
         return true
       }
       return false
@@ -43,6 +36,10 @@ const handler = NextAuth({
 
       return session
     },
+  },
+  pages: {
+    // signIn error 발생 시 이동할 커스텀 에러 페이지 경로
+    error: '/auth/error',
   },
 })
 

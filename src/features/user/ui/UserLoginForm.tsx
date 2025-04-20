@@ -50,20 +50,14 @@ const UserLoginForm = () => {
     }
   }
 
-  const googleLogin = async () => {
-    try {
-      await signIn('google', { callbackUrl: '/user/login/callback' })
-    } catch (err) {
-      setError('로그인 실패했어요. 잠시 후 다시 시도해 주세요.')
-      console.error('로그인 실패', err)
-    }
-  }
+  const handleGoogleLogin = () =>
+    signIn('google', { callbackUrl: '/auth/callback?flow=login' })
 
   return (
     <div className="w-full max-w-md">
       <button
         className="w-full flex items-center justify-center gap-2 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 p-3 rounded-md shadow hover:bg-gray-100 dark:hover:bg-gray-700 transition active:opacity-80"
-        onClick={googleLogin}
+        onClick={handleGoogleLogin}
       >
         <Image src={GoogleIcon} alt="Google" />
         <span className="text-sm font-medium">구글 간편 로그인</span>
