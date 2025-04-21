@@ -95,6 +95,7 @@ export default function CodeEditor({
 
       const diff = diffs.map(([op, text]: [number, string]) => ({ op, text }))
       const cursorPos = { line: 0, ch: 0 }
+      const isBroadcast = true
 
       console.log('diff', diff)
       updateLiveCodingSnippet(
@@ -104,6 +105,7 @@ export default function CodeEditor({
         diff,
         language,
         cursorPos,
+        isBroadcast,
       )
 
       lastSyncedCodeRef.current = newCode
@@ -123,9 +125,9 @@ export default function CodeEditor({
           >
             {inviteButtonText}
           </button>
-          <button className="px-4 py-2 text-sm rounded-lg bg-gray-200 text-gray-800 hover:bg-red-400 hover:text-white transition">
-            강퇴
-          </button>
+          {/*<button className="px-4 py-2 text-sm rounded-lg bg-gray-200 text-gray-800 hover:bg-red-400 hover:text-white transition">*/}
+          {/*  강퇴*/}
+          {/*</button>*/}
         </div>
         <h2 className="text-xl font-semibold text-white">언어 선택</h2>
         <div className="space-x-4">
