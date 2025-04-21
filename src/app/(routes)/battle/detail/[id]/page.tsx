@@ -7,6 +7,8 @@ import Link from 'next/link'
 import { decompressGzip } from '@/features/editor/helper'
 import BattleControlArea from '@/features/battle/ui/BattleControlArea'
 import Image from 'next/image'
+import CommentSection from '@/features/comment/ui/CommentSection'
+import { COMMENT_TARGET } from '@/features/comment/types'
 
 interface BattleDetailPageProps {
   params: Promise<{ id: string }>
@@ -111,6 +113,9 @@ const BattleDetailPage: FC<BattleDetailPageProps> = async ({ params }) => {
           결과 보기
         </Link>
       </div>
+      <hr className="my-8 border-gray-300 dark:border-gray-700" />
+
+      <CommentSection id={battleId} commentTarget={COMMENT_TARGET.BATTLE} />
     </div>
   )
 }

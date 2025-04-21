@@ -12,6 +12,7 @@ import { motion } from 'framer-motion'
 import { AxiosError } from 'axios'
 import { useRouter, usePathname } from 'next/navigation'
 import { usePopupStore } from '@/shared/store/usePopupStore'
+import { useAuth } from '@/shared/hook/useAuth'
 
 const BattleCodeBlock = ({
   battleId,
@@ -46,13 +47,23 @@ const BattleCodeBlock = ({
   } | null>(null)
   const { openPopup } = usePopupStore()
   const { theme } = useThemeStore()
+  const checkAuth = useAuth()
   const safeLanguage = language ?? 'javascript'
   const voteBattleMutation = useUpdateVoteBattle(true)
   const invalidateBattleVoteState = useInvalidateBattleVoteState()
   const isMotionDivVisible = waveHeight && overlayColor
 
-  const onClickCode = () => {
+  const goToLogin = () => {
+    router.push(`/user/login?redirect=/battle/detail${battleId}`)
+  }
+
+  const onClickCode = async () => {
     if (resultMode) {
+      return
+    }
+    const isLogin = await checkAuth()
+    if (!isLogin) {
+      openPopup('로그인 후에 가능합니다.', '', goToLogin)
       return
     }
     const voteReq: BATTLE.UpdateVoteBattleReqDTO = {
