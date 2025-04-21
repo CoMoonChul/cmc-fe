@@ -10,6 +10,7 @@ import CommentSection from '@/features/comment/ui/CommentSection'
 import { decompressGzip } from '@/features/editor/helper'
 import { usePopupStore } from '@/shared/store/usePopupStore'
 import Image from 'next/image'
+import Link from 'next/link'
 
 const BattleResultPage = () => {
   const { id: queryBattleId } = useParams()
@@ -100,6 +101,21 @@ const BattleResultPage = () => {
 
       <div className="mt-6 bg-gray-100 dark:bg-gray-900 p-4 rounded-lg">
         <p className="text-gray-700 dark:text-gray-300">{data.content}</p>
+      </div>
+
+      <div className="mt-6 flex justify-end gap-3">
+        <Link
+          href={'/battle'}
+          className="px-4 py-2 bg-gray-400 text-white rounded-lg hover:bg-grey-500 transition"
+        >
+          목록 보기
+        </Link>
+        <Link
+          href={`/battle/detail/${battleId}`}
+          className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+        >
+          상세 보기
+        </Link>
       </div>
 
       <hr className="my-8 border-gray-300 dark:border-gray-700" />
