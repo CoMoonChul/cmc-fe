@@ -65,9 +65,6 @@ const ReviewDetailPage: FC<ReviewDetailPageProps> = async ({ params }) => {
           <span>{createdAt && getFormattedCreatedAt(createdAt)}</span>
         </div>
         <div className="flex items-center space-x-4">
-          <div className="flex items-center space-x-1">
-            <span>조회수 : {viewCount ?? 1}회</span>
-          </div>
           <LikeComponent reviewId={reviewId} />
           <button className="text-blue-500">🔗 공유</button>
           <ReviewButtonsComponent

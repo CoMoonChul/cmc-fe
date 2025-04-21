@@ -48,7 +48,7 @@ const ReviewListCard = ({
       <div className="border-t border-gray-200 dark:border-gray-700 my-4" />
 
       {/* 프로필 + 작성일자 + 조회수/좋아요 */}
-      <div className="flex justify-between items-start mt-2">
+      <div className="flex justify-between items-center mt-2">
         <div className="flex items-center gap-3">
           <div className="relative w-7 h-7 rounded-full overflow-hidden">
             <Image
@@ -64,17 +64,11 @@ const ReviewListCard = ({
           </span>
         </div>
 
-        <div className="flex flex-col items-end gap-1 text-xs text-gray-500 dark:text-gray-400">
+        <div className="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400">
           <span>{createdAt && getFormattedCreatedAt(createdAt)}</span>
-          <div className="flex gap-2">
-            <div className="flex items-center gap-1">
-              <span>👀</span>
-              <span>{viewCount ?? 0}</span>
-            </div>
-            <div className="flex items-center gap-1">
-              <span>👍</span>
-              <span>{likeCount ?? 0}</span>
-            </div>
+          <div className="flex items-center gap-1">
+            <span>👍</span>
+            <span>{likeCount ?? 0}</span>
           </div>
         </div>
       </div>

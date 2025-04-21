@@ -74,9 +74,6 @@ const BattleDetailPage: FC<BattleDetailPageProps> = async ({ params }) => {
         </div>
 
         <div className="flex items-center space-x-4 text-sm">
-          <div className="flex items-center space-x-1">
-            <span>조회수 : {viewCount ?? 1}회</span>
-          </div>
           <BattleControlArea battleId={battleId} auditerNum={userNum} />
         </div>
       </div>
