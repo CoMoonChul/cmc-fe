@@ -29,12 +29,28 @@ const LiveCodingJoinPage = () => {
     checkRoomVerification()
   }, [token, router])
 
-  return <p>초대 링크 확인 중...</p>
+  return (
+    <div className="flex flex-col items-center justify-center min-h-screen text-center">
+      <div className="w-12 h-12 border-4 border-blue-500 border-dashed rounded-full animate-spin mb-4" />
+      <p className="text-lg font-medium text-gray-700 dark:text-gray-300">
+        초대 링크 확인 중...
+      </p>
+    </div>
+  )
 }
 
 const SuspenseLiveCodingJoinPage = () => {
   return (
-    <Suspense fallback={<p>초대 링크를 확인하는 중입니다...</p>}>
+    <Suspense
+      fallback={
+        <div className="flex flex-col items-center justify-center min-h-screen text-center">
+          <div className="w-12 h-12 border-4 border-blue-500 border-dashed rounded-full animate-spin mb-4" />
+          <p className="text-lg font-medium text-gray-700 dark:text-gray-300">
+            초대 링크를 확인하는 중입니다...
+          </p>
+        </div>
+      }
+    >
       <LiveCodingJoinPage />
     </Suspense>
   )

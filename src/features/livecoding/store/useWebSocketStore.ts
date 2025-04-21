@@ -73,6 +73,7 @@ const useWebSocketStore = create<WebSocketStore>((set, get) => ({
     socket.onclose = () => {
       console.log('❌ WebSocket Disconnected')
       set({ isConnected: false, socket: null })
+      redirect('/')
     }
 
     socket.onerror = (error) => {

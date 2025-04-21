@@ -129,6 +129,7 @@ export async function updateLiveCodingSnippet(
     line: number
     ch: number
   },
+  isBroadcast: boolean,
   manualErrorHandle = false,
 ): Promise<LIVECODING.UpdateLiveCodingSnippetResDTO> {
   const response = await apiClient(
@@ -141,6 +142,7 @@ export async function updateLiveCodingSnippet(
       diff,
       language,
       cursorPos,
+      isBroadcast,
     },
   )
   return response.data
