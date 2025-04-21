@@ -30,7 +30,6 @@ const ReviewDetailPage: FC<ReviewDetailPageProps> = async ({ params }) => {
     content,
     codeContent,
     codeType,
-    viewCount,
     createdAt,
   } = await selectReview(Number(id))
 

@@ -7,15 +7,35 @@ import { useAuth } from '@/shared/hook/useAuth'
 import { useState, useEffect } from 'react'
 import IconNotification from '@/shared/ui/IconNotification'
 import IconTheme from './IconTheme'
-import StartLiveButton from '@/features/livecoding/ui/StartLiveButton'
+import { usePopupStore } from '@/shared/store/usePopupStore'
+import StartLiveModal from '@/features/livecoding/ui/StartLiveModal'
 
 export default function Header() {
   const router = useRouter()
   const pathname = usePathname()
   const [isAuthed, setIsAuthed] = useState<boolean | null>(null)
+  const { openPopup } = usePopupStore.getState()
+  const [openLiveModal, setOpenLiveModal] = useState<boolean>(false)
 
   const { toggleTheme } = useThemeStore()
   const checkAuth = useAuth()
+
+  const goLogin = () => {
+    router.push('/user/login')
+  }
+
+  const onClickStartLive = async () => {
+    const isLogin = await checkAuth()
+    if (!isLogin) {
+      openPopup(
+        '로그인 후에 코드 리뷰를 시작할 수 있습니다.',
+        '로그인 하시겠습니까?',
+        goLogin,
+      )
+      return
+    }
+    setOpenLiveModal(true)
+  }
 
   useEffect(() => {
     const check = async () => {
@@ -44,7 +64,12 @@ export default function Header() {
       </div>
 
       <div className="flex items-center gap-3">
-        <StartLiveButton />
+        <button
+          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+          onClick={onClickStartLive}
+        >
+          코드 리뷰 시작
+        </button>
         <motion.button
           whileHover={{ scale: 1.1 }}
           onClick={() => router.push('/notice')}
@@ -100,6 +125,9 @@ export default function Header() {
           </>
         )}
       </div>
+      {openLiveModal && (
+        <StartLiveModal onClose={() => setOpenLiveModal(false)} />
+      )}
     </header>
   )
 }

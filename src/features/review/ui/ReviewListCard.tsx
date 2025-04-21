@@ -10,7 +10,6 @@ const ReviewListCard = ({
   userImg,
   title,
   content,
-  viewCount,
   likeCount,
   createdAt,
 }: {
@@ -19,7 +18,6 @@ const ReviewListCard = ({
   userImg: string
   title: string
   content: string
-  viewCount?: number
   likeCount?: number
   createdAt?: string
 }) => {
