@@ -78,10 +78,6 @@ const BattleResultPage = () => {
             </p>
           </div>
         </div>
-
-        <p className="text-sm text-gray-600 dark:text-gray-400">
-          조회수: {data.viewCount ?? 1}회
-        </p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-[1fr_auto_1fr] gap-4 items-center">
