@@ -31,6 +31,7 @@ const GroupManageModal = ({ groupId, onClose }: GroupManageModalProps) => {
     expelMutation.mutate(ExpelReq)
   }
   const handleInvite = () => {
+    console.log('handleInvite')
     if (!username.trim()) return
 
     const InviteReq: GROUP.InviteReqDTO = {
@@ -125,6 +126,7 @@ const GroupManageModal = ({ groupId, onClose }: GroupManageModalProps) => {
           </button>
           {memberData.members.length < 5 ? (
             <button
+              type="button"
               className="bg-blue-500 hover:bg-blue-700 text-white px-4 py-2 rounded"
               onClick={handleInvite}
             >

@@ -30,7 +30,6 @@ const BattleDetailPage: FC<BattleDetailPageProps> = async ({ params }) => {
     codeTypeRight,
     leftVote,
     rightVote,
-    viewCount,
     username,
     userNum,
     userImg,

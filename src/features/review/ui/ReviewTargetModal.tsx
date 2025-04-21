@@ -19,8 +19,6 @@ export default function ReviewTargetModal({
   const [activeGroups, setActiveGroups] = useState<number[]>([])
   const { data: groupData } = useGetMyGroupList()
 
-  console.log('groupData', groupData)
-
   const toggleGroup = (group: number) => {
     setActiveGroups((prev) =>
       prev.includes(group) ? prev.filter((g) => g !== group) : [...prev, group],
