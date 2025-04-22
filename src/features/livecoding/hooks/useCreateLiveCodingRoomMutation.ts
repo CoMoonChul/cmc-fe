@@ -19,7 +19,7 @@ export const useCreateLiveCodingRoomMutation = () => {
         // 1. 방 생성
         const createResponse = await createLiveCoding({ hostId })
         createdRoomId = createResponse.roomId
-
+        const isBroadcast = true
         console.log(
           'updateLiveCodingSnippet req',
           createdRoomId,
@@ -35,6 +35,7 @@ export const useCreateLiveCodingRoomMutation = () => {
           [{ op: 0, text: '' }],
           language,
           { line: 0, ch: 0 },
+          isBroadcast,
         )
 
         return createResponse
