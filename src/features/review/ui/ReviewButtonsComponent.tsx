@@ -23,11 +23,7 @@ const ReviewButtonsComponent = ({
   const { user } = useUserStore()
   const router = useRouter()
   const deleteReviewMutation = useDeleteReviewMutation(reviewId)
-  const useCreateLiveCodingRoomMutaion = useCreateLiveCodingRoomMutation(
-    userNum,
-    code,
-    language,
-  )
+  const useCreateLiveCodingRoomMutaion = useCreateLiveCodingRoomMutation()
   const { openPopup } = usePopupStore.getState()
   const [isDeleting, setIsDeleting] = useState(false)
   const [roomId, setRoomId] = useState<string | null>(null)
@@ -71,29 +67,25 @@ const ReviewButtonsComponent = ({
     })
   }
   // 라이브 코딩 확인 버튼 클릭
-  const onConfirmCreateRoom = () => {
+  const onConfirmCreateRoom = async () => {
     if (!userNum) throw new Error('호스트ID 정보가 유효하지 않습니다.')
-
     if (!code) throw new Error('기술 된 코드가 없습니다.')
-
     if (!language?.trim())
       throw new Error('프로그래밍 언어가 올바르지 않습니다.')
 
-    const req = {
-      hostId: Number(userNum),
-      code: code,
-      language: language,
-    }
+    try {
+      const result = await useCreateLiveCodingRoomMutaion.mutateAsync({
+        hostId: Number(userNum),
+        code,
+        language,
+      })
 
-    useCreateLiveCodingRoomMutaion.mutate(req, {
-      onSuccess: (response) => {
-        // 방 생성 후 해당 roomId로 URL 변경
-        router.push(`/livecoding/${response.roomId}`)
-      },
-      onError: (error) => {
-        throw new Error('방 생성 실패:', error)
-      },
-    })
+      // ✅ 성공 시 URL 이동
+      router.push(`/livecoding/${result.roomId}`)
+    } catch (error) {
+      console.error('방 생성 실패:', error)
+      throw new Error('방 생성 실패. 잠시 후 다시 시도해 주세요.')
+    }
   }
 
   // 작성자가 아닌 경우 버튼 숨기기

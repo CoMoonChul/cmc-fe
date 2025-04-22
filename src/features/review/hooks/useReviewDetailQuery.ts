@@ -18,5 +18,7 @@ export const useReviewDetailQuery = (
     queryKey: [QUERY_KEYS.REVIEW.DETAIL, reviewId],
     queryFn: () => selectReview(reviewId),
     enabled: enabled,
+    staleTime: 1000 * 60 * 5, // 5 min
+    gcTime: 1000 * 60 * 30, // 30 min
   })
 }

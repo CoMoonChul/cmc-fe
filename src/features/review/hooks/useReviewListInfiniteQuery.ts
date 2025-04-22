@@ -32,6 +32,8 @@ export const useReviewListInfiniteQuery = (
       const currentPage = lastPage.pageNumber ?? 0
       return totalPages - 1 > currentPage ? currentPage + 1 : undefined
     },
+    staleTime: 1000 * 60 * 5, // 5 min
+    gcTime: 1000 * 60 * 30, // 30 min
     retry: false,
   })
 }
