@@ -1,4 +1,4 @@
-export const CLIENT_BASE_PATH = 'http://localhost:3000/api'
-export const SERVER_BASE_PATH = 'http://localhost:8080'
+export const CLIENT_BASE_PATH = process.env.NEXT_PUBLIC_FRONTEND_URL
+export const SERVER_BASE_PATH = process.env.BACKEND_URL
 export const LOGO_PATH =
   'https://cmc-public-bucket.s3.ap-northeast-2.amazonaws.com/logos/cmc_icon.png'
