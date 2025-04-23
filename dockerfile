@@ -14,7 +14,7 @@ RUN pnpm install
 COPY . .
 
 # ✅ 환경파일 마지막에 덮어쓰기
-COPY .env.production .env.production
+COPY .env.production /app/.env.production
 
 # OAG 생성
 RUN pnpm oag:gen:prd

@@ -13,11 +13,7 @@ export function getApiConfig(): Configuration {
   const isClient = typeof window !== 'undefined'
   const basePath = isClient ? CLIENT_BASE_PATH : SERVER_BASE_PATH
 
-  if (isClient) {
-    console.log(`[CLIENT] basePath: ${basePath}`)
-  } else {
-    console.log(`[SERVER] basePath: ${basePath}`)
-  }
+  console.log(`[getApiConfig] basePath: ${basePath} (isClient: ${isClient})`)
 
   return new Configuration({ basePath })
 }
