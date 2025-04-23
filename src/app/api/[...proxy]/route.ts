@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 
-const BACKEND_URL = process.env.BACKEND_URL || 'http://localhost:8080'
+const BACKEND_URL =
+  process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8080'
 const REFRESH_TOKEN_URL = `${BACKEND_URL}/user/tempRefresh`
 
 export async function GET(req: NextRequest) {
