@@ -129,9 +129,17 @@ const UserJoinForm = () => {
             <input
               type={type}
               value={formData[name as keyof typeof formData]}
-              onChange={(e) =>
-                setFormData({ ...formData, [name]: e.target.value })
-              }
+              onChange={(e) => {
+                const value = e.target.value
+                setFormData((prev) => ({
+                  ...prev,
+                  [name]: value,
+                }))
+                setErrors((prev) => ({
+                  ...prev,
+                  [name]: null,
+                }))
+              }}
               className={`w-full p-3 border rounded-md dark:bg-gray-800 dark:border-gray-600 focus:ring-2 focus:ring-blue-500 ${
                 errors[name] ? 'border-red-500' : 'border-gray-300'
               }`}
