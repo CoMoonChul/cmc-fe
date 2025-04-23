@@ -19,7 +19,7 @@ RUN pnpm install
 COPY . .
 
 # 5. 클라이언트용 환경 변수 포함을 위해 .env.production만 따로 복사
-COPY .env.production .env.production
+COPY ./env/.env.production /app/.env.production
 
 # 6. OpenAPI Generator 실행
 RUN pnpm oag:gen:prd
