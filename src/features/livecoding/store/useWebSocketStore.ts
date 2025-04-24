@@ -13,6 +13,19 @@ interface WebSocketStore {
   applyDiff: (diff: diff) => void
 }
 
+const CHAT_TYPE = {
+  IN_OUT: 0,
+  CHAT: 1,
+  UPDATE: 2,
+} as  const
+
+const ACTION_TYPE = {
+  JOIN: 0,
+  LEAVE: 1,
+  DELETE: 2,
+} as  const
+
+
 const useWebSocketStore = create<WebSocketStore>((set, get) => ({
   isConnected: false,
   messages: [],
@@ -31,7 +44,7 @@ const useWebSocketStore = create<WebSocketStore>((set, get) => ({
         const user = useUserStore.getState().user
 
         // 코드 diff 수신 처리
-        if (liveCodingChatType === 2 && diff) {
+        if (liveCodingChatType === CHAT_TYPE.UPDATE && diff) {
           if (user.userNum !== usernum) {
             get().applyDiff(diff)
           }
@@ -40,17 +53,17 @@ const useWebSocketStore = create<WebSocketStore>((set, get) => ({
 
         let formattedMessage = ''
 
-        if (liveCodingChatType === 0) {
-          if (action === 2) {
+        if (liveCodingChatType === CHAT_TYPE.IN_OUT) {
+          if (action === ACTION_TYPE.DELETE) {
             alert('호스트와 연결이 끊겼습니다.')
             redirect('/')
             return
           }
           formattedMessage =
-            action === 0
+            action === ACTION_TYPE.JOIN
               ? `${username} 님이 입장하셨습니다.`
               : `${username} 님이 퇴장하셨습니다.`
-        } else if (liveCodingChatType === 1) {
+        } else if (liveCodingChatType === CHAT_TYPE.CHAT) {
           formattedMessage = `${username}: ${msg}`
         }
 
@@ -106,7 +119,6 @@ const useWebSocketStore = create<WebSocketStore>((set, get) => ({
   },
 
   applyDiff: (diff) => {
-    console.log('🧩 받은 diff:', diff)
     // TODO: 에디터 상태 반영 로직
   },
 }))
