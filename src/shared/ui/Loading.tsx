@@ -1,11 +1,14 @@
 'use client'
 import { motion } from 'framer-motion'
 import { useIsFetching, useIsMutating } from '@tanstack/react-query'
+import { useLoadingStore } from '@/shared/store/useLoadingStore'
 
 const Loading = () => {
-  const isFetching = useIsFetching() + useIsMutating() > 0
+  const isManualShow = useLoadingStore((state) => state.isManualShow)
+  const isShow = useIsFetching() + useIsMutating() > 0 || isManualShow
 
-  if (!isFetching) return null
+  if (!isShow) return null
+
   return (
     <motion.div
       className="fixed top-0 left-0 w-screen h-screen flex items-center justify-center bg-black bg-opacity-50 backdrop-blur-sm z-50 dark:bg-opacity-70"
