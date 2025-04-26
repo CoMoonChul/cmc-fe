@@ -46,6 +46,7 @@
 
 라이브러리 | 사용 목적 | Version  
 :---------:|:---------:|:--------:  
+openapi-generator | OpenAPI 코드 생성기 | 2.6.0
 Framer Motion | 애니메이션 라이브러리 | 12.4.7  
 CodeMirror | 코드 에디터 | 6.x
 Diff Match Patch | 텍스트 비교 | 1.0.5
@@ -92,9 +93,8 @@ Pako | 데이터 압축 | 2.1.0
 
 # Layers
 
----
+![1](https://github.com/user-attachments/assets/631d298b-9769-49cb-9dc5-a1d662cd0ab8)
 
-![image.png](attachment:71421fae-c754-43b8-82b6-c79af4b0f207:image.png)
 
 Layers는 FSD 패턴의 첫 번째 수준을 나타냅니다. 레이어는 각각이 다루어야 할 책임과 다른 모듈과의 의존도에 따라 분류됩니다.
 
@@ -107,7 +107,8 @@ Layers는 FSD 패턴의 첫 번째 수준을 나타냅니다. 레이어는 각�
 
 </aside>
 
-![image.png](attachment:be2d6bb8-55d8-4e0c-a469-db8a01af2dcc:image.png)
+![2](https://github.com/user-attachments/assets/015291eb-82db-443f-828d-7fc1d8c903c0)
+
 
 상위 레벨에 있는 레이어는 하위 레벨을 의존성으로 가질 수 있지만 그 반대는 성립될 수 없습니다.
 
@@ -130,7 +131,6 @@ Layers는 FSD 패턴의 첫 번째 수준을 나타냅니다. 레이어는 각�
 
 ### Shared
 
----
 
 <aside>
 💡
@@ -152,7 +152,6 @@ Shared는 다른 모든 레이어의 근간을 형성하며, Slice를 두지 않
 
 ## Entities
 
----
 
 <aside>
 💡
@@ -210,7 +209,6 @@ open api generator를 사용하지 않는 경우, api in/out 타입을 types.ts�
 
 ## Features
 
----
 
 Features 레이어가 Entities, Shared와 어떻게 다른지 표로 나타내었습니다.
 
@@ -235,7 +233,6 @@ Features 레이어가 Entities, Shared와 어떻게 다른지 표로 나타내�
 
 ## Widgets
 
----
 
 <aside>
 ⛔
@@ -246,7 +243,6 @@ Features 레이어가 Entities, Shared와 어떻게 다른지 표로 나타내�
 
 ## Pages, App
 
----
 
 <aside>
 ⛔
@@ -290,7 +286,7 @@ export const useBattleDetailQuery = (battleId: number) => {
 - Tanstack query는 hook으로 감싸 사용
 - hook의 이름은 조회성 쿼리는 Query, 처리성 쿼리는 Mutation을 붙여서 사용
 
-![스크린샷 2025-04-26 오후 5.27.22.png](attachment:990d8a14-4db3-4626-825c-02d6292a12b5:스크린샷_2025-04-26_오후_5.27.22.png)
+<img width="269" alt="스크린샷 2025-04-26 오후 5 35 08" src="https://github.com/user-attachments/assets/725a4f0c-ff65-491b-a96b-f652fd148aaf" />
 
 - 쿼리 키는 feature/{domain}/types.ts에 아래 코드와 같이 QUERY_KEY를 export하여 공통적으로 사용할 수 있도록 함
 
