@@ -96,7 +96,6 @@ const ReviewForm = ({ reviewId }: { reviewId?: string }) => {
         {
           onSuccess: (response) =>
             router.push(`/review/detail/${response.reviewId}`),
-          onError: () => openPopup('수정 실패', ''),
         },
       )
     } else {
@@ -107,7 +106,6 @@ const ReviewForm = ({ reviewId }: { reviewId?: string }) => {
       createReviewMutation.mutate(createReq, {
         onSuccess: (response) =>
           router.push(`/review/detail/${response.reviewId}`),
-        onError: () => openPopup('등록 실패', ''),
       })
     }
   }

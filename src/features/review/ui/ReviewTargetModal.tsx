@@ -90,7 +90,10 @@ export default function ReviewTargetModal({
             취소
           </button>
           <button
-            onClick={() => onSubmit(activeGroups)}
+            onClick={() => {
+              onClose()
+              onSubmit(activeGroups)
+            }}
             className="px-4 py-2 rounded-md text-sm bg-blue-500 text-white hover:bg-blue-600"
           >
             {isEdit ? '수정하기' : '등록하기'}
