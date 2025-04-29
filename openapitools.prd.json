@@ -69,6 +69,12 @@
         "templateDir": "#{cwd}/generate/template",
         "output": "#{cwd}/generate/group",
         "inputSpec": "https://cmc-public-bucket.s3.ap-northeast-2.amazonaws.com/oag/group.yaml"
+      },
+      "ai": {
+        "generatorName": "typescript-axios",
+        "templateDir": "#{cwd}/generate/template",
+        "output": "#{cwd}/generate/ai",
+        "inputSpec": "https://cmc-public-bucket.s3.ap-northeast-2.amazonaws.com/oag/ai.yaml"
       }
     }
   }
