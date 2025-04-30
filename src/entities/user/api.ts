@@ -68,11 +68,14 @@ export async function loginNext(userId: string, password: string) {
  * @returns 로그아웃 결과
  */
 export async function logoutNext() {
+  console.log('logoutNext call')
   const response = await fetch('/api/auth/logout', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     credentials: 'include',
   })
+
+  console.log('logoutNext response', response)
 
   if (!response.ok) {
     throw new Error('로그아웃 실패')
