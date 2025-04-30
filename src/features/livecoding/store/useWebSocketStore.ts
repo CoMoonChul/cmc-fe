@@ -17,14 +17,13 @@ const CHAT_TYPE = {
   IN_OUT: 0,
   CHAT: 1,
   UPDATE: 2,
-} as  const
+} as const
 
 const ACTION_TYPE = {
   JOIN: 0,
   LEAVE: 1,
   DELETE: 2,
-} as  const
-
+} as const
 
 const useWebSocketStore = create<WebSocketStore>((set, get) => ({
   isConnected: false,
