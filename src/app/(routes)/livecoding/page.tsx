@@ -42,9 +42,9 @@ export default function LiveCodingTestPage() {
       }
       const response = await selectLiveCoding(inputRoomId)
       setRoomInfo(response)
-      console.log('✅ 조회된 방 정보:', response)
+      console.log('조회된 방 정보:', response)
     } catch (error) {
-      console.error('❌ 방 조회 실패:', error)
+      console.error('방 조회 실패:', error)
     }
   }
 
@@ -68,7 +68,7 @@ export default function LiveCodingTestPage() {
         alert('방 삭제에 실패했습니다.')
       }
     } catch (error) {
-      console.error('❌ 방 삭제 실패:', error)
+      console.error('방 삭제 실패:', error)
       alert('방 삭제 중 오류가 발생했습니다.')
     }
   }
@@ -83,9 +83,7 @@ export default function LiveCodingTestPage() {
       >
         라이브코딩 방 생성
       </button>
-      {roomId && (
-        <p className="mt-2 text-green-600">✅ 생성된 방 ID: {roomId}</p>
-      )}
+      {roomId && <p className="mt-2 text-green-600">생성된 방 ID: {roomId}</p>}
 
       <button
         onClick={selectRoom}

@@ -63,7 +63,7 @@ export default function LiveCodingPage() {
       setSnippet(snippetData)
       setReady(true)
     } catch (e) {
-      console.error('❌ 방 조회 실패:', e)
+      console.error('방 조회 실패:', e)
       disconnect()
       router.replace('/')
     }
@@ -87,7 +87,9 @@ export default function LiveCodingPage() {
       <div className="flex items-center justify-center h-screen bg-gray-100 dark:bg-gray-900">
         <div className="flex flex-col items-center space-y-4">
           <div className="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
-          <p className="text-lg font-medium text-gray-800 dark:text-gray-100">로딩 중입니다...</p>
+          <p className="text-lg font-medium text-gray-800 dark:text-gray-100">
+            로딩 중입니다...
+          </p>
         </div>
       </div>
     )

@@ -1,4 +1,5 @@
 import { create } from 'zustand'
+import { v4 as uuidv4 } from 'uuid'
 
 interface Popup {
   id: string
@@ -18,7 +19,7 @@ export const usePopupStore = create<PopupState>((set) => ({
   openPopup: (title, message, onConfirm) =>
     set((state) => {
       const newPopup: Popup = {
-        id: crypto.randomUUID(),
+        id: uuidv4(),
         title,
         message,
         onConfirm,

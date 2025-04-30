@@ -72,24 +72,24 @@ const useWebSocketStore = create<WebSocketStore>((set, get) => ({
           }))
         }
       } catch (error) {
-        console.error('❌ WebSocket 메시지 파싱 오류:', error)
+        console.error('WebSocket 메시지 파싱 오류:', error)
         redirect('/')
       }
     }
 
     socket.onopen = () => {
-      console.log('✅ WebSocket Connected')
+      console.log('WebSocket Connected')
       set({ isConnected: true, socket, messages: [] })
     }
 
     socket.onclose = () => {
-      console.log('❌ WebSocket Disconnected')
+      console.log('WebSocket Disconnected')
       set({ isConnected: false, socket: null })
       redirect('/')
     }
 
     socket.onerror = (error) => {
-      console.error('❌ WebSocket Error:', error)
+      console.error('WebSocket Error:', error)
       redirect('/')
     }
 
