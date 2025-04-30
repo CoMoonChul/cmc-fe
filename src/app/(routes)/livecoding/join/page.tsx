@@ -10,7 +10,7 @@ const LiveCodingJoinPage = () => {
   const token = searchParams.get('token')
   useEffect(() => {
     if (!token) {
-      alert('❌ 유효한 초대 링크가 아닙니다.')
+      alert('유효한 초대 링크가 아닙니다.')
       router.push('/')
       return
     }

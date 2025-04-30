@@ -38,7 +38,7 @@ const BattleControlArea = ({
         ✏ 수정하기
       </Link>
       <button onClick={onClickDeleteBtn} className="text-red-500">
-        ❌ 삭제하기
+        삭제하기
       </button>
     </div>
   )

@@ -80,7 +80,6 @@ const ReviewButtonsComponent = ({
         language,
       })
 
-      // ✅ 성공 시 URL 이동
       router.push(`/livecoding/${result.roomId}`)
     } catch (error) {
       console.error('방 생성 실패:', error)
@@ -107,7 +106,7 @@ const ReviewButtonsComponent = ({
         className="text-red-500"
         disabled={isDeleting}
       >
-        {isDeleting ? '삭제 중...' : '❌ 삭제하기'}
+        {isDeleting ? '삭제 중...' : '삭제하기'}
       </button>
     </div>
   )

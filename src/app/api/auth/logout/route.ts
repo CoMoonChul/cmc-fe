@@ -3,7 +3,6 @@ import { API_ENDPOINTS } from '@/features/user/types'
 
 // 로그아웃 api의 경우 액세스 토큰이 필요함. 하지만 api route.ts에 포함되지 못해 at 갱신 로직 등이 적용되지 못해, 간혹 에러가 발생할 수 있음
 export async function POST(req: NextRequest) {
-  console.log('logout route.ts')
   const accessToken = req.cookies.get('accessToken')?.value
   const headers: HeadersInit = {
     'Content-Type': 'application/json',
@@ -16,25 +15,27 @@ export async function POST(req: NextRequest) {
       credentials: 'include',
     })
 
-    console.log('logout route.ts response', response)
-
     if (!response.ok) {
-      console.log('logout response not ok!')
-      const res = NextResponse.json({ message: 'Logout api error' })
-      res.cookies.set('accessToken', '', { maxAge: 0, path: '/' })
-      res.cookies.set('refreshToken', '', { maxAge: 0, path: '/' })
-      return res
+      console.error('[auth/logout] response not ok')
+      return getLogoutResponse()
     }
 
-    const res = NextResponse.json({ message: 'Logout successful' })
-    res.cookies.set('accessToken', '', { maxAge: 0, path: '/' })
-    res.cookies.set('refreshToken', '', { maxAge: 0, path: '/' })
-    return res
+    return getLogoutResponse()
   } catch (error) {
-    console.error('[auth/logout] error:', error)
-    const res = NextResponse.json({ message: 'Logout api error' })
-    res.cookies.set('accessToken', '', { maxAge: 0, path: '/' })
-    res.cookies.set('refreshToken', '', { maxAge: 0, path: '/' })
-    return res
+    console.error('[auth/logout] catch error:', error)
+    return getLogoutResponse()
   }
+}
+
+const getLogoutResponse = () => {
+  const res = NextResponse.json({ message: 'Logout successful' })
+  res.cookies.set('accessToken', '', {
+    maxAge: 0,
+    path: '/',
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'strict',
+  })
+  res.cookies.set('refreshToken', '', { maxAge: 0, path: '/' })
+  return res
 }
