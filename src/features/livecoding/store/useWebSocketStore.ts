@@ -33,9 +33,8 @@ const useWebSocketStore = create<WebSocketStore>((set, get) => ({
   connect: (roomId) => {
     if (get().isConnected) return
 
-    const baseHttpUrl =
-      process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8080'
-    const wsBaseUrl = baseHttpUrl.replace(/^http/, 'ws')
+    const wsBaseUrl =
+      process.env.NEXT_PUBLIC_WS_BASE_URL || 'ws://localhost:8080'
     const socket = new WebSocket(`${wsBaseUrl}/ws/livecoding/${roomId}`)
 
     const handleMessage = (event: MessageEvent) => {
