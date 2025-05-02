@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import useUserStore from '@/shared/store/useUserStore'
 import { withdrawNext } from '@/entities/user/api'
 import { useUpdateUserMutation } from '@/features/user/hooks/useUpdateUserMutation'
 import { useLogoutMutation } from '@/features/user/hooks/useLogoutMutation'
@@ -40,6 +41,11 @@ const UserProfilePage = () => {
   const onClickLogout = () => {
     logoutMutation.mutate(undefined, {
       onSuccess: () => {
+        // Zustand 상태 초기화
+        useUserStore.getState().clearUser()
+        // 로컬스토리지 데이터 제거
+        localStorage.removeItem('user-store')
+
         router.push('/')
       },
     })
@@ -89,6 +95,7 @@ const UserProfilePage = () => {
 
   useEffect(() => {
     if (data) {
+      console.log('???', data)
       setNickname(data.username)
       setEmail(data.email)
       setSelectedImage(data.profileImg ?? '')
@@ -120,15 +127,6 @@ const UserProfilePage = () => {
               className="text-sm text-blue-500 hover:text-blue-700"
             >
               이미지 선택
-            </button>
-            <button
-              onClick={() => {
-                setSelectedImage('')
-                updateUser(nickname, email, '')
-              }}
-              className="text-sm text-red-500 hover:text-red-700"
-            >
-              이미지 제거
             </button>
           </div>
         </div>
@@ -175,17 +173,19 @@ const UserProfilePage = () => {
                   {email}
                 </p>
               )}
-              <button
-                onClick={() => {
-                  if (editMode.email) {
-                    updateUser(nickname, email, selectedImage)
-                  }
-                  setEditMode((prev) => ({ ...prev, email: !prev.email }))
-                }}
-                className="text-sm text-blue-500 hover:text-blue-700"
-              >
-                {editMode.email ? '저장' : '수정'}
-              </button>
+              {data?.email && !data?.email.endsWith('@gmail.com') && (
+                <button
+                  onClick={() => {
+                    if (editMode.email) {
+                      updateUser(nickname, email, selectedImage)
+                    }
+                    setEditMode((prev) => ({ ...prev, email: !prev.email }))
+                  }}
+                  className="text-sm text-blue-500 hover:text-blue-700"
+                >
+                  {editMode.email ? '저장' : '수정'}
+                </button>
+              )}
             </div>
           </div>
         </div>
