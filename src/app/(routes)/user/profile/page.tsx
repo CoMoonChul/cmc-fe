@@ -95,7 +95,6 @@ const UserProfilePage = () => {
 
   useEffect(() => {
     if (data) {
-      console.log('???', data)
       setNickname(data.username)
       setEmail(data.email)
       setSelectedImage(data.profileImg ?? '')
