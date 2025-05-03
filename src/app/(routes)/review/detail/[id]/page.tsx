@@ -65,7 +65,6 @@ const ReviewDetailPage: FC<ReviewDetailPageProps> = async ({ params }) => {
         </div>
         <div className="flex items-center space-x-4">
           <LikeComponent reviewId={reviewId} />
-          <button className="text-blue-500">🔗 공유</button>
           <ReviewButtonsComponent
             reviewId={reviewId}
             userNum={userNum}

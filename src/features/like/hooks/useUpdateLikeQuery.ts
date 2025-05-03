@@ -1,7 +1,8 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { updateReviewLike } from '@/entities/like/api'
 import type { LIKE } from '#/generate'
-import { QUERY_KEYS } from '../types'
+import { QUERY_KEYS } from '@/features/like/types'
+import { QUERY_KEYS as REVIEW_KEYS } from '@/features/review/types'
 
 /**
  * 리뷰 좋아요
@@ -20,8 +21,13 @@ export const useUpdateLike = (
   >({
     mutationFn: (data) => updateReviewLike(data, manualErrorHandle),
     onSuccess: () => {
+      // 좋아요 상태
       queryClient.invalidateQueries({
         queryKey: [QUERY_KEYS.LIKE.STATE, reviewId],
+      })
+      // 리뷰 리스트에 좋아요 상태 갱신
+      queryClient.invalidateQueries({
+        queryKey: [REVIEW_KEYS.REVIEW.LIST],
       })
     },
     retry: false,

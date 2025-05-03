@@ -7,7 +7,6 @@ import CodeModal from './CodeModal'
 import { useThemeStore } from '@/shared/store/useThemeStore'
 import { languageExtensions } from '@/entities/editor/types'
 import { useUpdateVoteBattle } from '@/features/battle/hooks/useUpdateVoteBattle'
-import { useInvalidateBattleVoteState } from '@/features/battle/hooks/useInvalidateBattleVoteState'
 import { motion } from 'framer-motion'
 import { AxiosError } from 'axios'
 import { useRouter, usePathname } from 'next/navigation'
@@ -49,8 +48,7 @@ const BattleCodeBlock = ({
   const { theme } = useThemeStore()
   const checkAuth = useAuth()
   const safeLanguage = language ?? 'javascript'
-  const voteBattleMutation = useUpdateVoteBattle(true)
-  const invalidateBattleVoteState = useInvalidateBattleVoteState()
+  const voteBattleMutation = useUpdateVoteBattle(battleId, true)
   const isMotionDivVisible = waveHeight && overlayColor
 
   const goToLogin = () => {
@@ -72,7 +70,6 @@ const BattleCodeBlock = ({
     }
     voteBattleMutation.mutate(voteReq, {
       onSuccess: () => {
-        invalidateBattleVoteState(battleId)
         onVote(position)
       },
       onError: (e) => {
