@@ -59,7 +59,7 @@ async function handleRequest(
       })
       newResponse.headers.append(
         'Set-Cookie',
-        `accessToken=${newAccessToken}; Path=/; HttpOnly; Secure=${process.env.NODE_ENV === 'production'}; SameSite=Strict; Max-Age=900`,
+        `accessToken=${newAccessToken}; Path=/; HttpOnly; Secure=${process.env.NODE_ENV === 'production'}; SameSite=None; Max-Age=900`,
       )
       return newResponse
     }

@@ -32,7 +32,7 @@ export async function POST(req: NextRequest) {
     // access token set cookie header
     res.headers.append(
       'Set-Cookie',
-      `accessToken=${accessToken}; Path=/; HttpOnly; Secure=${process.env.NODE_ENV === 'production'}; SameSite=Strict; Max-Age=600`,
+      `accessToken=${accessToken}; Path=/; HttpOnly; Secure=${process.env.NODE_ENV === 'production'}; SameSite=None; Max-Age=600`,
     )
     return res
   } catch (error) {
