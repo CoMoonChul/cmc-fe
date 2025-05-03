@@ -60,9 +60,8 @@ const ReviewListCard = ({
 
         <div className="flex flex-col gap-2 text-xs text-gray-500 dark:text-gray-400 min-w-[120px]">
           <span>{createdAt && getFormattedCreatedAt(createdAt)}</span>
-          <div className="flex items-center gap-1">
-            <span>👍</span>
-            <span>{likeCount ?? 0}</span>
+          <div className="flex items-center gap-2">
+            <span>{likeCount ?? 0}명이 좋아해요</span>
           </div>
         </div>
       </div>

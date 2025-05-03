@@ -6,6 +6,7 @@ import { javascript } from '@codemirror/lang-javascript'
 import { dracula } from '@uiw/codemirror-theme-dracula'
 import { useThemeStore } from '@/shared/store/useThemeStore'
 import CommentSection from '@/features/comment/ui/CommentSection'
+import React from 'react'
 
 const sampleJavaScriptCode = `
 // Example Code
