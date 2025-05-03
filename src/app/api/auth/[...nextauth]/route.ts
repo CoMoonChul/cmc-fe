@@ -13,6 +13,8 @@ const handler = NextAuth({
   callbacks: {
     // 가입 여부 확인
     async signIn({ account }) {
+      console.log('app/api/auth/signIn account', account)
+      console.log('app/api/auth/signIn account?.provider', account?.provider)
       if (account?.provider === 'google') {
         return true
       }
@@ -20,6 +22,8 @@ const handler = NextAuth({
     },
     // id_token 저장
     async jwt({ token, account }) {
+      console.log('app/api/auth/jwt token', token)
+      console.log('app/api/auth/jwt account', account)
       if (account) {
         token.idToken = account.id_token
       }
@@ -33,6 +37,9 @@ const handler = NextAuth({
       } else {
         session.idToken = undefined
       }
+
+      console.log('app/api/auth/session session', session)
+      console.log('app/api/auth/session token', token)
 
       return session
     },
