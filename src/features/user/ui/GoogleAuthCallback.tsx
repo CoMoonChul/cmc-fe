@@ -34,6 +34,8 @@ const GoogleAuthCallback = ({ flow }: { flow: string | null }) => {
     if (!email) return
 
     const userId = `google_${email.split('@')[0]}`
+    console.log('GoogleAuthCallback email', email)
+    console.log('GoogleAuthCallback userId', userId)
 
     if (flow === 'login') {
       checkUserId(userId)
