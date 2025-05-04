@@ -82,7 +82,13 @@ const UserProfilePage = () => {
     openPopup(
       '',
       '탈퇴 시 작성하신 모든 리뷰, 배틀, 댓글이 삭제되며 복구되지 않습니다.',
-      () => setShowWithdrawPopup(true),
+      () => {
+        if (data?.userId?.startsWith('google_')) {
+          withDraw('') // 구글 회원은 비밀번호 입력 없이 탈퇴 처리
+        } else {
+          setShowWithdrawPopup(true) // 일반 사용자는 비밀번호 입력 후 탈퇴 처리
+        }
+      },
     )
   }
 
@@ -172,7 +178,7 @@ const UserProfilePage = () => {
                   {email}
                 </p>
               )}
-              {data?.email && !data?.email.endsWith('@gmail.com') && (
+              {data?.email && !data?.userId?.startsWith('google_') && (
                 <button
                   onClick={() => {
                     if (editMode.email) {
