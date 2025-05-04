@@ -77,21 +77,16 @@ const BattleDetailPage: FC<BattleDetailPageProps> = async ({ params }) => {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-[1fr_auto_1fr] gap-4 items-center">
-        <BattleCodeArea
-          battleId={battleId}
-          codeContentLeft={deCompCodeLeft}
-          codeTypeLeft={codeTypeLeft}
-          codeContentRight={deCompCodeRight}
-          codeTypeRight={codeTypeRight}
-          leftVote={leftVote}
-          rightVote={rightVote}
-          resultMode={false}
-        />
-      </div>
-      <div className="mt-4 text-center text-gray-700 dark:text-gray-300">
-        코드를 클릭해 투표하세요
-      </div>
+      <BattleCodeArea
+        battleId={battleId}
+        codeContentLeft={deCompCodeLeft}
+        codeTypeLeft={codeTypeLeft}
+        codeContentRight={deCompCodeRight}
+        codeTypeRight={codeTypeRight}
+        leftVote={leftVote}
+        rightVote={rightVote}
+        resultMode={false}
+      />
       <div className="mt-6 bg-gray-100 dark:bg-gray-900 p-4 rounded-lg">
         <p className="text-gray-700 dark:text-gray-300">{content}</p>
       </div>
@@ -101,12 +96,6 @@ const BattleDetailPage: FC<BattleDetailPageProps> = async ({ params }) => {
           className="px-4 py-2 bg-gray-400 text-white rounded-lg hover:bg-grey-500 transition"
         >
           목록 보기
-        </Link>
-        <Link
-          href={`/battle/result/${battleId}`}
-          className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
-        >
-          결과 보기
         </Link>
       </div>
       <hr className="my-8 border-gray-300 dark:border-gray-700" />
