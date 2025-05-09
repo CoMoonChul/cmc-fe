@@ -10,7 +10,7 @@ interface WebSocketStore {
   connect: (roomId: string) => void
   sendMessage: (message: string) => void
   disconnect: () => void
-  applyDiff: (diff: diff) => void
+  applyDiff: (diff: diff, language: string) => void
 }
 
 const CHAT_TYPE = {
@@ -40,14 +40,20 @@ const useWebSocketStore = create<WebSocketStore>((set, get) => ({
     const handleMessage = (event: MessageEvent) => {
       try {
         const data = JSON.parse(event.data)
-        const { liveCodingChatType, action, msg, usernum, username, diff } =
-          data
+        const {
+          liveCodingChatType,
+          action,
+          msg,
+          usernum,
+          username,
+          diff,
+          language,
+        } = data
         const user = useUserStore.getState().user
-
         // 코드 diff 수신 처리
         if (liveCodingChatType === CHAT_TYPE.UPDATE && diff) {
           if (user.userNum !== usernum) {
-            get().applyDiff(diff)
+            get().applyDiff(diff, language)
           }
           return
         }

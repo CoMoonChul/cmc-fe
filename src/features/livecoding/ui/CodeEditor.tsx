@@ -9,6 +9,7 @@ import { debounce } from 'lodash'
 import { updateLiveCodingSnippet } from '@/entities/livecoding/api'
 import useWebSocketStore from '@/features/livecoding/store/useWebSocketStore'
 import DiffMatchPatch from 'diff-match-patch'
+import { python } from '@codemirror/lang-python'
 
 export default function CodeEditor({
   roomInfo,
@@ -31,7 +32,7 @@ export default function CodeEditor({
   // diff 수신 후 에디터에 적용
   useEffect(() => {
     useWebSocketStore.setState({
-      applyDiff: (diff) => {
+      applyDiff: (diff, language) => {
         if (!editorRef.current?.view) return
 
         const parsedDiff =
@@ -54,6 +55,7 @@ export default function CodeEditor({
         })
 
         setCode(newText)
+        setLanguage(language)
         lastSyncedCodeRef.current = newText
       },
     })
@@ -151,6 +153,16 @@ export default function CodeEditor({
           >
             Java
           </button>
+          <button
+            onClick={() => setLanguage('python')}
+            className={`px-4 py-2 text-sm rounded-lg transition duration-300 ease-in-out transform ${
+              language === 'python'
+                ? 'bg-blue-600 text-white scale-105'
+                : 'bg-gray-200 text-gray-800 hover:bg-blue-400 hover:text-white'
+            }`}
+          >
+            Python
+          </button>
         </div>
       </div>
 
@@ -165,7 +177,13 @@ export default function CodeEditor({
             value={code}
             height="500px"
             theme={dracula}
-            extensions={[language === 'javascript' ? javascript() : java()]}
+            extensions={[
+              language === 'javascript'
+                ? javascript()
+                : language === 'java'
+                  ? java()
+                  : python(),
+            ]}
             onChange={editCode}
           />
           {isHovered && (
