@@ -37,11 +37,6 @@ const BattleListCard = ({
     router.push(`/battle/detail/${battleId}`)
   }
 
-  const onClickGoResult = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.stopPropagation()
-    router.push(`/battle/result/${battleId}`)
-  }
-
   return (
     <div
       onClick={onClickCard}
@@ -80,14 +75,7 @@ const BattleListCard = ({
               총 {formatNumberWithCommas(leftVote + rightVote)}명이
               투표했습니다.
             </p>
-            <div className="flex items-center justify-between mt-3">
-              <button
-                onClick={onClickGoResult}
-                className="px-3 py-1 text-sm bg-blue-500 text-white rounded-md hover:bg-blue-600 transition flex-shrink-0"
-              >
-                결과 보기
-              </button>
-
+            <div className="flex items-center justify-end mt-3">
               <div className="flex items-center gap-2 px-3 py-1 text-sm text-gray-500 dark:text-gray-400 overflow-hidden">
                 <div className="w-6 h-6 rounded-full overflow-hidden bg-gray-300 dark:bg-gray-700 relative flex-shrink-0">
                   <Image
