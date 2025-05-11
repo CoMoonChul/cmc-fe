@@ -33,9 +33,9 @@ const BattleControlArea = ({
   }
 
   return (
-    <div className="flex space-x-4">
+    <div className="flex space-x-3">
       <Link href={`/battle/form/${battleId}`} className="text-green-500">
-        ✏ 수정하기
+        수정하기
       </Link>
       <button onClick={onClickDeleteBtn} className="text-red-500">
         삭제하기

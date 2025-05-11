@@ -93,13 +93,12 @@ const ReviewButtonsComponent = ({
   }
 
   return (
-    <div className="flex space-x-4">
-      {/* 방 생성 버튼 */}
+    <div className="flex space-x-3">
       <button onClick={onClickCreateLiveCodingRoom} className="text-blue-500">
         라이브코딩 방 생성
       </button>
       <button onClick={handleEdit} className="text-green-500">
-        ✏ 수정하기
+        수정하기
       </button>
       <button
         onClick={onClickDeleteBtn}
