@@ -48,23 +48,22 @@ const ReviewDetailPage: FC<ReviewDetailPageProps> = async ({ params }) => {
     <div className="min-h-screen p-6 bg-white text-black dark:bg-black dark:text-white">
       <h1 className="text-2xl font-bold mb-4">{title}</h1>
       <div className="flex justify-between text-sm text-gray-600 dark:text-gray-400 mb-4">
-        <div className="flex items-center space-x-1">
-          {userImg && (
-            <div className="w-6 h-6 relative rounded-full overflow-hidden">
-              <Image
-                src={userImg}
-                alt={`${username}의 프로필 이미지`}
-                width={30}
-                height={30}
-                className="object-cover"
-              />
-            </div>
-          )}
-          <span className="font-medium">{username}</span>
-          <span>|</span>
-          <span className="text-sm">
-            {createdAt && getFormattedCreatedAt(createdAt)}
-          </span>
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-full overflow-hidden bg-gray-300 dark:bg-gray-700 relative">
+            <Image
+              src={userImg}
+              alt="프로필 이미지"
+              fill
+              sizes="24px"
+              className="object-cover"
+            />
+          </div>
+          <div className="flex flex-col justify-center">
+            <p className="text-sm font-medium">{username}</p>
+            <p className="text-xs text-gray-500 dark:text-gray-400">
+              {createdAt && getFormattedCreatedAt(createdAt)}
+            </p>
+          </div>
         </div>
         <div className="flex items-center space-x-3">
           <LikeComponent reviewId={reviewId} />
