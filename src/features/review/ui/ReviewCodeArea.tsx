@@ -1,14 +1,9 @@
 'use client'
 
-import { useState, useEffect } from 'react'
-import { Review } from '#/generate/review/api'
 import CodeMirror from '@uiw/react-codemirror'
 import { dracula } from '@uiw/codemirror-theme-dracula'
-import CodeModal from '@/features/battle/ui/CodeModal'
 import { useThemeStore } from '@/shared/store/useThemeStore'
 import { languageExtensions } from '@/entities/editor/types'
-import { usePathname, useRouter } from 'next/navigation'
-import { usePopupStore } from '@/shared/store/usePopupStore'
 
 const ReviewCodeArea = ({
   reviewId,
@@ -19,9 +14,6 @@ const ReviewCodeArea = ({
   code: string
   language: string
 }) => {
-  const router = useRouter()
-  const pathname = usePathname()
-  const { openPopup } = usePopupStore()
   const { theme } = useThemeStore()
   const safeLanguage = language ?? 'javascript'
 

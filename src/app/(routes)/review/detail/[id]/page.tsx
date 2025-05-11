@@ -10,6 +10,7 @@ import ReviewButtonsComponent from '@/features/review/ui/ReviewButtonsComponent'
 import Link from 'next/link'
 import Image from 'next/image'
 import { decompressGzip } from '@/features/editor/helper'
+import AISection from '@/features/ai/ui/AISection'
 
 interface ReviewDetailPageProps {
   params: Promise<{ id: string }>
@@ -83,6 +84,9 @@ const ReviewDetailPage: FC<ReviewDetailPageProps> = async ({ params }) => {
         language={codeType}
       />
       <hr className="my-8 border-gray-300 dark:border-gray-700" />
+
+      <AISection reviewId={reviewId} />
+
       <div className="mt-6 bg-gray-100 dark:bg-gray-900 p-4 rounded-lg">
         <CommentSection id={reviewId} commentTarget={COMMENT_TARGET.REVIEW} />
       </div>
