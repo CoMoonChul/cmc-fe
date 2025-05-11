@@ -10,6 +10,7 @@ import { updateLiveCodingSnippet } from '@/entities/livecoding/api'
 import useWebSocketStore from '@/features/livecoding/store/useWebSocketStore'
 import DiffMatchPatch from 'diff-match-patch'
 import { python } from '@codemirror/lang-python'
+import { replaceDomainWithCurrent } from '@/shared/lib/url'
 
 export default function CodeEditor({
   roomInfo,
@@ -28,6 +29,14 @@ export default function CodeEditor({
 
   // 최신 코드 기준을 저장하는 ref
   const lastSyncedCodeRef = useRef(snippet?.livecode || "console.log('CMC')")
+  const [isTooSmall, setIsTooSmall] = useState(false)
+
+  useEffect(() => {
+    const checkWidth = () => setIsTooSmall(window.innerWidth < 740)
+    checkWidth()
+    window.addEventListener('resize', checkWidth)
+    return () => window.removeEventListener('resize', checkWidth)
+  }, [])
 
   // diff 수신 후 에디터에 적용
   useEffect(() => {
@@ -63,8 +72,9 @@ export default function CodeEditor({
 
   const copyInviteLink = () => {
     if (!roomInfo?.link) return
+    const link = replaceDomainWithCurrent(roomInfo.link)
     navigator.clipboard
-      .writeText(roomInfo.link)
+      .writeText(link)
       .then(() => {
         setInviteButtonText('초대링크 복사됨!')
         setTimeout(() => setInviteButtonText('초대링크 복사'), 2000)
@@ -116,6 +126,20 @@ export default function CodeEditor({
   )
 
   const debouncedUpdate = useMemo(() => debounce(updateCode, 500), [updateCode])
+
+  if (isTooSmall) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-screen px-6 text-center text-gray-800 dark:text-white bg-white dark:bg-gray-900">
+        <h2 className="text-2xl font-bold mb-2">⚠️ 화면이 너무 작습니다</h2>
+        <p className="text-base leading-relaxed">
+          실시간 코드 공유는 <strong>가로 화면 700px 이상</strong>에서 이용하실
+          수 있어요.
+          <br />
+          PC나 태블릿 등 더 큰 화면으로 접속해 주세요.
+        </p>
+      </div>
+    )
+  }
 
   return (
     <div className="flex flex-col">

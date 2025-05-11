@@ -48,7 +48,7 @@ const ReviewDetailPage: FC<ReviewDetailPageProps> = async ({ params }) => {
     <div className="min-h-screen p-6 bg-white text-black dark:bg-black dark:text-white">
       <h1 className="text-2xl font-bold mb-4">{title}</h1>
       <div className="flex justify-between text-sm text-gray-600 dark:text-gray-400 mb-4">
-        <div className="flex items-center space-x-2">
+        <div className="flex items-center space-x-1">
           {userImg && (
             <div className="w-6 h-6 relative rounded-full overflow-hidden">
               <Image
@@ -62,9 +62,11 @@ const ReviewDetailPage: FC<ReviewDetailPageProps> = async ({ params }) => {
           )}
           <span className="font-medium">{username}</span>
           <span>|</span>
-          <span>{createdAt && getFormattedCreatedAt(createdAt)}</span>
+          <span className="text-sm">
+            {createdAt && getFormattedCreatedAt(createdAt)}
+          </span>
         </div>
-        <div className="flex items-center space-x-4">
+        <div className="flex items-center space-x-3">
           <LikeComponent reviewId={reviewId} />
           <ReviewButtonsComponent
             reviewId={reviewId}

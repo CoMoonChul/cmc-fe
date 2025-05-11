@@ -82,13 +82,14 @@ const ReviewListPage = () => {
 
   return (
     <div className="min-h-screen p-6 bg-white text-black dark:bg-black dark:text-white">
-      <div className="flex justify-between items-center mb-4">
+      <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
         <button
           onClick={onclickCreateReview}
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded whitespace-nowrap"
         >
           리뷰 작성하기
         </button>
+
         <div className="flex items-center border border-gray-300 dark:border-gray-600 rounded-lg overflow-visible">
           {FILTERS.slice(0, 2).map((filter) => (
             <button
