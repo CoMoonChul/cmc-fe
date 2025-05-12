@@ -110,15 +110,17 @@ export default function CodeEditor({
       const isBroadcast = true
 
       console.log('diff', diff)
-      updateLiveCodingSnippet(
-        newCode,
-        roomInfo.roomId,
-        roomInfo.hostId,
+      const snippetReq: LIVECODING.UpdateLiveCodingSnippetReqDTO = {
+        code: newCode,
+        roomId: roomInfo.roomId,
+        hostId: roomInfo.hostId,
         diff,
         language,
         cursorPos,
         isBroadcast,
-      )
+      }
+
+      updateLiveCodingSnippet(snippetReq)
 
       lastSyncedCodeRef.current = newCode
     },
