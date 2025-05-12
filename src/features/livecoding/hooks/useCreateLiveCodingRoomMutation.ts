@@ -27,16 +27,16 @@ export const useCreateLiveCodingRoomMutation = () => {
           language,
         )
 
-        // 2. 스니펫 초기화
-        await updateLiveCodingSnippet(
-          code,
-          createdRoomId,
-          hostId,
-          [{ op: 0, text: '' }],
-          language,
-          { line: 0, ch: 0 },
+        const snippetReq: LIVECODING.UpdateLiveCodingSnippetReqDTO = {
+          roomId: createdRoomId,
+          hostId: hostId,
+          diff: [{ op: 0, text: '' }],
+          language: language,
+          cursorPos: { line: 0, ch: 0 },
           isBroadcast,
-        )
+        }
+        // 2. 스니펫 초기화
+        await updateLiveCodingSnippet(snippetReq)
 
         return createResponse
       } catch (err) {

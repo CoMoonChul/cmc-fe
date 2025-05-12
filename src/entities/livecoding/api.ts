@@ -74,17 +74,13 @@ export async function deleteLiveCoding(
  * @returns 삭제 성공 여부
  */
 export async function updateLiveCoding(
-  roomId: string,
-  userNum: number,
-  action: number,
+  data: LIVECODING.UpdateLiveCodingReqDTO,
   manualErrorHandle = false,
 ): Promise<LIVECODING.UpdateLiveCodingResDTO> {
   const response = await apiClient(
     api.updateLiveCoding.bind(api),
     manualErrorHandle,
-    roomId,
-    userNum,
-    action,
+    data,
   )
   return response.data
 }
@@ -120,30 +116,13 @@ export async function selectLiveCodingSnippet(
 }
 
 export async function updateLiveCodingSnippet(
-  code: string,
-  roomId: string,
-  hostId: number,
-  diff: diff[],
-  language: string,
-  cursorPos: {
-    line: number
-    ch: number
-  },
-  isBroadcast: boolean,
+  data: LIVECODING.UpdateLiveCodingSnippetReqDTO,
   manualErrorHandle = false,
 ): Promise<LIVECODING.UpdateLiveCodingSnippetResDTO> {
   const response = await apiClient(
     api.updateLiveCodingSnippet.bind(api),
     manualErrorHandle,
-    {
-      code,
-      roomId,
-      hostId,
-      diff,
-      language,
-      cursorPos,
-      isBroadcast,
-    },
+    data,
   )
   return response.data
 }
