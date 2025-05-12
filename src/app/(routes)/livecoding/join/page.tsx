@@ -3,6 +3,7 @@
 import { Suspense, useEffect } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { verifyLiveCoding } from '@/entities/livecoding/api'
+import { LIVECODING } from '#/generate'
 
 const LiveCodingJoinPage = () => {
   const router = useRouter()
@@ -17,7 +18,10 @@ const LiveCodingJoinPage = () => {
 
     const checkRoomVerification = async () => {
       try {
-        const res = await verifyLiveCoding(token)
+        const req: LIVECODING.VerifyLiveCodingReqDTO = {
+          token,
+        }
+        const res = await verifyLiveCoding(req)
         const verifyRoomId = res?.roomId || ''
         router.replace(`/livecoding/${verifyRoomId}`)
       } catch (e) {

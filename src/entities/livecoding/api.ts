@@ -96,13 +96,13 @@ export async function updateLiveCoding(
  * @returns 삭제 성공 여부
  */
 export async function verifyLiveCoding(
-  token: string,
+  data: LIVECODING.VerifyLiveCodingReqDTO,
   manualErrorHandle = false,
 ): Promise<LIVECODING.VerifyLiveCodingResDTO> {
   const response = await apiClient(
     api.verifyLiveCoding.bind(api),
     manualErrorHandle,
-    token,
+    data,
   )
   return response.data
 }
