@@ -24,7 +24,7 @@
 ## 링크
 
 
-- 배포 후 입력(서비스)
+- 코문철 링크 : https://comoonchul.com/
 
 <br>
 
