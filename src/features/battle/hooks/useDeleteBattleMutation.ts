@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { deleteBattle } from '@/entities/battle/api'
 import { BATTLE } from '#/generate'
-import { QUERY_KEYS } from '../types'
+import { QUERY_KEYS, battleKeys } from '../types'
 
 /**
  * 배틀 삭제 mutation
@@ -21,7 +21,7 @@ export const useDeleteCommentMutation = (battleId: number) => {
         queryKey: [QUERY_KEYS.BATTLE.LIST],
       })
       queryClient.invalidateQueries({
-        queryKey: [QUERY_KEYS.BATTLE.DETAIL, battleId],
+        queryKey: battleKeys.detail(battleId),
       })
     },
   })

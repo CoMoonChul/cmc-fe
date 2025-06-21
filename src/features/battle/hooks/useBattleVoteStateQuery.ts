@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { selectBattleVoteState } from '@/entities/battle/api'
 import { BATTLE } from '#/generate'
-import { QUERY_KEYS } from '../types'
+import { battleKeys } from '../types'
 
 /**
  * battleId에 해당하는 배틀 상세 정보를 불러오는 Query
@@ -10,7 +10,7 @@ import { QUERY_KEYS } from '../types'
  */
 export const useBattleVoteStateQuery = (battleId: number) => {
   return useQuery<BATTLE.SelectBattleVoteStateResDTO>({
-    queryKey: [QUERY_KEYS.BATTLE.VOTE_STATE, battleId],
+    queryKey: battleKeys.voteState(battleId),
     queryFn: () => selectBattleVoteState(battleId),
     retry: false,
   })

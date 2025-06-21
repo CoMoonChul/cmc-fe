@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { updateVoteBattle } from '@/entities/battle/api'
 import type { BATTLE } from '#/generate'
-import { QUERY_KEYS } from '../types'
+import { battleKeys } from '../types'
 
 /**
  * 배틀 투표
@@ -22,13 +22,13 @@ export const useUpdateVoteBattle = (
     retry: false,
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: [QUERY_KEYS.BATTLE.VOTE_STATE, battleId],
+        queryKey: battleKeys.voteState(battleId),
       })
       queryClient.invalidateQueries({
-        queryKey: [QUERY_KEYS.BATTLE.LIST],
+        queryKey: battleKeys.list(),
       })
       queryClient.invalidateQueries({
-        queryKey: [QUERY_KEYS.BATTLE.DETAIL, battleId],
+        queryKey: battleKeys.detail(battleId),
       })
     },
   })
