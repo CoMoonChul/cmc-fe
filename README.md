@@ -1,7 +1,6 @@
-#  코문철 Co Moon Chul
+# 코문철 Co Moon Chul
 
-> **코드 리뷰를 위한 개발자 커뮤니티 서비스**
-> <br>
+> **코드 리뷰를 위한 개발자 커뮤니티 서비스** > <br>
 > 코드 리뷰 커뮤니티
 > <br>
 > 실시간 코드 공유
@@ -14,15 +13,14 @@
 
 ## Contributors
 
-| 리더 | 배포/아키 | 알림/SMTP | 실시간 공유 | 리뷰/배틀 | 회원 |
-| :---------: | :----------: | :---------: | :---------: | :---------: | :---------: |
-| ⚡ 임현우 | ⚡ 심우현 | ⚡ 안승기 | ⚡ 고영성 | ⚡ 박종일 | ⚡ 한성수 |
+|                 리더                  |                 배포/아키                 |                 알림/SMTP                 |                  실시간 공유                  |                   리뷰/배틀                   |                   회원                    |
+| :-----------------------------------: | :---------------------------------------: | :---------------------------------------: | :-------------------------------------------: | :-------------------------------------------: | :---------------------------------------: |
+|               ⚡ 임현우               |                 ⚡ 심우현                 |                 ⚡ 안승기                 |                   ⚡ 고영성                   |                   ⚡ 박종일                   |                 ⚡ 한성수                 |
 | [Myunwoo](https://github.com/Myunwoo) | [woohj0702](https://github.com/woohj0702) | [AnSeungGi](https://github.com/AnSeungKi) | [KoYoungSung](https://github.com/KoYoungSung) | [Allday Park](https://github.com/JongIlParks) | [sungsuhan](https://github.com/sungsuhan) |
 
 <br>
 
 ## 링크
-
 
 - 코문철 링크 : https://comoonchul.com/
 
@@ -34,23 +32,23 @@
 
 - Framework
 
-|                라이브러리                |        사용 목적         | Version |
-|:-----------------------------------:|:--------------------:|:-------:|
-|    Next.js     |   React 기반 웹 프레임워크    |  15.1.7  |
-|    React     |       UI 라이브러리        |  19.0.0  |
-|       TailwindCSS       |      CSS 프레임워크       |  3.4.1  |
-|      Zustand       |        글로벌 상태 관리        |  5.0.3  |
-|    TanStack Query    |        서버 상태 관리        |  5.66.9  |
+|   라이브러리   |        사용 목적         | Version |
+| :------------: | :----------------------: | :-----: |
+|    Next.js     | React 기반 웹 프레임워크 | 15.1.7  |
+|     React      |      UI 라이브러리       | 19.0.0  |
+|  TailwindCSS   |      CSS 프레임워크      |  3.4.1  |
+|    Zustand     |     글로벌 상태 관리     |  5.0.3  |
+| TanStack Query |      서버 상태 관리      | 5.66.9  |
 
 - Library
 
-라이브러리 | 사용 목적 | Version  
-:---------:|:---------:|:--------:  
-openapi-generator | OpenAPI 코드 생성기 | 2.6.0
-Framer Motion | 애니메이션 라이브러리 | 12.4.7  
-CodeMirror | 코드 에디터 | 6.x
-Diff Match Patch | 텍스트 비교 | 1.0.5
-Pako | 데이터 압축 | 2.1.0
+|    라이브러리     |       사용 목적       | Version |
+| :---------------: | :-------------------: | :-----: |
+| openapi-generator |  OpenAPI 코드 생성기  |  2.6.0  |
+|   Framer Motion   | 애니메이션 라이브러리 | 12.4.7  |
+|    CodeMirror     |      코드 에디터      |   6.x   |
+| Diff Match Patch  |      텍스트 비교      |  1.0.5  |
+|       Pako        |      데이터 압축      |  2.1.0  |
 
 <br>
 
@@ -60,7 +58,7 @@ Pako | 데이터 압축 | 2.1.0
 <summary>Commit Convention</summary>
 <div markdown="1">
 
-- [HOTFIX] : 🚑️  issue나, QA에서 급한 버그 수정에 사용
+- [HOTFIX] : 🚑️ issue나, QA에서 급한 버그 수정에 사용
 - [FIX] : 🔨 버그, 오류 해결
 - [ADD] : ➕ Feat 이외의 부수적인 코드 추가, 라이브러리 추가, 새로운 파일 생성 시
 - [FEAT] ✨ 새로운 기능 구현
@@ -70,7 +68,7 @@ Pako | 데이터 압축 | 2.1.0
 - [CHORE] : ✅ 코드 수정, 내부 파일 수정
 - [CORRECT] : ✏️ 주로 문법의 오류나 타입의 변경, 이름 변경 등에 사용합니다.
 - [MOVE] : 🚚 프로젝트 내 파일이나 코드의 이동
-- [RENAME] : ⏪️  파일 이름 변경이 있을 때 사용합니다.
+- [RENAME] : ⏪️ 파일 이름 변경이 있을 때 사용합니다.
 - [IMPROVE] : ⚡️ 향상이 있을 때 사용합니다.
 - [REFACTOR] : ♻️ 전면 수정이 있을 때 사용합니다
 - [MERGE] : 🔀 다른브렌치를 merge 할 때 사용합니다.
@@ -95,7 +93,6 @@ Pako | 데이터 압축 | 2.1.0
 
 ![1](https://github.com/user-attachments/assets/631d298b-9769-49cb-9dc5-a1d662cd0ab8)
 
-
 Layers는 FSD 패턴의 첫 번째 수준을 나타냅니다. 레이어는 각각이 다루어야 할 책임과 다른 모듈과의 의존도에 따라 분류됩니다.
 
 각 Layer는 Slice와 Segment들로 세분화되며, app과 shared 레이어는 그 자체로서 Slice이기 때문에 예외입니다.
@@ -108,7 +105,6 @@ Layers는 FSD 패턴의 첫 번째 수준을 나타냅니다. 레이어는 각�
 </aside>
 
 ![2](https://github.com/user-attachments/assets/015291eb-82db-443f-828d-7fc1d8c903c0)
-
 
 상위 레벨에 있는 레이어는 하위 레벨을 의존성으로 가질 수 있지만 그 반대는 성립될 수 없습니다.
 
@@ -124,13 +120,12 @@ Layers는 FSD 패턴의 첫 번째 수준을 나타냅니다. 레이어는 각�
 슬라이스의 모듈(파일)은 아래 레이어에 위치하는 것들만 의존성으로 가질 수 있습니다.
 
 > For example, the folder `📁 ~/features/aaa` is a slice with the name "aaa". A file inside of it, `~/features/aaa/api/request.ts`, cannot import code from any file in `📁 ~/features/bbb`, but can import code from `📁 ~/entities` and `📁 ~/shared`, as well as any sibling code from `📁 ~/features/aaa`, for example, `~/features/aaa/lib/cache.ts`.
-> 
+
 </aside>
 
 이제 하위 레이어에서부터 각각을 알아보겠습니다.
 
 ### Shared
-
 
 <aside>
 💡
@@ -152,7 +147,6 @@ Shared는 다른 모든 레이어의 근간을 형성하며, Slice를 두지 않
 
 ## Entities
 
-
 <aside>
 💡
 
@@ -164,11 +158,11 @@ Shared는 다른 모든 레이어의 근간을 형성하며, Slice를 두지 않
 
 각 슬라이스에는 아래 세그먼트들이 포함됩니다.
 
-| 파일 | 역할 |
-| --- | --- |
+| 파일       | 역할                            |
+| ---------- | ------------------------------- |
 | `types.ts` | 타입 정의 (인터페이스, enum 등) |
-| `model.ts` | 데이터 변환 및 비즈니스 로직 |
-| `api.ts` | API 호출 관련 함수 |
+| `model.ts` | 데이터 변환 및 비즈니스 로직    |
+| `api.ts`   | API 호출 관련 함수              |
 
 ### types.ts
 
@@ -209,30 +203,28 @@ open api generator를 사용하지 않는 경우, api in/out 타입을 types.ts�
 
 ## Features
 
-
 Features 레이어가 Entities, Shared와 어떻게 다른지 표로 나타내었습니다.
 
-| 폴더 | 역할 |
-| --- | --- |
-| **`entities/`** | **도메인 모델** (User, Comment, Battle 등 핵심 개념) |
-| **`feature/`** | **도메인 단위의 비즈니스 로직과 UI** (BattlePage, UserProfile 등) |
-| **`shared/`** | **전역적으로 사용되는 공통 모듈** (UI, Utils, API 클라이언트 등) |
+| 폴더            | 역할                                                              |
+| --------------- | ----------------------------------------------------------------- |
+| **`entities/`** | **도메인 모델** (User, Comment, Battle 등 핵심 개념)              |
+| **`feature/`**  | **도메인 단위의 비즈니스 로직과 UI** (BattlePage, UserProfile 등) |
+| **`shared/`**   | **전역적으로 사용되는 공통 모듈** (UI, Utils, API 클라이언트 등)  |
 
 이 레이어는 앱의 주요 상호 작용을 포함합니다. 각 도메인에서 다루어야 할 기능을 담지만, “모든 것을 기능으로 세분화”하는 상황을 경계하면 되겠습니다.
 
-코문철의  Feature layer는 Entities layer와 동일하게 도메인 별 Slice를 갖도록 하고, 아래 Segment 들을 갖도록 하겠습니다.
+코문철의 Feature layer는 Entities layer와 동일하게 도메인 별 Slice를 갖도록 하고, 아래 Segment 들을 갖도록 하겠습니다.
 
-| 파일 | 역할 |
-| --- | --- |
-| `model/` | 상태 관리 (Zustand) |
-| `ui/` | ui 컴포넌트 |
-| `hooks/` | React Hooks |
-| `types.ts` | 타입 정의 |
-| `helper.ts` | 유틸리티 함수 |
-| `constants.ts` | 상수 정의 |
+| 파일           | 역할                |
+| -------------- | ------------------- |
+| `model/`       | 상태 관리 (Zustand) |
+| `ui/`          | ui 컴포넌트         |
+| `hooks/`       | React Hooks         |
+| `types.ts`     | 타입 정의           |
+| `helper.ts`    | 유틸리티 함수       |
+| `constants.ts` | 상수 정의           |
 
 ## Widgets
-
 
 <aside>
 ⛔
@@ -242,7 +234,6 @@ Features 레이어가 Entities, Shared와 어떻게 다른지 표로 나타내�
 </aside>
 
 ## Pages, App
-
 
 <aside>
 ⛔
@@ -277,7 +268,7 @@ import { QUERY_KEYS } from '../types'
  */
 export const useBattleDetailQuery = (battleId: number) => {
   return useQuery<BATTLE.SelectBattleResDTO>({
-    queryKey: [QUERY_KEYS.BATTLE.DETAIL, battleId],
+    queryKey: battleKeys.detail(battleId),
     queryFn: () => selectBattle(battleId),
   })
 }
@@ -285,6 +276,7 @@ export const useBattleDetailQuery = (battleId: number) => {
 
 - Tanstack query는 hook으로 감싸 사용
 - hook의 이름은 조회성 쿼리는 Query, 처리성 쿼리는 Mutation을 붙여서 사용
+- Tanstack Query의 쿼리키는 직접 지정을 하지 않고 Query key Factory로 키를 반환받아 사용한다.
 
 <img width="269" alt="스크린샷 2025-04-26 오후 5 35 08" src="https://github.com/user-attachments/assets/725a4f0c-ff65-491b-a96b-f652fd148aaf" />
 
@@ -293,9 +285,9 @@ export const useBattleDetailQuery = (battleId: number) => {
 ```jsx
 export const QUERY_KEYS = {
   BATTLE: {
-    DETAIL: "battle.Detail",
+    DETAIL: 'battle.Detail',
   },
-};
+}
 ```
 
 </div>
@@ -303,9 +295,6 @@ export const QUERY_KEYS = {
 
 <br>
 
-
 ## AWS Architecture
+
 ![cmc drawio](https://github.com/user-attachments/assets/b3f5cc1b-0d7b-4fab-adda-75828f9f8ef7)
-
-
-
