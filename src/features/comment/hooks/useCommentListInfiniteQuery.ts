@@ -1,7 +1,7 @@
 import { useInfiniteQuery } from '@tanstack/react-query'
 import { selectCommentList } from '@/entities/comment/api'
 import { COMMENT } from '#/generate'
-import { QUERY_KEYS } from '../types'
+import { commentKeys } from '../types'
 
 /**
  * 특정 타겟의 댓글 조회 Infinite Query
@@ -18,7 +18,7 @@ export const useCommentListInfiniteQuery = (
   manualErrorHandle?: boolean,
 ) => {
   return useInfiniteQuery<COMMENT.SelectCommentListResDTO>({
-    queryKey: [QUERY_KEYS.COMMENT.LIST, targetId, commentTarget, size],
+    queryKey: commentKeys.list(targetId, commentTarget, size),
     queryFn: ({ pageParam }) =>
       selectCommentList(
         targetId,

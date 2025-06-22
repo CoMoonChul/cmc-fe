@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { updateBattle } from '@/entities/battle/api'
 import type { BATTLE } from '#/generate'
-import { QUERY_KEYS, battleKeys } from '../types'
+import { battleKeys } from '../types'
 
 /**
  * 배틀 수정
@@ -20,7 +20,7 @@ export const useUpdateBattleQuery = (battleId: number) => {
         queryKey: battleKeys.detail(battleId),
       })
       queryClient.invalidateQueries({
-        queryKey: [QUERY_KEYS.BATTLE.LIST],
+        queryKey: battleKeys.list(),
       })
     },
   })

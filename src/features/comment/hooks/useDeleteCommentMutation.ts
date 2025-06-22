@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { deleteComment } from '@/entities/comment/api'
 import { COMMENT } from '#/generate'
-import { QUERY_KEYS } from '../types'
+import { commentKeys } from '../types'
 
 /**
  * 특정 댓글 삭제 Mutation
@@ -22,7 +22,7 @@ export const useDeleteCommentMutation = (
     mutationFn: (data) => deleteComment(data),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: [QUERY_KEYS.COMMENT.LIST, targetId, commentTarget, size],
+        queryKey: commentKeys.list(targetId, commentTarget, size),
       })
     },
   })

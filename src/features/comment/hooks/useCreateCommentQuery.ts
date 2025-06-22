@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { createComment } from '@/entities/comment/api'
 import type { COMMENT } from '#/generate'
-import { QUERY_KEYS } from '../types'
+import { commentKeys } from '../types'
 
 /**
  * 댓글
@@ -21,7 +21,7 @@ export const useCreateCommentQuery = (
     mutationFn: (data) => createComment(data),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: [QUERY_KEYS.COMMENT.LIST, targetId, commentTarget, pageSize],
+        queryKey: commentKeys.list(targetId, commentTarget, pageSize),
       })
     },
   })

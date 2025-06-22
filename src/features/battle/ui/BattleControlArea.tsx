@@ -1,7 +1,7 @@
 'use client'
 import Link from 'next/link'
 import useUserStore from '@/shared/store/useUserStore'
-import { useDeleteCommentMutation } from '@/features/battle/hooks/useDeleteBattleMutation'
+import { useDeleteBattleMutation } from '@/features/battle/hooks/useDeleteBattleMutation'
 import { BATTLE } from '#/generate'
 import { useRouter } from 'next/navigation'
 
@@ -14,7 +14,7 @@ const BattleControlArea = ({
 }) => {
   const { user } = useUserStore()
   const router = useRouter()
-  const deleteBattleMutation = useDeleteCommentMutation(battleId)
+  const deleteBattleMutation = useDeleteBattleMutation(battleId)
 
   const onClickDeleteBtn = () => {
     const req: BATTLE.DeleteBattleReqDTO = {
@@ -22,8 +22,8 @@ const BattleControlArea = ({
     }
 
     deleteBattleMutation.mutate(req, {
-      onSuccess: () => {
-        router.push('/battle')
+      onSuccess: async () => {
+        router.replace('/battle')
       },
     })
   }
