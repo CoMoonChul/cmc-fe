@@ -1,5 +1,4 @@
-export const QUERY_KEYS = {
-  AI: {
-    DETAIL: 'ai.detail',
-  } as const,
+export const aiKeys = {
+  all: ['ai'] as const,
+  detail: (id: number) => [...aiKeys.all, 'detail', id] as const,
 }
