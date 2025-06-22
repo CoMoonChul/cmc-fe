@@ -259,7 +259,7 @@ Tanstack query
 import { useQuery } from '@tanstack/react-query'
 import { selectBattle } from '@/entities/battle/api'
 import { BATTLE } from '#/generate'
-import { QUERY_KEYS } from '../types'
+import { battleKeys } from '../types'
 
 /**
  * battleId에 해당하는 배틀 상세 정보를 불러오는 Query
