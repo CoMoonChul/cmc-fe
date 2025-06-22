@@ -1,7 +1,7 @@
 import { REVIEW } from '#/generate'
 import { createReview } from '@/entities/review/api'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { QUERY_KEYS } from '../types'
+import { reviewKeys } from '../types'
 
 /*
  * 리뷰 생성
@@ -17,7 +17,7 @@ export const useCreateReviewQuery = () => {
     mutationFn: (data) => createReview(data),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: [QUERY_KEYS.REVIEW.LIST],
+        queryKey: reviewKeys.list(),
       })
     },
   })
