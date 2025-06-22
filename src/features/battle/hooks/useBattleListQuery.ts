@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { selectBattleList } from '@/entities/battle/api'
 import { BATTLE } from '#/generate'
-import { QUERY_KEYS } from '../types'
+import { battleKeys } from '../types'
 
 /**
  * 배틀 리스트 조회 Query
@@ -18,7 +18,7 @@ export const useBattleListQuery = (
   manualErrorHandle: boolean,
 ) => {
   return useQuery<BATTLE.SelectBattleListResDTO>({
-    queryKey: [QUERY_KEYS.BATTLE.LIST, condition, page, size],
+    queryKey: battleKeys.list(condition, page, size),
     queryFn: () => selectBattleList(condition, page, size, manualErrorHandle),
   })
 }

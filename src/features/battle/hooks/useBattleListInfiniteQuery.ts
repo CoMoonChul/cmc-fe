@@ -1,7 +1,7 @@
 import { useInfiniteQuery } from '@tanstack/react-query'
 import { selectBattleList } from '@/entities/battle/api'
 import { BATTLE } from '#/generate'
-import { QUERY_KEYS } from '../types'
+import { battleKeys } from '../types'
 
 /**
  * 배틀 리스트 조회 Infinite Query
@@ -16,7 +16,7 @@ export const useBattleListInfiniteQuery = (
   manualErrorHandle: boolean,
 ) => {
   return useInfiniteQuery<BATTLE.SelectBattleListResDTO>({
-    queryKey: [QUERY_KEYS.BATTLE.LIST, condition, size],
+    queryKey: battleKeys.list(condition, size),
     queryFn: ({ pageParam }) =>
       selectBattleList(condition, pageParam as number, size, manualErrorHandle),
     initialPageParam: 0,

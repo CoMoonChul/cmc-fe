@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { selectReview } from '@/entities/review/api'
 import { REVIEW } from '#/generate'
-import { QUERY_KEYS } from '../types'
+import { reviewKeys } from '../types'
 
 /**
  * reviewId에 해당하는 게시글의 상세정보를 불러오는 Query
@@ -15,7 +15,7 @@ export const useReviewDetailQuery = (
   enabled: boolean = true,
 ) => {
   return useQuery<REVIEW.SelectReviewResDTO>({
-    queryKey: [QUERY_KEYS.REVIEW.DETAIL, reviewId],
+    queryKey: reviewKeys.detail(reviewId),
     queryFn: () => selectReview(reviewId),
     enabled: enabled,
     staleTime: 1000 * 60 * 5, // 5 min
