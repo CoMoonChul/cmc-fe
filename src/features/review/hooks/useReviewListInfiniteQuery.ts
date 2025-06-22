@@ -1,7 +1,7 @@
 import { useInfiniteQuery } from '@tanstack/react-query'
 import { selectReviewList } from '@/entities/review/api'
 import { REVIEW } from '#/generate'
-import { QUERY_KEYS } from '../types'
+import { reviewKeys } from '../types'
 
 /**
  * 리뷰 리스트 조회 Infinite Query
@@ -18,7 +18,7 @@ export const useReviewListInfiniteQuery = (
   manualErrorHandle: boolean,
 ) => {
   return useInfiniteQuery<REVIEW.SelectReviewListResDTO>({
-    queryKey: [QUERY_KEYS.REVIEW.LIST, condition, pageSize],
+    queryKey: reviewKeys.list(condition, pageSize),
     queryFn: ({ pageParam = 0 }) =>
       selectReviewList(
         condition,
