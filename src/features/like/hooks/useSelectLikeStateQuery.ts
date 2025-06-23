@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { selectReviewLikeState } from '@/entities/like/api'
 import { LIKE } from '#/generate'
-import { QUERY_KEYS } from '../types'
+import { likeKeys } from '../types'
 
 /**
  * id에 해당하는 리뷰 좋아요 상태 조회 쿼리
@@ -14,7 +14,7 @@ export const useSelectLikeStateQuery = (
   enabled: boolean = true,
 ) => {
   return useQuery<LIKE.SelectReviewLikeStateResDTO>({
-    queryKey: [QUERY_KEYS.LIKE.STATE, id],
+    queryKey: likeKeys.state(id),
     queryFn: () => selectReviewLikeState(id),
     enabled: enabled,
     retry: false,

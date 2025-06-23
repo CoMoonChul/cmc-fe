@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { deleteGroup } from '@/entities/group/api'
 import { GROUP } from '#/generate'
-import { QUERY_KEYS } from '../types'
+import { groupKeys } from '../types'
 
 /**
  * 그룹 삭제 mutation
@@ -15,10 +15,10 @@ export const useDeleteGroupMutation = () => {
     onSuccess: (data, variables) => {
       const { groupId } = variables
       queryClient.invalidateQueries({
-        queryKey: [QUERY_KEYS.GROUP.LIST],
+        queryKey: groupKeys.list(),
       })
       queryClient.invalidateQueries({
-        queryKey: [QUERY_KEYS.GROUP.DETAIL, groupId],
+        queryKey: groupKeys.detail(groupId),
       })
     },
   })

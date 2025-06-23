@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { create } from '@/entities/group/api'
 import type { GROUP } from '#/generate'
-import { QUERY_KEYS } from '../types'
+import { groupKeys } from '../types'
 
 /**
  * 그룹 생성
@@ -12,7 +12,7 @@ export const useCreateGroup = () => {
     mutationFn: (data) => create(data),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: [QUERY_KEYS.GROUP.LIST],
+        queryKey: groupKeys.list(),
       })
     },
   })

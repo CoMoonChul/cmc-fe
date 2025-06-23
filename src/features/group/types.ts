@@ -1,6 +1,6 @@
-export const QUERY_KEYS = {
-  GROUP: {
-    LIST: 'group.list',
-    DETAIL: 'group.detail',
-  } as const,
+export const groupKeys = {
+  all: ['group'] as const,
+  list: (...conditions: number[]) =>
+    [...groupKeys.all, 'list', ...conditions] as const,
+  detail: (groupId: number) => [...groupKeys.all, 'detail', groupId] as const,
 }
