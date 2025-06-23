@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { updateReviewLike } from '@/entities/like/api'
 import type { LIKE } from '#/generate'
-import { QUERY_KEYS } from '@/features/like/types'
+import { likeKeys } from '@/features/like/types'
 import { reviewKeys } from '@/features/review/types'
 
 /**
@@ -23,7 +23,7 @@ export const useUpdateLike = (
     onSuccess: () => {
       // 좋아요 상태
       queryClient.invalidateQueries({
-        queryKey: [QUERY_KEYS.LIKE.STATE, reviewId],
+        queryKey: likeKeys.state(reviewId),
       })
       // 리뷰 리스트에 좋아요 상태 갱신
       queryClient.invalidateQueries({

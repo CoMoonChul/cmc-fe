@@ -20,8 +20,9 @@ export const API_ENDPOINTS = {
   WITHDRAW: `${BACKEND_URL + API_PATH.WITHDRAW}`,
 }
 
-export const QUERY_KEYS = {
-  USER: {
-    DETAIL: 'user.detail',
-  } as const,
+export const userKeys = {
+  all: ['user'] as const,
+  list: (...conditions: number[]) =>
+    [...userKeys.all, 'list', ...conditions] as const,
+  detail: () => [...userKeys.all, 'detail'] as const,
 }

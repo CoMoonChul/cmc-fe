@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { getMyGroupList } from '@/entities/group/api'
 import { GROUP } from '#/generate'
-import { QUERY_KEYS } from '../types'
+import { groupKeys } from '../types'
 
 /**
  * 내 그룹 정보 조회
@@ -9,7 +9,7 @@ import { QUERY_KEYS } from '../types'
  */
 export const useGetMyGroupList = () => {
   return useQuery<GROUP.GetMyGroupListResDTO>({
-    queryKey: [QUERY_KEYS.GROUP.LIST],
+    queryKey: groupKeys.list(),
     queryFn: () => getMyGroupList(),
     staleTime: 1000 * 60 * 5, // 10 min
     gcTime: 1000 * 60 * 30, // 30 min

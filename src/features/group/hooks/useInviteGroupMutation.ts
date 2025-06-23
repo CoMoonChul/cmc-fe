@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { invite } from '@/entities/group/api'
 import type { GROUP } from '#/generate'
-import { QUERY_KEYS } from '../types'
+import { groupKeys } from '../types'
 
 /**
  * 그룹 초대
@@ -13,12 +13,12 @@ export const useInviteGroupMutation = (manualErrorHandle: boolean) => {
     onSuccess: (data, variables) => {
       const { groupId } = variables
       queryClient.invalidateQueries({
-        queryKey: [QUERY_KEYS.GROUP.DETAIL, groupId],
+        queryKey: groupKeys.detail(groupId),
       })
     },
     onError: () => {
       queryClient.invalidateQueries({
-        queryKey: [QUERY_KEYS.GROUP.DETAIL],
+        queryKey: groupKeys.all,
       })
     },
   })

@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { getMyInfo } from '@/entities/user/api'
 import { USER } from '#/generate'
-import { QUERY_KEYS } from '../types'
+import { userKeys } from '../types'
 
 /**
  * 내 정보 조회
@@ -9,7 +9,7 @@ import { QUERY_KEYS } from '../types'
  */
 export const useGetMyInfoQuery = () => {
   return useQuery<USER.GetMyInfoResDTO>({
-    queryKey: [QUERY_KEYS.USER.DETAIL],
+    queryKey: userKeys.detail(),
     queryFn: () => getMyInfo(),
   })
 }

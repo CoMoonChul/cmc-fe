@@ -1,5 +1,5 @@
 import { useInfiniteQuery } from '@tanstack/react-query'
-import { QUERY_KEYS } from '@/features/notice/types'
+import { noticeKeys } from '@/features/notice/types'
 import { selectPageNotice } from '@/entities/notification/api'
 import { NOTICE } from '#/generate'
 
@@ -10,7 +10,7 @@ import { NOTICE } from '#/generate'
  */
 export const useNoticeListInfiniteQuery = (page: number, size: number) => {
   return useInfiniteQuery<NOTICE.SelectNoticeListDTO>({
-    queryKey: [QUERY_KEYS.NOTICE.LIST, page, size],
+    queryKey: noticeKeys.list(page, size),
     queryFn: ({ pageParam }) => selectPageNotice(pageParam as number, size),
     initialPageParam: 0,
     getNextPageParam: (lastPage) => {
