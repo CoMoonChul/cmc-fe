@@ -280,14 +280,17 @@ export const useBattleDetailQuery = (battleId: number) => {
 
 <img width="269" alt="스크린샷 2025-04-26 오후 5 35 08" src="https://github.com/user-attachments/assets/725a4f0c-ff65-491b-a96b-f652fd148aaf" />
 
-- 쿼리 키는 feature/{domain}/types.ts에 아래 코드와 같이 QUERY_KEY를 export하여 공통적으로 사용할 수 있도록 함
+- 쿼리 키는 쿼리 키 팩토리를 이용해 생성/사용한다.
 
-```jsx
-export const QUERY_KEYS = {
-  BATTLE: {
-    DETAIL: 'battle.Detail',
-  },
+```
+export const reviewKeys = {
+  all: ['review'] as const,
+  list: (...conditions: number[]) =>
+    [...reviewKeys.all, 'list', ...conditions] as const,
+  detail: (reviewId: number) =>
+    [...reviewKeys.all, 'detail', reviewId] as const,
 }
+
 ```
 
 </div>
