@@ -82,6 +82,13 @@
 - Github issue에서 이슈가 발행되면 issue 별로 번호가 채번됩니다.
 - 브랜치 명은 feature/{issue번호}로 생성합니다.
 
+![Untitled](https://github.com/user-attachments/assets/b4c684bb-27fb-4aa0-85de-06fa15861f71)
+
+1. main 브랜치에서 feature 브랜치 생성
+2. feature 브랜치에서 작업
+3. local test 완료 후 pre-main으로 merge
+4. pre-main에서 main으로 머지
+
 </div>
 </details>
 
